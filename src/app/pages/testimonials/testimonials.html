@@ -1,0 +1,33 @@
+<div id="testimonials" class="bg-gray-50 py-16 sm:py-24">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:mx-0">
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">What our students say</h2>
+      <p class="mt-2 text-lg leading-8 text-gray-600">Hear from the students who have transformed their skills with our courses.</p>
+    </div>
+    
+    <!-- Testimonial Grid -->
+    <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 gap-8">
+      
+      <!-- Iterate over the testimonials array -->
+      <div *ngFor="let testimonial of testimonials"
+           class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-between transition-transform transform hover:scale-105">
+        
+        <!-- Review text -->
+        <blockquote class="text-sm leading-6 text-gray-800 italic flex-grow">
+          <p class="mt-2">{{ testimonial.review }}</p>
+        </blockquote>
+        
+        <!-- Student Info -->
+        <div class="mt-6 flex items-center">
+          <!-- Replaced the image with a styled div for initials -->
+          <div class="h-10 w-10 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold ring-2 ring-gray-200">
+            {{ testimonial.initials }}
+          </div>
+          <div class="ml-4">
+            <div class="font-medium text-gray-900">{{ testimonial.name }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

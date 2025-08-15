@@ -1,15 +1,48 @@
-<div class="header-container p-4">
-    <nav class="bg-white shadow-md rounded-lg">
-        <ul class="nav-list flex justify-around items-center font-bold text-gray-700">
-            <div class="logo flex items-center">
-               <a><img src="assets/bg.png" alt="Logo" width="50"/></a>
-                <a routerLink="/" class="logoText">FLOW</a>
-            </div>
-            <li><a routerLink="/">Home</a></li>
-            <li><a routerLink="/about">About</a></li>
-            <li><a routerLink="/contact">Contact</a></li>
-            <li><a routerLink="/services">Services</a></li>
-            <li><a routerLink="/Interships">Interships</a></li>
-        </ul>
-    </nav>
-</div>
+<!-- Navbar -->
+<header class="w-full absolute top-0 left-0 z-50 px-4 py-3">
+  <nav
+    class="px-6 py-3 flex items-center justify-between w-full max-w-7xl mx-auto rounded-lg shadow-lg hero-bg backdrop-blur-md bg-opacity-80 text-white transition-all duration-300"
+  >
+    <!-- Logo -->
+    <a routerLink="/" class="flex items-center gap-2">
+      <img src="assets/bg.png" alt="Logo" class="w-9 h-9" />
+      <span class="font-extrabold text-lg tracking-wide">FLOW</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden sm:flex items-center space-x-8 font-medium">
+      <li><a routerLink="/" fragment="home" (click)="scrollToSection('home')" class="hover:text-pink-400">Home</a></li>
+      <li><a routerLink="/" fragment="about" (click)="scrollToSection('about')" class="hover:text-pink-400">About</a></li>
+      <li><a routerLink="/" fragment="interships" (click)="scrollToSection('interships')" class="hover:text-pink-400">Internships</a></li>
+      <li><a routerLink="/" fragment="services" (click)="scrollToSection('services')" class="hover:text-pink-400">Services</a></li>
+      <li><a routerLink="/" fragment="testimonials" (click)="scrollToSection('testimonials')" class="hover:text-pink-400">Testimonials</a></li>
+      <li><a routerLink="/" fragment="contact" (click)="scrollToSection('contact')" class="hover:text-pink-400">Contact</a></li>
+    </ul>
+
+    <!-- Desktop Buttons -->
+    <div class="hidden sm:flex items-center gap-3">
+      <a routerLink="/login" (click)="login()" class="px-4 py-2 rounded-md shadow-2xl hover:text-black font-extrabold login">LogIn</a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button (click)="isMobileMenuOpen = !isMobileMenuOpen" class="sm:hidden focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="isMobileMenuOpen" class="sm:hidden px-6 py-4 hero-bg backdrop-blur-md bg-opacity-80 text-white transition-all duration-300 rounded-b-lg">
+    <div class="flex flex-col items-end space-y-6 font-medium">
+      <a (click)="mobileNavigate('home')" class="hover:text-pink-400 ">Home</a>
+      <a (click)="mobileNavigate('about')" class="hover:text-pink-400">About</a>
+      <a (click)="mobileNavigate('interships')" class="hover:text-pink-400">Internships</a>
+      <a (click)="mobileNavigate('services')" class="hover:text-pink-400">Services</a>
+      <a (click)="mobileNavigate('contact')" class="hover:text-pink-400">Contact</a>
+      <a routerLink="/login" (click)="login()" class="rounded-md shadow-2xl hover:text-pink-400 login">LogIn</a>
+
+    </div>
+  </div>
+</header>
