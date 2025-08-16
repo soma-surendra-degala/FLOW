@@ -11,4 +11,11 @@ import { Home } from './pages/home/home';
 })
 export class App {
   protected title = 'frontend';
+  scrollToSection(sectionId: string) {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 }

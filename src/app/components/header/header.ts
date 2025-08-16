@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   imports: [CommonModule],
+  standalone: true,
   templateUrl: './header.html',
   styleUrl: './header.css'
 })
@@ -47,8 +48,16 @@ login() {
   // This could be a redirect to the login page or opening a modal
   console.log('Login clicked');
   // For example, you might want to navigate to the login page:
-  this.router.navigate(['/login']);
+  window.open('student/login','_blank');
+  
 }
 
+admin() {
+  // Logic to handle admin navigation
+  // This could be a redirect to the admin page or opening a modal
+  console.log('Admin clicked');
+  // For example, you might want to navigate to the admin page:
+ window.open('admin','_blank');
+}
 
 }

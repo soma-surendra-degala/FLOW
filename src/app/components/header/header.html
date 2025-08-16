@@ -10,7 +10,7 @@
     </a>
 
     <!-- Desktop Menu -->
-    <ul class="hidden sm:flex items-center space-x-8 font-medium">
+    <ul class="hidden min-[871px]:flex items-center space-x-8 font-medium">
       <li><a routerLink="/" fragment="home" (click)="scrollToSection('home')" class="hover:text-pink-400">Home</a></li>
       <li><a routerLink="/" fragment="about" (click)="scrollToSection('about')" class="hover:text-pink-400">About</a></li>
       <li><a routerLink="/" fragment="interships" (click)="scrollToSection('interships')" class="hover:text-pink-400">Internships</a></li>
@@ -20,29 +20,38 @@
     </ul>
 
     <!-- Desktop Buttons -->
-    <div class="hidden sm:flex items-center gap-3">
-      <a routerLink="/login" (click)="login()" class="px-4 py-2 rounded-md shadow-2xl font-bold hover:text-pink-400 login">LogIn</a>
+    <div class="hidden min-[871px]:flex items-center gap-5">
+      <a routerLink="/admin"(click)='admin()' class="px-2 rounded-md shadow-2xl font-bold hover:text-pink-400">Admin</a>
+      <a routerLink="student/login" (click)='login()' class="px-2 rounded-md shadow-2xl font-bold hover:text-pink-400">LogIn</a>
     </div>
 
     <!-- Mobile Menu Button -->
-    <button (click)="isMobileMenuOpen = !isMobileMenuOpen" class="sm:hidden focus:outline-none">
+    <button (click)="isMobileMenuOpen = !isMobileMenuOpen" class="min-[871px]:hidden focus:outline-none">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M4 6h16M4 12h16M4 18h16"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
   </nav>
 
-  <!-- Mobile Menu -->
-  <div *ngIf="isMobileMenuOpen" class="sm:hidden px-6 py-4 hero-bg backdrop-blur-md bg-opacity-80 text-white transition-all duration-300 rounded-b-lg">
-    <div class="flex flex-col items-end space-y-6 font-medium">
-      <a (click)="mobileNavigate('home')" class="hover:text-pink-400 ">Home</a>
-      <a (click)="mobileNavigate('about')" class="hover:text-pink-400">About</a>
-      <a (click)="mobileNavigate('interships')" class="hover:text-pink-400">Internships</a>
-      <a (click)="mobileNavigate('services')" class="hover:text-pink-400">Services</a>
-      <a (click)="mobileNavigate('contact')" class="hover:text-pink-400">Contact</a>
-      <a routerLink="/login" (click)="login()" class="rounded-md shadow-2xl hover:text-pink-400 login">LogIn</a>
+  <!-- Mobile Menu (appears at the end of header) -->
+  <div *ngIf="isMobileMenuOpen" 
+       class="min-[871px]:hidden mt-2 px-6 py-4 text-end hero-bg backdrop-blur-md bg-opacity-90 text-white rounded-lg shadow-lg space-y-4">
+    
+    <!-- Links -->
+    <a routerLink="/" fragment="home" (click)="scrollToSection('home'); isMobileMenuOpen=false" class="block hover:text-pink-400">Home</a>
+    <a routerLink="/" fragment="about" (click)="scrollToSection('about'); isMobileMenuOpen=false" class="block hover:text-pink-400">About</a>
+    <a routerLink="/" fragment="interships" (click)="scrollToSection('interships'); isMobileMenuOpen=false" class="block hover:text-pink-400">Internships</a>
+    <a routerLink="/" fragment="services" (click)="scrollToSection('services'); isMobileMenuOpen=false" class="block hover:text-pink-400">Services</a>
+    <a routerLink="/" fragment="testimonials" (click)="scrollToSection('testimonials'); isMobileMenuOpen=false" class="block hover:text-pink-400">Testimonials</a>
+    <a routerLink="/" fragment="contact" (click)="scrollToSection('contact'); isMobileMenuOpen=false" class="block hover:text-pink-400">Contact</a>
 
+    <hr class="border-gray-500 opacity-40" />
+
+    <!-- Buttons -->
+    <div class="flex flex-col gap-3">
+      <a routerLink="/admin" (click)='admin()' class="block font-bold hover:text-pink-400 ">Admin</a>
+      <a routerLink="/login"(click)='login()' class="block font-bold hover:text-pink-400 ">LogIn</a>
     </div>
   </div>
 </header>

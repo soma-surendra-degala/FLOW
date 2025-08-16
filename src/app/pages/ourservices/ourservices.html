@@ -26,56 +26,24 @@
 
       <!-- Feature Badges -->
       <div class="flex flex-wrap justify-center gap-3 mt-6">
-        <span class="bg-blue-500/20 text-blue-300 px-4 py-1 rounded-full text-sm">⚡ Fast Delivery</span>
-        <span class="bg-purple-500/20 text-purple-300 px-4 py-1 rounded-full text-sm">🎯 Expert Team</span>
-        <span class="bg-green-500/20 text-green-300 px-4 py-1 rounded-full text-sm">🔒 Secure</span>
-        <span class="bg-yellow-500/20 text-yellow-300 px-4 py-1 rounded-full text-sm">💡 Innovative</span>
+        <span *ngFor="let badge of badges" 
+              class="{{ badge.color }} px-4 py-1 rounded-full text-sm">
+          {{ badge.text }}
+        </span>
       </div>
     </div>
 
     <!-- Services Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Service 1 -->
-      <div class="bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
-        <i class="bi bi-code-slash text-4xl text-blue-400 mb-4"></i>
-        <h3 class="text-2xl font-semibold text-white mb-2">Custom Web Development</h3>
-        <p class="text-gray-300 mb-4">
-          Tailored websites and web applications built with cutting-edge technologies.
-        </p>
-        <ul class="text-gray-400 text-sm mb-4 space-y-1">
-          <li>✅ Responsive Design</li>
-          <li>✅ SEO Optimized</li>
-          <li>✅ API Integrations</li>
-        </ul>
+      <div *ngFor="let service of services"
+           class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
         
-      </div>
+        <i class="{{ service.icon }} text-4xl {{ service.color }} mb-4"></i>
+        <h3 class="text-2xl font-semibold text-black mb-2">{{ service.title }}</h3>
+        <p class="text-gray-800 mb-4">{{ service.description }}</p>
 
-      <!-- Service 2 -->
-      <div class="bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
-        <i class="bi bi-phone text-4xl text-purple-400 mb-4"></i>
-        <h3 class="text-2xl font-semibold text-white mb-2">Mobile App Development</h3>
-        <p class="text-gray-300 mb-4">
-          Build high-performance mobile apps for Android and iOS platforms.
-        </p>
-        <ul class="text-gray-400 text-sm mb-4 space-y-1">
-          <li>✅ Cross-Platform</li>
-          <li>✅ User-Friendly UI</li>
-          <li>✅ Smooth Performance</li>
-        </ul>
-        
-      </div>
-
-      <!-- Service 3 -->
-      <div class="bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
-        <i class="bi bi-palette text-4xl text-green-400 mb-4"></i>
-        <h3 class="text-2xl font-semibold text-white mb-2">UI/UX Design</h3>
-        <p class="text-gray-300 mb-4">
-          Design user-friendly, visually appealing interfaces that convert visitors.
-        </p>
-        <ul class="text-gray-400 text-sm mb-4 space-y-1">
-          <li>✅ Modern Aesthetics</li>
-          <li>✅ Interactive Prototypes</li>
-          <li>✅ User Testing</li>
+        <ul class="text-black text-sm mb-4 space-y-1">
+          <li *ngFor="let feature of service.features">{{ feature }}</li>
         </ul>
       </div>
     </div>

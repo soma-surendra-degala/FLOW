@@ -1,20 +1,7 @@
-<!-- Internship Section -->
 <div id="interships" class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
   <!-- Background Image -->
   <img src="assets/intership-bg.jpg" alt="Internship Background" 
-       class="absolute inset-0 -z-10 w-full h-full object-cover object-center opacity-20 blur-xs"  />
-
-  <!-- Gradient Shape -->
-  <div aria-hidden="true" 
-       class="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl">
-    <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 
-                85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 
-                52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 
-                27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 
-                27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
-         class="w-[60rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20">
-    </div>
-  </div>
+       class="absolute inset-0 -z-10 w-full h-full object-cover object-center opacity-20 blur-xs" />
 
   <div class="mx-auto max-w-7xl px-6 lg:px-8">
     <!-- Section Title -->
@@ -23,61 +10,24 @@
       <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
         Gain real-world experience, work with industry experts, and build a strong portfolio.
       </p>
-
-      <!-- Features Badges -->
-      <div class="flex flex-wrap justify-center gap-3 mt-6">
-        <span class="bg-blue-500/20 text-blue-300 px-4 py-1 rounded-full text-sm">💼 Real Projects</span>
-        <span class="bg-purple-500/20 text-purple-300 px-4 py-1 rounded-full text-sm">📚 Mentorship</span>
-        <span class="bg-green-500/20 text-green-300 px-4 py-1 rounded-full text-sm">🌍 Remote Work</span>
-        <span class="bg-yellow-500/20 text-yellow-300 px-4 py-1 rounded-full text-sm">🕒 Flexible Hours</span>
-      </div>
     </div>
 
     <!-- Internship Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Internship 1 -->
-      <div class="bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
-        <i class="bi bi-laptop text-4xl text-blue-400 mb-4"></i>
-        <h3 class="text-2xl font-semibold text-white mb-2">Web Development</h3>
-        <p class="text-gray-300 mb-4">
-          Build modern, responsive websites and applications using the latest technologies.
-        </p>
-        <ul class="text-gray-400 text-sm mb-4 space-y-1">
-          <li>✅ Frontend & Backend Training</li>
-          <li>✅ API Integration</li>
-          <li>✅ Deployment Skills</li>
-        </ul>
-        <button class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">Apply</button>
-      </div>
+      <div *ngFor="let internship of internships"
+           class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
+        
+        <i class="{{ internship.icon }} text-4xl {{ internship.color }} mb-4"></i>
+        <h3 class="text-2xl font-semibold text-black mb-2">{{ internship.title }}</h3>
+        <p class="text-gray-800 mb-4">{{ internship.description }}</p>
 
-      <!-- Internship 2 -->
-      <div class="bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
-        <i class="bi bi-bar-chart-line text-4xl text-purple-400 mb-4"></i>
-        <h3 class="text-2xl font-semibold text-white mb-2">Data Analysis</h3>
-        <p class="text-gray-300 mb-4">
-          Work with data sets, analyze trends, and create insightful reports & dashboards.
-        </p>
-        <ul class="text-gray-400 text-sm mb-4 space-y-1">
-          <li>✅ Data Cleaning & Visualization</li>
-          <li>✅ Excel, Python, & SQL</li>
-          <li>✅ Predictive Modelling</li>
+        <ul class="text-gray-900 text-sm mb-4 space-y-1">
+          <li *ngFor="let skill of internship.skills">{{ skill }}</li>
         </ul>
-        <button class="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg">Apply</button>
-      </div>
 
-      <!-- Internship 3 -->
-      <div class="bg-gray-800/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
-        <i class="bi bi-brush text-4xl text-green-400 mb-4"></i>
-        <h3 class="text-2xl font-semibold text-white mb-2">UI/UX Design</h3>
-        <p class="text-gray-300 mb-4">
-          Design engaging user experiences with a focus on aesthetics and usability.
-        </p>
-        <ul class="text-gray-400 text-sm mb-4 space-y-1">
-          <li>✅ Wireframing & Prototyping</li>
-          <li>✅ Figma, Adobe XD</li>
-          <li>✅ User Testing</li>
-        </ul>
-        <button class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg">Apply</button>
+        <button class="px-4 py-2 text-white rounded-lg {{ internship.buttonColor }}">
+          Apply
+        </button>
       </div>
     </div>
 

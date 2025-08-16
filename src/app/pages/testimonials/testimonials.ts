@@ -3,21 +3,20 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-testimonials',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './testimonials.html',
-  styleUrl: './testimonials.css'
+  styleUrls: ['./testimonials.css']
 })
 export class Testimonials {
-
-
   testimonials = [
     {
-      name: 'Sravani Reddy',
+      name: 'Sravani',
       initials: 'SR',
       review: 'The course material was incredibly clear and the hands-on projects made learning easy. I highly recommend this platform!'
     },
     {
-      name: 'Karthik Rao',
+      name: 'Karthik Reddy',
       initials: 'KR',
       review: 'I finally understood complex topics thanks to the brilliant instructors. The support team was also very responsive to my questions.'
     },

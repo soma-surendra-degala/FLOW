@@ -15,5 +15,12 @@ import { Testimonials } from '../testimonials/testimonials';
   styleUrl: './home.css'
 })
 export class Home {
+  scrollToSection(sectionId: string) {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 
 }
