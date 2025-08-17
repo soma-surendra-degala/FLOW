@@ -15,7 +15,9 @@ export const routes: Routes = [
       { path: 'login', component: Login },
       { path: 'register', component: Register },
       { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
-      { path: 'courses', component: Courses, canActivate: [authGuard] }
+      { path: 'courses', component: Courses, canActivate: [authGuard] },
+      {path: 'assignments', loadComponent: () => import('./student/assignments/assignments').then(m => m.Assignments), canActivate: [authGuard] },
+      {path: 'profile', loadComponent: () => import('./student/profile/profile').then(m => m.Profile), canActivate: [authGuard] },
     ]
   },
 

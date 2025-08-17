@@ -1,93 +1,72 @@
-<div class="min-h-screen bg-gradient-to-br from-pink-100 via-pink-50 to-white flex flex-col">
+<div class="flex flex-col min-h-screen " (click)="toggleTheme()">
+  <!-- Header -->
+  <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
 
-  <!-- Top Navbar -->
-  <header class="bg-white shadow-md sticky top-0 z-20 border-b border-pink-200">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="font-extrabold text-2xl text-pink-600 flex items-center gap-2">
-        <img src="assets/bg.png" alt="FLOW Logo" class="w-10 h-10 rounded-lg shadow-sm" />
-        FLOW
-      </div>
-      <div class="flex items-center gap-6">
-        <span class="text-gray-800 font-semibold tracking-wide">Welcome, {{ studentName }} 👋</span>
-        <button (click)="onLogout()" class="bg-pink-600 text-white px-5 py-2 rounded-lg shadow hover:bg-pink-700 transition">
-          Logout
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="flex flex-1 max-w-7xl mx-auto w-full mt-8 gap-10 px-4 md:px-6">
+  <!-- Sidebar + Main -->
+  <div class="flex flex-1">
     <!-- Sidebar -->
-    <aside class="w-64 bg-white rounded-3xl shadow-xl flex flex-col py-10 px-6">
-      <nav class="flex flex-col gap-4">
-        <a routerLink="/student/dashboard" routerLinkActive="bg-pink-100 text-pink-700 font-bold" class="flex items-center gap-3 py-3 px-5 rounded-xl text-gray-600 hover:bg-pink-100 hover:text-pink-700 transition"
-         (click)='dashboard()' ><i class="bi bi-speedometer2 text-2xl"></i> Dashboard
-        </a>
-        <a routerLink="/student/courses" routerLinkActive="bg-pink-100 text-pink-700 font-bold" class="flex items-center gap-3 py-3 px-5 rounded-xl text-gray-600 hover:bg-pink-100 hover:text-pink-700 transition"
-    (click)="courses()">        <i class="bi bi-book text-2xl"></i> Courses
-        </a>
-        <a routerLink="/student/assignments" routerLinkActive="bg-pink-100 text-pink-700 font-bold" class="flex items-center gap-3 py-3 px-5 rounded-xl text-gray-600 hover:bg-pink-100 hover:text-pink-700 transition">
-          <i class="bi bi-file-earmark-text text-2xl"></i> Assignments
-        </a>
-        <a routerLink="/student/profile" routerLinkActive="bg-pink-100 text-pink-700 font-bold" class="flex items-center gap-3 py-3 px-5 rounded-xl text-gray-600 hover:bg-pink-100 hover:text-pink-700 transition">
-          <i class="bi bi-person-circle text-2xl"></i> Profile
-        </a>
-      </nav>
-      <div class="mt-auto text-center pt-6 text-gray-400 text-xs select-none">
-        &copy; 2025 FLOW
-      </div>
-    </aside>
+    <app-sidebar #sidebar></app-sidebar>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col gap-12">
-      <!-- Cards Section -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-        <div class="bg-gradient-to-tr from-pink-50 to-pink-100 shadow-md rounded-3xl p-7 flex flex-col">
-          <div class="flex items-center justify-between mb-4">
-            <div class="p-3 rounded-xl bg-pink-200 text-pink-700">
-              <i class="bi bi-collection-fill text-2xl"></i>
-            </div>
-            <div class="text-pink-700 font-bold text-2xl">{{ coursesEnrolled }}</div>
+    <main
+      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-6 transition-all duration-300"
+      [ngClass]="{ 'ml-64': sidebar.isOpen && !sidebar.isMobile }"
+    >
+      <h2 class="text-2xl font-bold text-cyan-400 mb-6">Dashboard</h2>
+
+      <!-- Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Enrolled Courses -->
+        <div
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4"
+        >
+          <div class="text-cyan-400 text-4xl">
+            <i class="bi bi-book"></i>
           </div>
-          <h3 class="text-lg font-semibold text-pink-700 mb-1">Courses Enrolled</h3>
-          <p class="text-sm text-pink-600 opacity-70">+{{ newCoursesThisWeek }} new this week</p>
+          <div>
+            <h3 class="text-lg font-semibold">Enrolled Courses</h3>
+            <p class="text-3xl font-bold text-cyan-400 mt-1">5</p>
+          </div>
         </div>
 
-        <div class="bg-gradient-to-tr from-pink-50 to-pink-100 shadow-md rounded-3xl p-7 flex flex-col">
-          <div class="flex items-center justify-between mb-4">
-            <div class="p-3 rounded-xl bg-pink-200 text-pink-700">
-              <i class="bi bi-journal-text text-2xl"></i>
-            </div>
-            <div class="text-pink-700 font-bold text-2xl">{{ assignmentsDue }}</div>
+        <!-- Assignments Due -->
+        <div
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4"
+        >
+          <div class="text-red-400 text-4xl">
+            <i class="bi bi-journal-check"></i>
           </div>
-          <h3 class="text-lg font-semibold text-pink-700 mb-1">Assignments Due</h3>
-          <p class="text-sm text-pink-600 opacity-70">Next deadline: {{ nextAssignmentDeadline }}</p>
+          <div>
+            <h3 class="text-lg font-semibold">Assignments Due</h3>
+            <p class="text-3xl font-bold text-red-400 mt-1">2</p>
+          </div>
         </div>
 
-        <div class="bg-gradient-to-tr from-pink-50 to-pink-100 shadow-md rounded-3xl p-7 flex flex-col">
-          <div class="flex items-center justify-between mb-4">
-            <div class="p-3 rounded-xl bg-pink-200 text-pink-700">
-              <i class="bi bi-check-circle-fill text-2xl"></i>
-            </div>
-            <div class="text-pink-700 font-bold text-2xl">{{ completedCourses }}</div>
+        <!-- Progress -->
+        <div
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4"
+        >
+          <div class="text-green-400 text-4xl">
+            <i class="bi bi-graph-up-arrow"></i>
           </div>
-          <h3 class="text-lg font-semibold text-pink-700 mb-1">Completed Courses</h3>
-          <p class="text-sm text-pink-600 opacity-70">Keep up the good work!</p>
+          <div>
+            <h3 class="text-lg font-semibold">Progress</h3>
+            <p class="text-3xl font-bold text-green-400 mt-1">78%</p>
+          </div>
         </div>
-      </section>
+      </div>
 
       <!-- Recent Activity -->
-      <section>
-        <h2 class="text-2xl font-bold mb-6 text-pink-600 tracking-wide">Recent Activity</h2>
-        <div class="bg-white shadow-lg rounded-3xl p-8 max-w-4xl">
-          <ul class="divide-y divide-gray-200">
-            <li *ngFor="let activity of recentActivities" class="py-4 flex justify-between items-center">
-              <span class="text-lg text-gray-700">• {{ activity.description }}</span>
-              <span class="text-xs text-gray-400 font-mono">{{ activity.time }}</span>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <div
+        class="mt-8 bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow"
+      >
+        <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+        <ul class="space-y-3 text-neutral-300 dark:text-neutral-700">
+          <li>✔️ Submitted Assignment 3 in <span class="text-cyan-400">Math</span></li>
+          <li>📚 Enrolled in <span class="text-cyan-400">Web Development</span></li>
+          <li>⭐ Completed <span class="text-cyan-400">Python Basics</span></li>
+        </ul>
+      </div>
     </main>
   </div>
 </div>

@@ -1,1 +1,85 @@
-<p>courses works!</p>
+<div class="flex flex-col min-h-screen">
+  <!-- Header -->
+  <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
+
+  <!-- Sidebar + Main -->
+  <div class="flex flex-1">
+    <!-- Sidebar -->
+    <app-sidebar #sidebar></app-sidebar>
+
+    <!-- Main -->
+    <main
+  class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-gray-900 p-6 transition-all duration-300"
+  [ngClass]="{ 'ml-64': sidebar.isOpen && !sidebar.isMobile }"
+>
+  <!-- Navigation Tabs -->
+  <nav
+    class="flex flex-wrap gap-2 border border-neutral-800 dark:border-gray-300 rounded-xl p-3 mb-6 bg-neutral-950 dark:bg-gray-100"
+  >
+    <button
+      (click)="navigate('courses/all')"
+      class="flex items-center gap-2 px-4 py-2 rounded-lg transition border border-transparent hover:border-cyan-500 hover:text-cyan-400"
+    >
+      <i class="bi bi-list-ul"></i>
+      <span>All Courses</span>
+    </button>
+     <button
+          (click)="navigate('courses/enrolled')"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg transition border border-transparent hover:border-cyan-500 hover:text-cyan-400"
+        >
+          <i class="bi bi-check2-circle"></i>
+          <span>Enrolled</span>
+        </button>
+
+        <button
+          (click)="navigate('courses/completed')"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg transition border border-transparent hover:border-cyan-500 hover:text-cyan-400"
+        >
+          <i class="bi bi-trophy"></i>
+          <span>Completed</span>
+        </button>
+
+        <button
+          (click)="navigate('courses/recommended')"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg transition border border-transparent hover:border-cyan-500 hover:text-cyan-400"
+        >
+          <i class="bi bi-star"></i>
+          <span>Recommended</span>
+        </button>
+    <!-- other buttons same -->
+  </nav>
+
+  <!-- Page Title -->
+  <h1 class="text-2xl font-bold mb-6 text-cyan-400 dark:text-cyan-600 flex items-center gap-2">
+    <i class="bi bi-book"></i> Student Courses
+  </h1>
+
+  <!-- Courses Grid -->
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      *ngFor="let course of courses"
+      class="bg-neutral-800 dark:bg-gray-100 border border-neutral-700 dark:border-gray-300 rounded-2xl shadow-md p-5 hover:border-cyan-500 transition flex flex-col"
+    >
+      <div class="flex items-center gap-3 mb-3">
+        <i [class]="course.icon + ' text-cyan-400 dark:text-cyan-600 text-3xl'"></i>
+        <h2 class="text-lg font-semibold text-white dark:text-gray-800">
+          {{ course.title }}
+        </h2>
+      </div>
+
+      <p class="text-sm text-neutral-400 dark:text-gray-600 flex-1 mb-4">
+        {{ course.description }}
+      </p>
+
+      <div class="w-full bg-neutral-700 dark:bg-gray-300 rounded-full h-2.5 mb-2">
+        <div
+          class="bg-cyan-500 h-2.5 rounded-full"
+          [style.width.%]="course.progress"
+        ></div>
+      </div>
+      <span class="text-xs text-neutral-400 dark:text-gray-600">
+        {{ course.progress }}% complete
+      </span>
+    </div>
+  </div>
+</main>
