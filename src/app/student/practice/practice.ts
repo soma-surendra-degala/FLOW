@@ -1,22 +1,10 @@
-// src/app/student/practice/practice.ts
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
+import { Practice, PracticeService } from '../../shared/sharedservices/practice';
 
-type Status = 'Pending' | 'Completed';
-
-interface PracticeItem {
-  id: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  timeLeft: string;
-  status: Status;
-  solution?: string;       // for Completed items
-  userAnswer?: string;     // student’s answer after Solve
-}
 
 @Component({
   selector: 'app-practice',
@@ -25,57 +13,46 @@ interface PracticeItem {
   templateUrl: './practice.html',
   styleUrls: ['./practice.css'],
 })
-export class Practice {
-  practiceList: PracticeItem[] = [
-    {
-      id: 1,
-      title: 'Array Reversal',
-      description: 'Reverse an array without using built-ins.',
-      dueDate: '2025-08-25',
-      timeLeft: '2 days left',
-      status: 'Pending'
-    },
-    {
-      id: 2,
-      title: 'Palindrome Checker',
-      description: 'Check if a string is a palindrome.',
-      dueDate: '2025-08-26',
-      timeLeft: '3 days left',
-      status: 'Completed',
-      solution:
-`function isPal(s){ s=s.toLowerCase().replace(/[^a-z0-9]/g,''); 
-  return s===s.split('').reverse().join(''); }`
-    },
-    {
-      id: 3,
-      title: 'Prime Numbers',
-      description: 'Generate all primes up to 100.',
-      dueDate: '2025-08-22',
-      timeLeft: 'Today',
-      status: 'Pending'
-    }
-  ];
+export class Practices implements OnInit {  
+  practiceList: Practice[] = [];
+  loading = true;
+  error: string | null = null;
 
   // UI state for modal
   showModal = false;
   modalMode: 'solve' | 'solution' = 'solve';
-  activePractice: PracticeItem | null = null;
+  activePractice: Practice | null = null;
   tempAnswer = '';
 
-  // Filter-nav click (optional; wire up later to real routes if you want)
-  navigate(path: string) {
-    console.log('navigate:', path);
+  constructor(private practiceService: PracticeService) {}
+
+  ngOnInit() {
+    this.loadPractices();
+  }
+
+  loadPractices() {
+    this.practiceService.getPractices().subscribe({
+      next: (data) => {
+        this.practiceList = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load practices:', err);
+        this.error = 'Could not load practices. Try again later.';
+        this.loading = false;
+      }
+    });
   }
 
   // BUTTON HANDLERS
-  onSolve(item: PracticeItem) {
+  onSolve(item: Practice) {
     this.activePractice = item;
     this.modalMode = 'solve';
-    this.tempAnswer = item.userAnswer || '';
+    this.tempAnswer = (item as any).userAnswer || '';
     this.showModal = true;
   }
 
-  onViewSolution(item: PracticeItem) {
+  onViewSolution(item: Practice) {
     this.activePractice = item;
     this.modalMode = 'solution';
     this.showModal = true;
@@ -87,8 +64,8 @@ export class Practice {
       alert('Please enter your solution first.');
       return;
     }
-    this.activePractice.userAnswer = this.tempAnswer.trim();
-    this.activePractice.status = 'Completed';
+    (this.activePractice as any).userAnswer = this.tempAnswer.trim();
+    (this.activePractice as any).status = 'Completed';
     this.closeModal();
   }
 

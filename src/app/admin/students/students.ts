@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
 
-
-
 interface Student {
   id: number;
   name: string;

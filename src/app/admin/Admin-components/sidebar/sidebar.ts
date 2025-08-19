@@ -21,7 +21,7 @@ export class Sidebar {
   }
 
   dashboard() {
-    this.router.navigate(['admin/admin']);
+    this.router.navigate(['admin/']);
     this.isSidebarOpen = false;
   }
 

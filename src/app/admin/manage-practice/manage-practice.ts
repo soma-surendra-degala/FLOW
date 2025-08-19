@@ -1,101 +1,94 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Admin-components/sidebar/sidebar';
-
-
-interface Exercise {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-}
+import { Practice, PracticeService } from '../../shared/sharedservices/practice';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-manage-practice',
-  imports: [FormsModule , CommonModule,Sidebar],
+  imports: [FormsModule, CommonModule, Sidebar,HttpClientModule],
   templateUrl: './manage-practice.html',
   styleUrls: ['./manage-practice.css']
 })
-export class ManagePractice {
-  
+export class ManagePractice implements OnInit {
+
   isSidebarOpen = false;
+  practices: Practice[] = [];   // ✅ FIXED
+  showModal = false;
+  selectedPractice: Practice | null = null;
+
+  constructor(private practiceService: PracticeService) {}
+
+  ngOnInit() {
+    this.loadPractices();
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
-  
-  exercises: Exercise[] = [
-    {
-      id: 1,
-      title: 'Array Basics',
-      description: 'Solve simple array problems',
-      icon: 'bi bi-list-ul',
-      difficulty: 'Easy'
-    },
-    {
-      id: 2,
-      title: 'Binary Search',
-      description: 'Implement binary search algorithm',
-      icon: 'bi bi-search',
-      difficulty: 'Medium'
-    }
-  ];
 
-  showModal = false;
-  selectedExercise: Exercise | null = null;
+  // Load all practices
+  loadPractices() {
+    this.practiceService.getPractices().subscribe({
+      next: (data) => this.practices = data,
+      error: (err) => console.error('Failed to load practices:', err)
+    });
+  }
 
-  // Add new exercise
-  addExercise() {
-    this.selectedExercise = {
-      id: 0,
+  // Add new practice
+  addPractice() {
+    this.selectedPractice = {
       title: '',
       description: '',
-      icon: '',
       difficulty: 'Easy'
     };
     this.showModal = true;
   }
 
-  // Edit exercise
-  editExercise(exercise: Exercise) {
-    this.selectedExercise = { ...exercise }; // clone to avoid direct binding
+  // Edit existing
+  editPractice(practice: Practice) {
+    this.selectedPractice = { ...practice }; // clone
     this.showModal = true;
   }
 
-  // Delete exercise
-  deleteExercise(id: number) {
-    this.exercises = this.exercises.filter(ex => ex.id !== id);
+  // Delete
+  deletePractice(id?: string) {
+    if (!id) return;
+    this.practiceService.deletePractice(id).subscribe({
+      next: () => this.loadPractices(),
+      error: (err) => console.error('Delete failed:', err)
+    });
   }
 
-  // Save exercise (add or update)
-  saveExercise() {
-    if (!this.selectedExercise) return;
+  // Save (create/update)
+  savePractice() {
+    if (!this.selectedPractice) return;
 
-    if (this.selectedExercise.id === 0) {
-      // Add new with unique id
-      this.selectedExercise.id =
-        this.exercises.length > 0
-          ? Math.max(...this.exercises.map(e => e.id)) + 1
-          : 1;
-      this.exercises.push({ ...this.selectedExercise });
+    if (this.selectedPractice._id) {
+      // Update
+      this.practiceService.updatePractice(this.selectedPractice._id, this.selectedPractice).subscribe({
+        next: () => {
+          this.loadPractices();
+          this.closeModal();
+        },
+        error: (err) => console.error('Update failed:', err)
+      });
     } else {
-      // Update existing
-      const index = this.exercises.findIndex(
-        ex => ex.id === this.selectedExercise!.id
-      );
-      if (index !== -1) {
-        this.exercises[index] = { ...this.selectedExercise };
-      }
+      // Add new
+      this.practiceService.addPractice(this.selectedPractice).subscribe({
+        next: () => {
+          this.loadPractices();
+          this.closeModal();
+        },
+        error: (err) => console.error('Add failed:', err)
+      });
     }
-
-    this.closeModal();
   }
 
   // Close modal
   closeModal() {
     this.showModal = false;
-    this.selectedExercise = null;
+    this.selectedPractice = null;
   }
 }
