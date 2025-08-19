@@ -1,34 +1,37 @@
+
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../services/auth';
+import { CommonModule } from '@angular/common';
+import { AuthService, LoginData } from '../services/auth';
+
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrls: ['./login.css']
 })
-
- export class Login {
-  loginData = { email: '', password: '' };
+export class Login {
+  loginData: LoginData = { email: '', password: '' };
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  onLogin() {
-    const success = this.authService.login(
-      this.loginData.email,
-      this.loginData.password
-    );
-
-    if (success) {
-      this.router.navigate(['/student/dashboard']); // redirect after login
-    } else {
-      alert('Invalid email or password');
-    }
+ onLogin() {
+    this.authService.login(this.loginData).subscribe({
+      next: (res: { token: string; student: any }) => {
+        alert('Login successful!');
+        this.router.navigate(['/student/dashboard']);
+      },
+      error: (err: any) => {
+        console.error('Login error:', err);
+        alert(err.error?.message || 'Login failed');
+      }
+    });
   }
-  register() {
+   register() {
     this.router.navigate(['/student/register']); // redirect to register page
   }
- }
+}
+
+ 

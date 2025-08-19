@@ -28,7 +28,7 @@
     </header>
 
     <!-- Stats Section -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-lg transition">
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold">Total Courses</h3>
@@ -42,7 +42,7 @@
           <h3 class="text-lg font-semibold">Practice Sets</h3>
           <i class="bi bi-pencil-square text-cyan-400 text-2xl"></i>
         </div>
-        <p class="text-3xl font-bold text-cyan-400 mt-3">{{ stats.practice }}</p>
+        <p class="text-3xl font-bold text-cyan-400 mt-3">{{ stats.practices }}</p>
       </div>
 
       <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-lg transition">
@@ -67,39 +67,39 @@
         </ul>
       </div>
 
-      <!-- Students Preview -->
-      <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-xl font-bold text-cyan-400">Recent Students</h3>
-          <a routerLink="/admin/students" class="text-sm text-cyan-400 hover:underline " (click)="student()">View All</a>
-        </div>
-        <table class="w-full text-left text-sm">
-          <thead>
-            <tr class="text-gray-400 border-b border-neutral-800">
-              <th class="py-2">#</th>
-              <th class="py-2 px-4">Name</th>
-              <th class="py-2 px-4">Course</th>
-              <th class="py-2 px-4">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let student of topStudents">
-  <td class="py-2 px-4">{{ student.name }}</td>
-  <td class="py-2 px-4">{{ student.score }}</td>
-  <td class="py-2 px-4">
-    <span 
-      [ngClass]="{
-        'text-green-400': student.status === 'Active',
-        'text-red-400': student.status === 'Inactive'
-      }">
-      {{ student.status }}
-    </span>
-  </td>
-</tr>
+    </div>
 
-          </tbody>
-        </table>
-      </div>
+    <!-- Recent Students -->
+    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow mt-8">
+      <h3 class="text-xl font-bold mb-4 text-cyan-400">Recent Students</h3>
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="text-gray-400 border-b border-neutral-800">
+            <th class="py-2">#</th>
+            <th class="py-2 px-4">Name</th>
+            <th class="py-2 px-4">Email</th>
+            <th class="py-2 px-4">Location</th>
+            <th class="py-2 px-4">Gender</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of recentStudents; index as i">
+            <td class="py-2 px-4">{{ i + 1 }}</td>
+            <td class="py-2 px-4">{{ student.name }}</td>
+            <td class="py-2 px-4">{{ student.email }}</td>
+            <td class="py-2 px-4">{{ student.location }}</td>
+            <td class="py-2 px-4">{{ student.gender }}</td>
+            <td class="py-2 px-4">
+              <span [ngClass]="{
+                'text-green-400': student.status === 'Active',
+                'text-red-400': student.status === 'Inactive'
+              }">
+                {{ student.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </main>
 </div>

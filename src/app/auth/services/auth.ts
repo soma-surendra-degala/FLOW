@@ -1,37 +1,50 @@
-import { Injectable } from '@angular/core'; 
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private tokenKey = 'authToken';
+  private apiUrl = 'http://localhost:5000/api/students';
+  private tokenKey = 'studentToken';
 
-  constructor(private router: Router) {}
+  constructor(private http: HttpClient) {}
 
-  // Login (fake, replace with API later)
-  login(email: string, password: string): boolean {
-    if (email === 'test' && password === '1234') {
-      localStorage.setItem(this.tokenKey, 'sample-jwt-token');
-      return true;
-    }
-    return false;
+  // ✅ Register
+  register(data: RegisterData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data);
   }
 
-  // Logout
-  logout(): void {
+  // ✅ Login
+  login(data: LoginData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, data).pipe(
+      tap((res: any) => {
+        if (res.token) localStorage.setItem(this.tokenKey, res.token);
+      })
+    );
+  }
+
+  // ✅ Logout
+  logout() {
     localStorage.removeItem(this.tokenKey);
-    this.router.navigate(['/student/login']);
   }
 
-  // Check if logged in
+  // ✅ Check authentication
   isAuthenticated(): boolean {
-    const token = localStorage.getItem(this.tokenKey);
-    console.log('🔑 isAuthenticated check, token =', token);
-    return !!token;
+    return !!localStorage.getItem(this.tokenKey);
   }
 
-  // Get Token
+  // ✅ Get token
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }

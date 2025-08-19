@@ -1,59 +1,69 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import type { Student } from '../../app/shared/models/student.model';
+import type { Course } from '../../app/shared/models/course.model';
+import type { Practice } from '../../app/shared/models/practice.model';
+import { CommonModule } from '@angular/common';
 import { Sidebar } from './Admin-components/sidebar/sidebar';
-
-// Define student type
-interface Student {
-  name: string;
-  score: number;
-  status: 'Active' | 'Inactive';
-}
+import { DashboardService } from '../shared/sharedservices/dashboard';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, Sidebar],
+  imports: [CommonModule, Sidebar,HttpClientModule],
   templateUrl: './admin.html',
   styleUrls: ['./admin.css']
 })
-export class Admin {
+export class Admin implements OnInit {
   isSidebarOpen = false;
 
   stats = {
-    courses: 12,
-    practice: 45,
-    students: 230,
-    revenue: 120000,
-    activeCourses: 8,
+    courses: 0,
+    practices: 0,
+    students: 0
   };
 
-  recentActivity: string[] = [
-    '🎓 New student registered',
-    '📘 Course "Angular Basics" updated',
-    '📝 Practice set "Arrays" completed by 10 students',
-    '💰 Revenue report generated',
-  ];
+  recentActivity: string[] = [];
+  recentStudents: Student[] = [];
+  topStudents: Student[] = [];
 
-  courseProgress = [
-    { title: 'Angular Basics', progress: 80 },
-    { title: 'React Fundamentals', progress: 60 },
-    { title: 'Python for ML', progress: 45 },
-  ];
+  constructor(private router: Router, private dashboardService: DashboardService) {}
 
-  // ✅ Strongly typed students
-  topStudents: Student[] = [
-    { name: 'Ravi Kumar', score: 95, status: 'Active' },
-    { name: 'Ananya Sharma', score: 90, status: 'Active' },
-    { name: 'Rahul Mehta', score: 88, status: 'Inactive' },
-  ];
+  ngOnInit() {
+    this.loadStats();
+    this.loadRecentData();
+  }
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
-  constructor(private router: Router) {}
+
   student() {
     this.router.navigate(['/admin/students']);
+  }
+
+  private loadStats() {
+    this.dashboardService.getStudents().subscribe(students => {
+      this.stats.students = students.length;
+      this.topStudents = students.slice(-3).reverse(); // last 3 students
+      students.slice(-1).forEach(s => this.recentActivity.push(`🎓 New student registered: ${s.name}`));
+    });
+
+    this.dashboardService.getCourses().subscribe(courses => {
+      this.stats.courses = courses.length;
+      courses.slice(-1).forEach(c => this.recentActivity.push(`📘 New course added: ${c.title}`));
+    });
+
+    this.dashboardService.getPractices().subscribe(practices => {
+      this.stats.practices = practices.length;
+      practices.slice(-1).forEach(p => this.recentActivity.push(`📝 New practice added: ${p.title}`));
+    });
+  }
+
+  private loadRecentData() {
+    this.dashboardService.getStudents().subscribe(students => {
+      this.recentStudents = students.slice(-3).reverse();
+    });
   }
 }

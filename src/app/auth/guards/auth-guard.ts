@@ -1,6 +1,8 @@
-import { inject } from '@angular/core'; 
+
+import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
+
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -9,7 +11,6 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (authService.isAuthenticated()) {
     return true;
   } else {
-    // Redirect if not logged in
     return router.createUrlTree(['/student/login']);
   }
 };
