@@ -57,7 +57,7 @@ admin() {
   // This could be a redirect to the admin page or opening a modal
   console.log('Admin clicked');
   // For example, you might want to navigate to the admin page:
- window.open('admin','_blank');
+ window.open('admin/login','_blank');
 }
 
 }

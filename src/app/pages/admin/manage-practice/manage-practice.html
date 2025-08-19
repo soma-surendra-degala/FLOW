@@ -1,0 +1,161 @@
+<div class="flex min-h-screen bg-neutral-950 text-white">
+  <div 
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+    [ngClass]="{ '-translate-x-full': !isSidebarOpen, 'translate-x-0': isSidebarOpen }">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div 
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+
+  <!-- Main content -->
+  <div class="flex-1 p-6">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-cyan-400">Manage Practice Exercises</h1>
+     <button 
+        class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
+        (click)="toggleSidebar()">
+        <i class="bi bi-list text-2xl"></i>
+      </button>
+    </header>
+
+
+    <!-- Content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      <div class="bg-neutral-900 rounded-2xl border border-neutral-800 shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold mb-4">Practice Exercises</h2>
+        <button
+        (click)="addExercise()"
+        class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg"
+      >
+        + Add Exercise
+      </button>
+      </div>
+        <!-- Table -->
+        <table class="w-full text-left text-sm" *ngIf="exercises.length > 0">
+          <thead>
+            <tr class="text-gray-400 border-b border-neutral-800">
+              <th class="py-2">Title</th>
+              <th class="py-2 px-4">Description</th>
+              <th class="py-2 px-4">Difficulty</th>
+              <th class="py-2 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let exercise of exercises"
+              class="border-b border-neutral-800 hover:bg-neutral-800/40 transition"
+            >
+              <td class="py-2 flex items-center gap-2">
+                <i [class]="exercise.icon + ' text-cyan-400 text-xl'"></i>
+                <span>{{ exercise.title }}</span>
+              </td>
+              <td class="px-4 py-2 text-gray-400 text-sm italic">
+                {{ exercise.description }}
+              </td>
+              <td class="px-4 py-2">
+                <span
+                  [ngClass]="{
+                    'text-green-400': exercise.difficulty === 'Easy',
+                    'text-yellow-400': exercise.difficulty === 'Medium',
+                    'text-red-400': exercise.difficulty === 'Hard'
+                  }"
+                >
+                  {{ exercise.difficulty }}
+                </span>
+              </td>
+              <td class="py-2 flex justify-end gap-2">
+                <button
+                  (click)="editExercise(exercise)"
+                  class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm"
+                >
+                  Edit
+                </button>
+                <button
+                  (click)="deleteExercise(exercise.id)"
+                  class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div
+          *ngIf="exercises.length === 0"
+          class="text-center text-gray-500 mt-6"
+        >
+          No exercises added yet.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div
+    *ngIf="showModal"
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+  >
+    <div
+      class="bg-neutral-900 p-6 rounded-2xl w-96 border border-neutral-800 shadow-lg"
+    >
+      <h3 class="text-lg font-semibold mb-4">
+        {{ selectedExercise?.id === 0 ? 'Add Exercise' : 'Edit Exercise' }}
+      </h3>
+
+      <div class="space-y-3">
+        <input
+          [(ngModel)]="selectedExercise!.title"
+          placeholder="Exercise Title"
+          class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"
+        />
+
+        <textarea
+          [(ngModel)]="selectedExercise!.description"
+          placeholder="Description"
+          class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm resize-none"
+          rows="3"
+        ></textarea>
+
+        <input
+          [(ngModel)]="selectedExercise!.icon"
+          placeholder="Icon class (e.g. bi bi-code-slash)"
+          class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"
+        />
+
+        <select
+          [(ngModel)]="selectedExercise!.difficulty"
+          class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"
+        >
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-4">
+        <button
+          (click)="closeModal()"
+          class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="saveExercise()"
+          class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

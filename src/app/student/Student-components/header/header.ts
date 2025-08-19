@@ -9,34 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.css']
 })
 export class Header {
-
-   @Output() toggleSidebar = new EventEmitter<void>();
-
   studentName = 'Suri';
   isSidebarOpen: boolean = false;
-closeSidebar() {
-  this.isSidebarOpen = false;
-}
-  constructor(private router :Router) {}
+  isDarkMode = true; // default dark
 
-  onLogout() {
-    localStorage.removeItem('authToken'); // optional
-    this.router.navigate(['/student/login']);
-  }
-  isDarkMode = true; // default dark mode
-
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }
-
-  ngOnInit() {
+  constructor(private router: Router) {
+    // ✅ Load saved theme on page reload
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
       this.isDarkMode = false;
@@ -47,5 +25,27 @@ closeSidebar() {
     }
   }
 
+  @Output() toggleSidebar = new EventEmitter<void>();
 
+  closeSidebar() {
+    this.isSidebarOpen = false;
+  }
+
+  onLogout() {
+    localStorage.removeItem('authToken');
+    this.router.navigate(['/student/login']);
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+
+    const htmlEl = document.documentElement;
+    if (this.isDarkMode) {
+      htmlEl.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      htmlEl.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }
 }

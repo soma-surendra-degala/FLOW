@@ -1,0 +1,45 @@
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-sidebar',
+  imports: [FormsModule,CommonModule],
+  standalone: true,
+  templateUrl: './sidebar.html',
+  styleUrls: ['./sidebar.css']
+})
+export class Sidebar {
+  isSidebarOpen = false;
+   @Input() isOpen: boolean = true; // default open
+
+  constructor(private router: Router) {}
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  dashboard() {
+    this.router.navigate(['admin/admin']);
+    this.isSidebarOpen = false;
+  }
+
+  students() {
+    this.router.navigate(['admin/students']);
+    this.isSidebarOpen = false;
+  }
+
+  courses() {
+    this.router.navigate(['admin/courses']);
+    this.isSidebarOpen = false;
+  }
+
+  practice() {
+    this.router.navigate(['admin/practice']);
+    this.isSidebarOpen = false;
+  }
+  logout() {
+    this.router.navigate(['admin/login'])
+  }
+}

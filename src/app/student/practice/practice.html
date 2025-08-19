@@ -1,0 +1,102 @@
+<div class="flex flex-col min-h-screen">
+  <!-- Header -->
+  <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
+
+  <!-- Sidebar + Main -->
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <app-sidebar #sidebar></app-sidebar>
+
+    <!-- Main Content -->
+    <main
+      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-6 transition-all duration-300 overflow-y-auto"
+      [ngClass]="{ 'ml-64': sidebar.isOpen && !sidebar.isMobile }"
+    >
+      <h2 class="text-2xl font-bold text-cyan-400 mb-6">Practice Exercises</h2>
+
+      <!-- Practice Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          *ngFor="let practice of practiceList"
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex flex-col transition hover:shadow-lg"
+        >
+          <!-- Title + description -->
+          <h3 class="text-lg font-semibold text-cyan-400 mb-2">{{ practice.title }}</h3>
+          <p class="text-sm text-gray-300 dark:text-gray-700 mb-3">{{ practice.description }}</p>
+
+          <!-- Due date & time left -->
+          <div class="flex justify-between text-xs text-gray-500 dark:text-gray-500 mb-4">
+            <span>📅 Due: {{ practice.dueDate }}</span>
+            <span>⏳ {{ practice.timeLeft }}</span>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="mt-auto">
+            <button
+              *ngIf="practice.status === 'Pending'"
+              type="button"
+              class="w-full px-4 py-2 rounded-lg bg-cyan-500 text-white hover:bg-cyan-600 transition"
+              (click)="onSolve(practice)"
+            >
+              Solve
+            </button>
+
+            <button
+              *ngIf="practice.status === 'Completed'"
+              type="button"
+              class="w-full px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition"
+              (click)="onViewSolution(practice)"
+            >
+              View Solution
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<!-- Modal -->
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+  (click)="closeModal()"
+>
+  <div
+    class="bg-neutral-900 text-white w-full max-w-2xl rounded-2xl p-5 border border-neutral-700 dark:bg-neutral-100 dark:text-neutral-900"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold">
+        {{ modalMode === 'solve' ? 'Solve Practice' : 'Solution' }}
+        <span *ngIf="activePractice" class="text-cyan-400">— {{ activePractice.title }}</span>
+      </h3>
+      <button type="button" (click)="closeModal()" class="text-xl">✖</button>
+    </div>
+
+    <!-- Solve view -->
+    <ng-container *ngIf="modalMode === 'solve'">
+      <textarea
+        [(ngModel)]="tempAnswer"
+        rows="8"
+        class="w-full p-3 rounded-xl bg-neutral-800 dark:bg-neutral-200 border border-neutral-700 dark:border-neutral-300 text-white dark:text-neutral-900"
+        placeholder="Write your solution here..."
+      ></textarea>
+      <div class="mt-4 flex justify-end gap-2">
+        <button type="button" class="px-4 py-2 rounded-lg bg-neutral-700 dark:bg-neutral-300" (click)="closeModal()">Cancel</button>
+        <button type="button" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500" (click)="submitSolution()">Submit</button>
+      </div>
+    </ng-container>
+
+    <!-- Solution view -->
+    <ng-container *ngIf="modalMode === 'solution'">
+      <pre
+        class="bg-neutral-800 dark:bg-neutral-200 rounded-xl p-4 overflow-auto border border-neutral-700 dark:border-neutral-300 text-white dark:text-neutral-900"
+      >
+{{ activePractice?.solution || 'Solution will be provided by the instructor.' }}
+      </pre>
+      <div class="mt-4 flex justify-end">
+        <button type="button" class="px-4 py-2 rounded-lg bg-neutral-700 dark:bg-neutral-300" (click)="closeModal()">Close</button>
+      </div>
+    </ng-container>
+  </div>
+</div>

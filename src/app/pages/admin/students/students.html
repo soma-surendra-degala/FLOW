@@ -1,0 +1,61 @@
+<div class="flex min-h-screen bg-neutral-950 text-white">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold text-cyan-400">
+        Students
+      </h2>
+    </div>
+
+    <!-- Students Table -->
+    <div
+      class="bg-neutral-900 p-6 rounded-2xl shadow border border-neutral-800"
+    >
+      <table class="w-full text-left text-sm" *ngIf="students.length > 0">
+        <thead>
+          <tr class="text-gray-400 border-b border-neutral-800">
+            <th class="py-2">#</th>
+            <th class="py-2 px-4">Name</th>
+            <th class="py-2 px-4">Email</th>
+            <th class="py-2 px-4">Course</th>
+            <th class="py-2 px-4">Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let student of students; index as i"
+            class="border-b border-neutral-800"
+          >
+            <td class="py-2 px-2 text-gray-400">{{ i + 1 }}</td>
+            <td class="px-4 py-2 flex items-center gap-2">
+              <i class="bi bi-person-circle text-cyan-400 text-lg"></i>
+              {{ student.name }}
+            </td>
+            <td class="px-4 py-2 text-gray-400">{{ student.email }}</td>
+            <td class="px-4 py-2">{{ student.course }}</td>
+            <td class="px-4 py-2">
+              <span
+                [ngClass]="{
+                  'text-green-400': student.status === 'Active',
+                  'text-red-400': student.status === 'Inactive'
+                }"
+              >
+                {{ student.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="students.length === 0" class="text-center text-gray-500 mt-4">
+        No students found.
+      </div>
+    </div>
+  </main>
+</div>

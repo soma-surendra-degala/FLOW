@@ -1,71 +1,52 @@
-<div class="flex flex-col min-h-screen " (click)="toggleTheme()">
+<div class="flex flex-col min-h-screen" (click)="toggleTheme()">
   <!-- Header -->
   <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
 
-  <!-- Sidebar + Main -->
   <div class="flex flex-1">
     <!-- Sidebar -->
     <app-sidebar #sidebar></app-sidebar>
 
     <!-- Main Content -->
     <main
-      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-6 transition-all duration-300"
-      [ngClass]="{ 'ml-64': sidebar.isOpen && !sidebar.isMobile }"
+      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-6 transition-all duration-300 overflow-y-auto"
+      [ngClass]="{ 'ml-64': sidebar?.isOpen && !sidebar?.isMobile }"
     >
       <h2 class="text-2xl font-bold text-cyan-400 mb-6">Dashboard</h2>
 
-      <!-- Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Enrolled Courses -->
+      <!-- Top Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
         <div
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4"
+          *ngFor="let card of summaryCards"
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4 transition hover:shadow-lg"
         >
-          <div class="text-cyan-400 text-4xl">
-            <i class="bi bi-book"></i>
-          </div>
+          <div [ngClass]="'text-' + card.color + ' text-4xl'"><i class="bi" [ngClass]="card.icon"></i></div>
           <div>
-            <h3 class="text-lg font-semibold">Enrolled Courses</h3>
-            <p class="text-3xl font-bold text-cyan-400 mt-1">5</p>
-          </div>
-        </div>
-
-        <!-- Assignments Due -->
-        <div
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4"
-        >
-          <div class="text-red-400 text-4xl">
-            <i class="bi bi-journal-check"></i>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold">Assignments Due</h3>
-            <p class="text-3xl font-bold text-red-400 mt-1">2</p>
-          </div>
-        </div>
-
-        <!-- Progress -->
-        <div
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4"
-        >
-          <div class="text-green-400 text-4xl">
-            <i class="bi bi-graph-up-arrow"></i>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold">Progress</h3>
-            <p class="text-3xl font-bold text-green-400 mt-1">78%</p>
+            <h3 class="text-lg font-semibold">{{ card.title }}</h3>
+            <p class="text-3xl font-bold" [ngClass]="'text-' + card.color + ' mt-1'">{{ card.value }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Recent Activity -->
-      <div
-        class="mt-8 bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow"
-      >
-        <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
-        <ul class="space-y-3 text-neutral-300 dark:text-neutral-700">
-          <li>✔️ Submitted Assignment 3 in <span class="text-cyan-400">Math</span></li>
-          <li>📚 Enrolled in <span class="text-cyan-400">Web Development</span></li>
-          <li>⭐ Completed <span class="text-cyan-400">Python Basics</span></li>
-        </ul>
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Activity Feed -->
+        <div class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow h-96 overflow-y-auto transition hover:shadow-lg">
+          <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+          <ul class="space-y-3 text-neutral-300 dark:text-neutral-700">
+            <li *ngFor="let activity of recentActivities" class="flex items-center gap-2">
+              <i class="bi" [ngClass]="[activity.type === 'submission' ? 'bi-check-circle' : activity.type === 'enrollment' ? 'bi-book' : 'bi-star', getActivityColor(activity.type)]"></i>
+              {{ activity.text }} <span class="text-cyan-400">{{ activity.course }}</span> - {{ activity.timeAgo }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Progress Chart Placeholder -->
+        <div class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow transition hover:shadow-lg">
+          <h3 class="text-lg font-semibold mb-4">Course Progress</h3>
+          <div class="h-50 flex items-center justify-center text-gray-400 dark:text-gray-600">
+            Chart Placeholder
+          </div>
+        </div>
       </div>
     </main>
   </div>

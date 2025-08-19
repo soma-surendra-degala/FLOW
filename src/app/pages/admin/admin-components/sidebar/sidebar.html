@@ -1,0 +1,57 @@
+<!-- Sidebar -->
+<div
+  class="bg-neutral-900 text-gray-200 h-screen transition-all duration-300 border-r border-neutral-800"
+  [class.w-64]="isOpen"
+  [class.w-20]="!isOpen"
+>
+  <!-- Logo -->
+  <div class="flex items-center justify-between p-15">
+    <span class="text-xl font-extrabold text-cyan-400" *ngIf="isOpen">FLOW Admin</span>
+    
+  </div>
+
+  <!-- Nav Items -->
+  <nav class="p-4 space-y-3">
+    <a
+      routerLink="/admin/dashboard" (click)="dashboard()"
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-speedometer2 text-cyan-400"></i>
+      <span *ngIf="isOpen">Dashboard</span>
+    </a>
+
+    <a
+       routerLink="/admin/manage-courses" (click)="courses()"
+     class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-book text-cyan-400"></i>
+      <span *ngIf="isOpen">Manage Courses</span>
+    </a>
+    <a
+       routerLink="/admin/manage-practice" (click)="practice()"
+     class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-book text-cyan-400"></i>
+      <span *ngIf="isOpen">Manage Practice</span>
+    </a>
+    <a
+      routerLink="/admin/students"  (click)="students()"
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-people text-cyan-400"></i>
+      <span *ngIf="isOpen">Students</span>
+    </a>
+
+    <a
+      routerLink="/admin/settings"
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-gear text-cyan-400"></i>
+      <span *ngIf="isOpen">Settings</span>
+    </a>
+  </nav>
+  <button class="flex items-center justify-center pt-50 gap-3 px-3 py-2 rounded-lg  w-full" (click)="logout()">
+    <i class="bi bi-box-arrow-right text-cyan-400 text-xl hover:bg-neutral-800"></i>
+    <span>Logout</span>
+  </button>
+</div>
