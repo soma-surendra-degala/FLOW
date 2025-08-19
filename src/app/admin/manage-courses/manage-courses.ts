@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Sidebar } from '../admin-components/sidebar/sidebar';
+import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
 interface Course {
   id: number;

@@ -13,11 +13,9 @@ import { BlankLayout } from './layouts/blank-layout/blank-layout';
 
 // Guards
 import { authGuard } from './auth/guards/auth-guard';
-import { Admin } from './pages/admin/admin';
-import { AdminLogin } from './pages/admin/admin-login/admin-login';
 import { AdminGuard } from './auth/admin/admin-guard';
-import { ManageCourses } from './pages/admin/manage-courses/manage-courses';
-import { ManagePractice } from './pages/admin/manage-practice/manage-practice';
+import { ManagePractice } from './admin/manage-practice/manage-practice';
+import { AdminLogin } from './admin/admin-login/admin-login';
 
 export const routes: Routes = [
   // ---------- Student Pages (Protected) ----------
@@ -55,12 +53,12 @@ export const routes: Routes = [
     {
       path: 'admin',   // ✅ clearer URL
       loadComponent: () =>
-        import('./pages/admin/admin').then((m) => m.Admin),
+        import('./admin/admin').then((m) => m.Admin),
       canActivate: [AdminGuard]
     },
-    { path: 'courses', loadComponent: () => import('./pages/admin/manage-courses/manage-courses').then(m => m.ManageCourses) },
+    { path: 'courses', loadComponent: () => import('./admin/manage-courses/manage-courses').then(m => m.ManageCourses) },
     {path:'practice', component: ManagePractice, canActivate: [AdminGuard]},
-    {path: 'students', loadComponent: () => import('./pages/admin/students/students').then(m => m.Students), canActivate: [AdminGuard]},
+    {path: 'students', loadComponent: () => import('./admin/students/students').then(m => m.Students), canActivate: [AdminGuard]},
     { path: '', redirectTo: 'login', pathMatch: 'full' } // ✅ default
   ],
 },

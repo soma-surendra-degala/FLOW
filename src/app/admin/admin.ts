@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Sidebar } from './admin-components/sidebar/sidebar';
+
 import { Router } from '@angular/router';
+import { Sidebar } from './Admin-components/sidebar/sidebar';
 
 // Define student type
 interface Student {
