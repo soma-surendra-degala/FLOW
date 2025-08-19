@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe.ts-pipe';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
+import { Router } from '@angular/router';
 
 interface Course {
   title: string;
@@ -84,6 +85,11 @@ export class Courses {
 get selectedVideoTitle(): string | null {
     const course = this.courses.find(c => c.videoUrl === this.selectedVideo);
     return course ? course.title : null;
+  }
+  constructor(private router:Router){}
+  coursesbtn(){
+    this.router.navigate(['/student/courses'])
+
   }
 
 }
