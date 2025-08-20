@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { Practice, PracticeService } from '../../shared/sharedservices/practice';
+import { Practice, PracticeService } from '../../shared/sharedservices/admin/practice';
 
 
 @Component({

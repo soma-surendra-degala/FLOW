@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Admin-components/sidebar/sidebar';
-import { Practice, PracticeService } from '../../shared/sharedservices/practice';
+import { Practice, PracticeService } from '../../shared/sharedservices/admin/practice';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({

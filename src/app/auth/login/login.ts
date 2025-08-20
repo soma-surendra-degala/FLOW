@@ -17,18 +17,22 @@ export class Login {
 
   constructor(private authService: AuthService, private router: Router) {}
 
- onLogin() {
-    this.authService.login(this.loginData).subscribe({
-      next: (res: { token: string; student: any }) => {
-        alert('Login successful!');
-        this.router.navigate(['/student/dashboard']);
-      },
-      error: (err: any) => {
-        console.error('Login error:', err);
-        alert(err.error?.message || 'Login failed');
-      }
-    });
-  }
+onLogin() {
+  this.authService.login(this.loginData).subscribe({
+    next: (res: { token: string; student: any }) => {
+      // Save JWT token
+      localStorage.setItem('token', res.token);
+
+      alert('Login successful!');
+      this.router.navigate(['/student/dashboard']);
+    },
+    error: (err: any) => {
+      console.error('Login error:', err);
+      alert(err.error?.message || 'Login failed');
+    }
+  });
+}
+
    register() {
     this.router.navigate(['/student/register']); // redirect to register page
   }

@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.css']
 })
-export class Sidebar {  isOpen = true;
+export class Sidebar {  
+  isOpen = true;
   isMobile = false;
 
   ngOnInit() {

@@ -30,6 +30,7 @@ export class AdminLogin implements OnInit {
   onLogin() {
     const { email, password } = this.loginForm.value;
     if (email && password && this.adminAuth.login(email, password)) {
+      
       console.log('✅ Admin logged in successfully');
       this.router.navigate(['/admin']); // Go to admin dashboard
     } else {

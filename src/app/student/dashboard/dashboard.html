@@ -11,42 +11,82 @@
       class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-6 transition-all duration-300 overflow-y-auto"
       [ngClass]="{ 'ml-64': sidebar?.isOpen && !sidebar?.isMobile }"
     >
-      <h2 class="text-2xl font-bold text-cyan-400 mb-6">Dashboard</h2>
+      <h2 class="text-2xl font-bold text-cyan-400 mb-6">Student Dashboard</h2>
 
-      <!-- Top Summary Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
+      <!-- ✅ Top Summary Cards -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6"
+      >
         <div
           *ngFor="let card of summaryCards"
           class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4 transition hover:shadow-lg"
         >
-          <div [ngClass]="'text-' + card.color + ' text-4xl'"><i class="bi" [ngClass]="card.icon"></i></div>
+          <div [ngClass]="'text-' + card.color + ' text-4xl'">
+            <i class="bi" [ngClass]="card.icon"></i>
+          </div>
           <div>
             <h3 class="text-lg font-semibold">{{ card.title }}</h3>
-            <p class="text-3xl font-bold" [ngClass]="'text-' + card.color + ' mt-1'">{{ card.value }}</p>
+            <p
+              class="text-3xl font-bold"
+              [ngClass]="'text-' + card.color + ' mt-1'"
+            >
+              {{ card.value }}
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- Main Content Grid -->
+      <!-- ✅ Main Content Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
         <!-- Recent Activity Feed -->
-        <div class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow h-96 overflow-y-auto transition hover:shadow-lg">
+        <div
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow h-70 overflow-y-auto transition hover:shadow-lg"
+        >
           <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
           <ul class="space-y-3 text-neutral-300 dark:text-neutral-700">
-            <li *ngFor="let activity of recentActivities" class="flex items-center gap-2">
-              <i class="bi" [ngClass]="[activity.type === 'submission' ? 'bi-check-circle' : activity.type === 'enrollment' ? 'bi-book' : 'bi-star', getActivityColor(activity.type)]"></i>
-              {{ activity.text }} <span class="text-cyan-400">{{ activity.course }}</span> - {{ activity.timeAgo }}
+            <li
+              *ngFor="let activity of recentActivities"
+              class="flex items-center gap-2"
+            >
+              <i
+                class="bi"
+                [ngClass]="[
+                  activity.type === 'submission'
+                    ? 'bi-check-circle'
+                    : activity.type === 'enrollment'
+                    ? 'bi-book'
+                    : 'bi-star',
+                  getActivityColor(activity.type)
+                ]"
+              ></i>
+              {{ activity.text }}
+              <span class="text-cyan-400">{{ activity.course }}</span> -
+              {{ activity.timeAgo }}
             </li>
           </ul>
         </div>
 
-        <!-- Progress Chart Placeholder -->
-        <div class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow transition hover:shadow-lg">
-          <h3 class="text-lg font-semibold mb-4">Course Progress</h3>
-          <div class="h-50 flex items-center justify-center text-gray-400 dark:text-gray-600">
-            Chart Placeholder
-          </div>
+        <!-- ✅ Upcoming Courses Section -->
+        <div
+          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow h-70 overflow-y-auto transition hover:shadow-lg"
+        >
+          <h3 class="text-lg font-semibold mb-4">Upcoming Courses</h3>
+          <ul
+            class="space-y-2 text-neutral-300 dark:text-neutral-700 divide-y  dark:divide-neutral-300"
+          >
+            <li
+              *ngFor="let course of upcomingCourses"
+              class="py-1 first:pt-0"
+            >
+              <p class="font-semibold">{{ course.title }}</p>
+              <p class="text-sm text-gray-400 dark:text-gray-600">
+                Starts: {{ course.startDate | date : "mediumDate" }}
+              </p>
+            </li>
+          </ul>
         </div>
+
       </div>
     </main>
   </div>

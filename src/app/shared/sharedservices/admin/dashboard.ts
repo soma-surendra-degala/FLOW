@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import type { Student } from '../models/student.model'; 
-import { Course } from '../models/course.model';
-import { Practice } from '../models/practice.model';
+import type { Student } from '../../models/student.model'; 
+import { Course } from '../../models/course.model';
+import { Practice } from '../../models/practice.model';
+import type { UpcomingCourse } from '../../models/upcoming-course.model';
 
 
 export interface Stats {
@@ -28,6 +29,10 @@ getCourses() {
 getPractices() {
   return this.http.get<Practice[]>('http://localhost:5000/api/practices');
 }
+
+ getUpcomingCourses(): Observable<UpcomingCourse[]> {
+    return this.http.get<UpcomingCourse[]>(`${this.baseUrl}/upcoming-courses`);
+  }
 
 }
 

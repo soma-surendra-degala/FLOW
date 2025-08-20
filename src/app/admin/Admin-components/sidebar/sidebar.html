@@ -34,6 +34,13 @@
       <i class="bi bi-book text-cyan-400"></i>
       <span *ngIf="isOpen">Manage Practice</span>
     </a>
+        <a
+       routerLink="/admin/upcoming_courses" (click)="upcoming_courses()"
+     class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-book text-cyan-400"></i>
+      <span *ngIf="isOpen">Upcoming Courses</span>
+    </a>
     <a
       routerLink="/admin/students"  (click)="students()"
       class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
@@ -50,7 +57,7 @@
       <span *ngIf="isOpen">Settings</span>
     </a>
   </nav>
-  <button class="flex items-center justify-center pt-50 gap-3 px-3 py-2 rounded-lg  w-full" (click)="logout()">
+  <button class="flex items-center justify-center pt-40 gap-3 px-3 py-2 rounded-lg  w-full" (click)="logout()">
     <i class="bi bi-box-arrow-right text-cyan-400 text-xl hover:bg-neutral-800"></i>
     <span>Logout</span>
   </button>

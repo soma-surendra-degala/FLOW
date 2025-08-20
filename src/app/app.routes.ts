@@ -18,6 +18,7 @@ import { BlankLayout } from './layouts/blank-layout/blank-layout';
 // Guards
 import { authGuard } from './auth/guards/auth-guard';
 import { AdminGuard } from './auth/admin/admin-guard';
+import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -68,6 +69,10 @@ export const routes: Routes = [
         path: 'practice',
         component: ManagePractice,
         canActivate: [AdminGuard],
+      },
+      { path: 'upcoming-courses', 
+        component: UpcomingCourses,
+        canActivate:[AdminGuard]
       },
       {
         path: 'students',

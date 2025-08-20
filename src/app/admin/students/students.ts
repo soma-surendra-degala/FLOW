@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Student, StudentService } from '../../shared/sharedservices/students';
+
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Sidebar } from '../Admin-components/sidebar/sidebar';
+
+import { Student } from '../../shared/models/student.model';
+import { StudentService } from '../../shared/sharedservices/admin/students';
 
 
 @Component({
@@ -12,9 +15,14 @@ import { Sidebar } from '../Admin-components/sidebar/sidebar';
   styleUrls: ['./students.css']
 })
 export class Students implements OnInit {
+  isSidebarOpen = false;
   students: Student[] = [];
 
   constructor(private studentService: StudentService) {}
+
+    toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 
   ngOnInit() {
     this.fetchStudents();
@@ -35,7 +43,7 @@ export class Students implements OnInit {
     if (!student._id) return;
 
     this.studentService.updateStudent(student._id, {
-      status: student.status,
+      phone: student.phone,
       location: student.location,
       gender: student.gender
     }).subscribe({

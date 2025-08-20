@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe.ts-pipe';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { Course, CourseService } from '../../shared/sharedservices/course';
+import { Course, CourseService } from '../../shared/sharedservices/admin/course';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({

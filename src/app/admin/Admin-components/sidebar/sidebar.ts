@@ -34,6 +34,10 @@ export class Sidebar {
     this.router.navigate(['admin/courses']);
     this.isSidebarOpen = false;
   }
+  upcoming_courses(){
+    this.router.navigate(['admin/upcoming-courses']);
+    this.isSidebarOpen = false;
+  }
 
   practice() {
     this.router.navigate(['admin/practice']);

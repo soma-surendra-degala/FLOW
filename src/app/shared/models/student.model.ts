@@ -3,8 +3,13 @@ export interface Student {
   name: string;
   email: string;
   course?: string;
-  status: 'Active' | 'Inactive';
+  status?: string;
   location?: string;
   gender?: 'Male' | 'Female' | 'Other';
-  score?: number;
+  year?: string;
+  phone?: string;
+  enrollment?: string;
+  progress?: number;
+  avatar?: string;
+  college?: string;
 }

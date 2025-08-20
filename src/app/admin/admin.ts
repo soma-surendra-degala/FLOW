@@ -5,7 +5,7 @@ import type { Course } from '../../app/shared/models/course.model';
 import type { Practice } from '../../app/shared/models/practice.model';
 import { CommonModule } from '@angular/common';
 import { Sidebar } from './Admin-components/sidebar/sidebar';
-import { DashboardService } from '../shared/sharedservices/dashboard';
+import { DashboardService } from '../shared/sharedservices/admin/dashboard';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({

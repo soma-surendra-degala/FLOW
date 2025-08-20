@@ -78,27 +78,33 @@
             <th class="py-2">#</th>
             <th class="py-2 px-4">Name</th>
             <th class="py-2 px-4">Email</th>
-            <th class="py-2 px-4">Location</th>
-            <th class="py-2 px-4">Gender</th>
+            <th class="py-2 px-4 hidden sm:table-cell">Location</th>
+            <th class="py-2 px-4 hidden sm:table-cell">Gender</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let student of recentStudents; index as i">
-            <td class="py-2 px-4">{{ i + 1 }}</td>
-            <td class="py-2 px-4">{{ student.name }}</td>
-            <td class="py-2 px-4">{{ student.email }}</td>
-            <td class="py-2 px-4">{{ student.location }}</td>
-            <td class="py-2 px-4">{{ student.gender }}</td>
-            <td class="py-2 px-4">
-              <span [ngClass]="{
-                'text-green-400': student.status === 'Active',
-                'text-red-400': student.status === 'Inactive'
-              }">
-                {{ student.status }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
+<tbody>
+  <tr *ngFor="let student of recentStudents; index as i" class="border-b border-neutral-800 hover:bg-neutral-800/30 transition">
+    <td class="py-2 px-2">{{ i + 1 }}</td>
+    <td class="py-2 px-2">{{ student.name }}</td>
+    <td class="py-2 px-2">{{ student.email }}</td>
+    
+    <!-- Location: hide on small screens -->
+    <td class="py-2 px-2 hidden sm:table-cell">{{ student.location }}</td>
+    
+    <!-- Gender: hide on small screens -->
+    <td class="py-2 px-2 hidden sm:table-cell">{{ student.gender }}</td>
+    
+    <td class="py-2 px-2">
+      <span [ngClass]="{
+        'text-green-400': student.status === 'Active',
+        'text-red-400': student.status === 'Inactive'
+      }">
+        {{ student.status }}
+      </span>
+    </td>
+  </tr>
+</tbody>
+
       </table>
     </div>
   </main>
