@@ -25,7 +25,7 @@
           <li *ngFor="let skill of internship.skills">{{ skill }}</li>
         </ul>
 
-        <button class="px-4 py-2 text-white rounded-lg {{ internship.buttonColor }}">
+        <button class="px-4 py-2 text-white rounded-lg {{ internship.buttonColor }}" (click)="login()">
           Apply
         </button>
       </div>

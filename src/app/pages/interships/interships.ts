@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-interships',
@@ -47,5 +48,11 @@ export class Interships {
       buttonColor: 'bg-green-500 hover:bg-green-600'
     }
   ];
+
+  constructor(private router:Router){}
+
+  login(){
+    this.router.navigate(['student/login'])
+  }
 
 }

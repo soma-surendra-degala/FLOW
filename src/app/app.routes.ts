@@ -38,6 +38,12 @@ export const routes: Routes = [
           import('./student/practice/practice').then((m) => m.Practices),
         canActivate: [authGuard],
       },
+         {
+        path: 'upcoming-courses',
+        loadComponent: () =>
+          import('./student/student-upcoming-courses/student-upcoming-courses').then((m) => m.StudentUpcomingCourses),
+        canActivate: [authGuard],
+      },
       {
         path: 'profile',
         loadComponent: () =>

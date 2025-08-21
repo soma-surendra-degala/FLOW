@@ -89,7 +89,7 @@ export class Dashboard implements OnInit {
         this.recentActivities.push({
           type: 'enrollment',
           text: 'New Student Enrolled',
-          course: latest.name,
+          course: '',
           timeAgo: 'Just now'
         });
       }

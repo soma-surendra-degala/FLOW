@@ -5,12 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe.ts-pipe';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { Course, CourseService } from '../../shared/sharedservices/admin/course';
+import { Course } from '../../shared/models/course.model';
+import { CourseService } from '../../shared/sharedservices/admin/course';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-courses',
-  imports: [FormsModule, CommonModule, SafeUrlPipe, Sidebar, Header,HttpClientModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    SafeUrlPipe,
+    Sidebar,
+    Header,
+    HttpClientModule
+  ],
   templateUrl: './courses.html',
   styleUrls: ['./courses.css'],
 })
@@ -24,17 +32,25 @@ export class Courses implements OnInit {
     this.loadCourses();
   }
 
+
   loadCourses() {
   this.courseService.getCourses().subscribe({
-  next: (data: Course[]) => {
-    this.courses = data;
-  },
-  error: (err: any) => {
-    console.error('❌ Error fetching courses:', err);
-  }
-});
+    next: (data: any[]) => {
+      this.courses = data.map(course => ({
+        ...course,
+        skills: Array.isArray(course.skills)
+          ? course.skills
+          : typeof course.skills === 'string'
+            ? course.skills.split(',').map((s: string) => s.trim())
+            : []
+      })) as Course[];
+    },
+    error: (err: any) => {
+      console.error('❌ Error fetching courses:', err);
+    }
+  });
+}
 
-  }
 
   playVideo(url: string) {
     this.selectedVideo = url;
@@ -54,3 +70,5 @@ export class Courses implements OnInit {
     this.router.navigate(['/student/courses']);
   }
 }
+
+

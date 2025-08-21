@@ -8,16 +8,16 @@ interface Course {
   _id?: string;
   title: string;
   description: string;
+  skills: string;   // ✅ Added
   icon: string;
   videoUrl?: string;
   fileUrl?: string;
 }
 
-
 @Component({
   selector: 'app-manage-courses',
-  standalone:true,
-  imports:[FormsModule,CommonModule,Sidebar,HttpClientModule],
+  standalone: true,
+  imports: [FormsModule, CommonModule, Sidebar, HttpClientModule],
   templateUrl: './manage-courses.html',
   styleUrls: ['./manage-courses.css']
 })
@@ -50,7 +50,7 @@ export class ManageCourses implements OnInit {
   }
 
   addCourse() {
-    this.selectedCourse = { title: '', description: '', icon: '', videoUrl: '', fileUrl: '' };
+    this.selectedCourse = { title: '', description: '', skills: '', icon: '', videoUrl: '', fileUrl: '' };
     this.showModal = true;
   }
 
@@ -82,6 +82,7 @@ export class ManageCourses implements OnInit {
     const formData = new FormData();
     formData.append('title', this.selectedCourse.title);
     formData.append('description', this.selectedCourse.description);
+    formData.append('skills', this.selectedCourse.skills);   // ✅ include skills
     formData.append('icon', this.selectedCourse.icon);
     if (this.selectedCourse.videoUrl) {
       formData.append('videoUrl', this.selectedCourse.videoUrl);

@@ -35,17 +35,23 @@
           <p class="text-sm text-neutral-400 dark:text-gray-600 flex-1 mb-4">
             {{ course.description }}
           </p>
+          <!-- Skills -->
+      <!-- Skills Section -->
+<div *ngIf="course.skills?.length" class=" mb-4">
+  <h4 class="text-sm font-semibold text-neutral-800 mb-2">
+    Skills you’ll gain:
+  </h4>
+  <ul class="flex flex-wrap gap-2">
+    <li
+      *ngFor="let skill of course.skills"
+      class="bg-neutral-700 dark:bg-gray-200 text-cyan-300 dark:text-cyan-700 text-xs font-medium px-3 py-2 rounded-full shadow-sm hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 transition"
+    >
+      {{ skill }}
+    </li>
+  </ul>
+</div>
 
-          <!-- Progress Bar -->
-          <div class="w-full bg-neutral-700 dark:bg-gray-300 rounded-full h-2.5 mb-2">
-            <div
-              class="bg-cyan-500 dark:bg-cyan-600 h-2.5 rounded-full transition-all"
-              [style.width.%]="course.progress"
-            ></div>
-          </div>
-          <span class="text-xs text-neutral-400 dark:text-gray-600 mb-4 block">
-            {{ course.progress }}% complete
-          </span>
+
 
           <!-- Watch Button -->
           <button

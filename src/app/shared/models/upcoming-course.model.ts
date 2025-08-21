@@ -1,6 +1,9 @@
 export interface UpcomingCourse {
-  _id?: string;
   title: string;
-  startDate: Date;
+  startDate: string;
   duration: string;
+
+  // ✅ Add these
+  description?: string;  
+  skills?: string[];
 }
