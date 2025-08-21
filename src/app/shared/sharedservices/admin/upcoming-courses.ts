@@ -13,13 +13,13 @@ export interface UpcomingCourse {
   providedIn: 'root'
 })
 export class UpcomingCoursesService {
-  private apiUrl = 'http://localhost:5000/api/upcoming-courses'; // check your backend route
+  private apiUrl = 'http://localhost:5000/api/admin/upcoming-courses'; // check your backend route
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<UpcomingCourse[]> {
-    return this.http.get<UpcomingCourse[]>(this.apiUrl);
-  }
+getAll(): Observable<UpcomingCourse[] | { courses: UpcomingCourse[] }> {
+  return this.http.get<UpcomingCourse[] | { courses: UpcomingCourse[] }>(this.apiUrl);
+}
 
 add(course: UpcomingCourse): Observable<UpcomingCourse> {
   return this.http.post<UpcomingCourse>(this.apiUrl, course);
