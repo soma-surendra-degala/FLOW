@@ -28,4 +28,8 @@ export class StudentUpcomingCourses implements OnInit {
       }
     });
   }
+  enroll(){
+    alert('Stay Tune Will Update!😊');
+  }
+
 }

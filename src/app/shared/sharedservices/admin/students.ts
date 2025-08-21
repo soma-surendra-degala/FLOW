@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Student } from '../../models/student.model';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,8 +37,6 @@ updateProfile(data: FormData) {
   });
 }
 
-
-
   // Admin: get all students
   getStudents(): Observable<Student[]> {
     return this.http
@@ -50,5 +49,15 @@ updateProfile(data: FormData) {
     return this.http
       .put<Student>(`${this.apiUrl}/${id}`, data, { headers: this.getAuthHeaders() })
       .pipe(catchError((err) => throwError(() => err)));
+  }
+
+  getStudent(id: string): Observable<Student> {
+  return this.http.get<Student>(`${this.apiUrl}/${id}`);
+}
+
+
+  // Delete student
+  deleteStudent(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

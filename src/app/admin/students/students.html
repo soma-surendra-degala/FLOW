@@ -45,7 +45,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let student of students; index as i" class="border-b border-neutral-800 hover:bg-neutral-800/30 transition">
+            <tr *ngFor="let student of students; index as i" 
+            class="border-b border-neutral-800 hover:bg-neutral-800/30 transition cursor-pointer"
+            (click)="viewDetails(student._id)">
               <td class="py-2 px-2 text-gray-400">{{ i + 1 }}</td>
               <td class="px-4 py-2 flex items-center gap-2">
                 <i class="bi bi-person-circle text-cyan-400 text-lg"></i>

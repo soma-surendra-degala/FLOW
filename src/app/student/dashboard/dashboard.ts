@@ -8,6 +8,7 @@ import type { Course } from '../../shared/models/course.model';
 import type { Practice } from '../../shared/models/practice.model';
 import type { UpcomingCourse } from '../../shared/models/upcoming-course.model';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Activity {
   type: 'submission' | 'enrollment' | 'completion';
@@ -43,7 +44,7 @@ export class Dashboard implements OnInit {
   practices: Practice[] = [];
   upcomingCourses: UpcomingCourse[] = [];
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService , private router:Router) {}
 
   ngOnInit(): void {
     this.loadStats();

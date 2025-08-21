@@ -1,0 +1,120 @@
+<div class="flex min-h-screen bg-neutral-950 text-white">
+  <!-- Sidebar -->
+  <div
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+    [ngClass]="{
+      '-translate-x-full': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen
+    }"
+  >
+    <div class="flex flex-col h-full">
+      <app-sidebar class="flex-1"></app-sidebar>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()"
+  ></div>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-8 overflow-y-auto">
+    <!-- Header -->
+    <header
+      class="flex justify-between items-center p-4 border-b mb-4 border-neutral-800 md:px-6"
+    >
+      <h1 class="text-xl md:text-2xl font-bold text-cyan-400">
+        Student Details
+      </h1>
+      <button
+        class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
+        (click)="toggleSidebar()"
+      >
+        <i class="bi bi-list text-2xl"></i>
+      </button>
+    </header>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center text-gray-500 dark:text-gray-400">
+      <span class="animate-pulse">Loading student details...</span>
+    </div>
+
+    <!-- Student Detail Card -->
+    <div
+      *ngIf="!loading && student"
+      class="max-w-3xl mx-auto bg-white dark:bg-neutral-900 p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-neutral-800"
+    >
+      <!-- Header -->
+      <div class="flex items-center space-x-6 border-b pb-6 mb-6">
+        <img
+          *ngIf="student.avatar"
+          [src]="'http://localhost:5000' + student.avatar"
+          (error)="student.avatar = 'assets/default-avatar.png'"
+          class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400"
+        />
+        <img
+          *ngIf="!student.avatar"
+          src="assets/default-avatar.png"
+          class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400"
+        />
+        <div class="min-w-0"> <!-- ensures truncation works -->
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white truncate max-w-xs">
+            {{ student.name }}
+          </h2>
+          <p
+            class="text-gray-500 dark:text-gray-400 mt-2 break-words max-w-xs md:max-w-sm"
+          >
+            {{ student.email }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Info Grid -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 dark:text-gray-300"
+      >
+        <p>
+          <strong class="text-gray-900 dark:text-white">📞 Phone:</strong>
+          {{ student.phone || "N/A" }}
+        </p>
+        <p>
+          <strong class="text-gray-900 dark:text-white">🎓 College:</strong>
+          {{ student.college || "N/A" }}
+        </p>
+        <p>
+          <strong class="text-gray-900 dark:text-white">📚 Course:</strong>
+          {{ student.course || "N/A" }}
+        </p>
+        <p>
+          <strong class="text-gray-900 dark:text-white">📅 Year:</strong>
+          {{ student.year || "N/A" }}
+        </p>
+        <p>
+          <strong class="text-gray-900 dark:text-white">📍 Location:</strong>
+          {{ student.location || "N/A" }}
+        </p>
+        <p>
+          <strong class="text-gray-900 dark:text-white">⚧ Gender:</strong>
+          {{ student.gender || "N/A" }}
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-8 flex gap-4">
+        <button
+          class="px-5 py-2 rounded-xl bg-cyan-500 text-white font-medium hover:bg-cyan-600 transition"
+        >
+          ✏️ Edit
+        </button>
+        <button
+          class="px-5 py-2 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 transition"
+          (click)="onDelete(student._id)"
+        >
+          🗑 Delete
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

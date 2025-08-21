@@ -10,6 +10,7 @@ import { Courses } from './student/courses/courses';
 import { AdminLogin } from './admin/admin-login/admin-login';
 import { ManageCourses } from './admin/manage-courses/manage-courses';
 import { ManagePractice } from './admin/manage-practice/manage-practice';
+import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
 
 // Layouts
 import { MainLayout } from './layouts/main-layout/main-layout';
@@ -18,7 +19,6 @@ import { BlankLayout } from './layouts/blank-layout/blank-layout';
 // Guards
 import { authGuard } from './auth/guards/auth-guard';
 import { AdminGuard } from './auth/admin/admin-guard';
-import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -38,10 +38,12 @@ export const routes: Routes = [
           import('./student/practice/practice').then((m) => m.Practices),
         canActivate: [authGuard],
       },
-         {
+      {
         path: 'upcoming-courses',
         loadComponent: () =>
-          import('./student/student-upcoming-courses/student-upcoming-courses').then((m) => m.StudentUpcomingCourses),
+          import('./student/student-upcoming-courses/student-upcoming-courses').then(
+            (m) => m.StudentUpcomingCourses
+          ),
         canActivate: [authGuard],
       },
       {
@@ -76,10 +78,20 @@ export const routes: Routes = [
         component: ManagePractice,
         canActivate: [AdminGuard],
       },
-      { path: 'upcoming-courses', 
+      {
+        path: 'upcoming-courses',
         component: UpcomingCourses,
-        canActivate:[AdminGuard]
+        canActivate: [AdminGuard],
       },
+{
+  path: 'students/:id',
+  loadComponent: () =>
+    import('./admin/student-details/student-details').then(
+      (m) => m.AdminStudentDetail
+    ),
+  canActivate: [AdminGuard],
+},
+
       {
         path: 'students',
         loadComponent: () =>
@@ -104,7 +116,8 @@ export const routes: Routes = [
       },
       {
         path: 'about',
-        loadComponent: () => import('./pages/about/about').then((m) => m.About),
+        loadComponent: () =>
+          import('./pages/about/about').then((m) => m.About),
       },
       {
         path: 'contact',
@@ -114,9 +127,7 @@ export const routes: Routes = [
       {
         path: 'services',
         loadComponent: () =>
-          import('./pages/ourservices/ourservices').then(
-            (m) => m.Ourservices
-          ),
+          import('./pages/ourservices/ourservices').then((m) => m.Ourservices),
       },
       {
         path: 'internships',

@@ -6,6 +6,7 @@ import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
 import { Student } from '../../shared/models/student.model';
 import { StudentService } from '../../shared/sharedservices/admin/students';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,8 +18,17 @@ import { StudentService } from '../../shared/sharedservices/admin/students';
 export class Students implements OnInit {
   isSidebarOpen = false;
   students: Student[] = [];
+  
 
-  constructor(private studentService: StudentService) {}
+
+  constructor(private studentService: StudentService,private router:Router) {}
+
+viewDetails(studentId: string | undefined) {
+  if (!studentId) return; // safeguard
+  this.router.navigate(['/admin/students', studentId]);
+}
+
+
 
     toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
