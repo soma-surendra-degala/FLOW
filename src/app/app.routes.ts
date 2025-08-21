@@ -19,6 +19,7 @@ import { BlankLayout } from './layouts/blank-layout/blank-layout';
 // Guards
 import { authGuard } from './auth/guards/auth-guard';
 import { AdminGuard } from './auth/admin/admin-guard';
+import { StudentSupport } from './student/student-support/student-support';
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -52,6 +53,12 @@ export const routes: Routes = [
           import('./student/profile/profile').then((m) => m.Profile),
         canActivate: [authGuard],
       },
+      {
+        path: 'support',
+        component:StudentSupport,
+        canActivate: [authGuard],
+      },
+
     ],
   },
 

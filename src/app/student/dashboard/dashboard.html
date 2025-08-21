@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen" (click)="toggleTheme()">
+<div class="flex flex-col min-h-screen">
   <!-- Header -->
   <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
 
@@ -8,83 +8,78 @@
 
     <!-- Main Content -->
     <main
-      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-6 transition-all duration-300 overflow-y-auto"
+      class="flex-1 p-8 transition-all duration-300 overflow-y-auto"
       [ngClass]="{ 'ml-64': sidebar?.isOpen && !sidebar?.isMobile }"
     >
-      <h2 class="text-2xl font-bold text-cyan-400 mb-6">Student Dashboard</h2>
+      <!-- Page Title -->
+      <h2 class="text-3xl font-bold text-cyan-400 mb-8">🎓 Student Dashboard</h2>
 
-      <!-- ✅ Top Summary Cards -->
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6"
-      >
+      <!-- Row 1: Quick Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         <div
           *ngFor="let card of summaryCards"
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow flex items-center gap-4 transition hover:shadow-lg"
+          class="border border-neutral-700 rounded-2xl p-6 shadow-xl hover:scale-[1.02] transition transform flex flex-col"
         >
-          <div [ngClass]="'text-' + card.color + ' text-4xl'">
-            <i class="bi" [ngClass]="card.icon"></i>
-          </div>
-          <div>
+          <div class="flex items-center justify-between mb-2">
             <h3 class="text-lg font-semibold">{{ card.title }}</h3>
-            <p
-              class="text-3xl font-bold"
-              [ngClass]="'text-' + card.color + ' mt-1'"
-            >
-              {{ card.value }}
-            </p>
+            <i class="bi" [ngClass]="card.icon" [class]="'text-' + card.color + ' text-2xl'"></i>
           </div>
+          <p class="text-3xl font-bold mt-2" [ngClass]="'text-' + card.color">
+            {{ card.value }}
+          </p>
         </div>
       </div>
 
-      <!-- ✅ Main Content Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Row 2: Panels -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- Recent Activity Feed -->
-        <div
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow h-50 overflow-y-auto transition hover:shadow-lg"
-        >
-          <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
-          <ul class="space-y-3 text-neutral-300 dark:text-neutral-700">
+        <!-- 📌 Recent Activity -->
+        <div class="rounded-2xl p-6 shadow-lg flex flex-col">
+          <h3 class="text-xl font-semibold mb-4 text-cyan-600">📌 Recent Activity</h3>
+          <ul class="space-y-3 text-sm text-neutral-800 flex-1 overflow-y-auto">
             <li
               *ngFor="let activity of recentActivities"
-              class="flex items-center gap-2"
+              class="flex items-center gap-3 p-2 rounded-lg transition"
             >
-              <i
-                class="bi"
-                [ngClass]="[
-                  activity.type === 'submission'
-                    ? 'bi-check-circle'
-                    : activity.type === 'enrollment'
-                    ? 'bi-book'
-                    : 'bi-star',
-                  getActivityColor(activity.type)
-                ]"
-              ></i>
-              {{ activity.text }}
-              <span class="text-cyan-400">{{ activity.course }}</span> -
-              {{ activity.timeAgo }}
+              <i class="bi"
+                 [ngClass]="[
+                   activity.type === 'submission' ? 'bi-check-circle text-green-400' :
+                   activity.type === 'enrollment' ? 'bi-book text-blue-400' :
+                   'bi-star text-yellow-400'
+                 ]"></i>
+              <span>{{ activity.text }} <span class="text-cyan-400">{{ activity.course }}</span></span>
+              <span class="ml-auto text-xs text-gray-500">{{ activity.timeAgo }}</span>
             </li>
           </ul>
         </div>
 
-        <!-- ✅ Upcoming Courses Section -->
-        <div
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow h-70 overflow-y-auto transition hover:shadow-lg"
-            >
-          <h3 class="text-lg font-semibold mb-4">Upcoming Courses</h3>
-          <ul
-            class="space-y-2 text-neutral-300 dark:text-neutral-700 divide-y  dark:divide-neutral-300"
-          >
+        <!-- 📅 Upcoming Courses -->
+        <div class="rounded-2xl p-6 shadow-lg flex flex-col">
+          <h3 class="text-xl font-semibold mb-4 text-cyan-400">📅 Upcoming Courses</h3>
+          <ul class="space-y-4 text-sm text-neutral-300 flex-1 overflow-y-auto">
             <li
               *ngFor="let course of upcomingCourses"
-              class="py-1 first:pt-0"
+              class="p-3 rounded transition"
             >
-              <p class="font-semibold">{{ course.title }}</p>
-              <p class="text-sm text-gray-400 dark:text-gray-600">
-                Starts: {{ course.startDate | date : "mediumDate" }}
-              </p>
+              <p class="font-semibold text-black">{{ course.title }}</p>
+              <p class="text-xs text-gray-400">Starts: {{ course.startDate | date:'mediumDate' }}</p>
             </li>
           </ul>
+        </div>
+
+        <!-- 💬 Discussion Forum -->
+        <div class=" rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
+          <h3 class="text-xl font-semibold text-cyan-400 mb-3">💬 Discussion Forum</h3>
+          <p class="text-sm text-gray-400 mb-4">
+            Join our student community to ask questions, share ideas & grow together.
+          </p>
+          <a
+            href="https://t.me/FLOW_Discussion_Forum"
+            target="_blank"
+            class="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-medium shadow-md transition"
+          >
+            🚀 Join Telegram Group
+          </a>
         </div>
 
       </div>
