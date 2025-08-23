@@ -1,44 +1,59 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Header } from '../Student-components/header/header';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
-import { CommonModule } from '@angular/common';
+import { SupportService } from '../../shared/sharedservices/admin/support';
+import { Ticket } from '../../shared/models/ticket.model';
+
+
 
 @Component({
   selector: 'app-student-support',
-  imports: [CommonModule ,FormsModule,Header,Sidebar],
+  standalone: true,
+  imports: [CommonModule, FormsModule, Header, Sidebar, HttpClientModule],
   templateUrl: './student-support.html',
-  styleUrl: './student-support.css'
+  styleUrls: ['./student-support.css']
 })
-export class StudentSupport {
-  isSidebarOpen = false;
+export class StudentSupport implements OnInit {
+  ticket: { subject: string; message: string } = {
+  subject: '',
+  message: ''
+};
 
-   ticket = { subject: '', message: '' };
+  myTickets: Ticket[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private supportService: SupportService) {}
 
-    toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+  ngOnInit(): void {
+    this.loadTickets();
   }
 
-  submitTicket() {
+  loadTickets(): void {
+    this.supportService.getMyTickets().subscribe({
+      next: tickets => {
+        console.log('Fetched tickets:', tickets); // 🟢 debug
+        this.myTickets = tickets;
+      },
+      error: err => console.error('Error fetching tickets:', err)
+    });
+  }
+
+  // Submit new ticket
+  submitTicket(): void {
     if (!this.ticket.subject || !this.ticket.message) {
-      alert('Please fill all fields');
+      console.warn('Subject and message are required');
       return;
     }
 
-    this.http.post('http://localhost:5000/api/support', this.ticket)
-      .subscribe({
-        next: () => {
-          alert('Ticket submitted successfully!');
-          this.ticket = { subject: '', message: '' }; // reset
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Error submitting ticket');
-        }
-      });
+    this.supportService.createTicket(this.ticket).subscribe({
+      next: (res) => {
+        console.log('Ticket created:', res);
+        this.loadTickets(); // refresh ticket list
+        this.ticket = { subject: '', message: '' }; // reset form
+      },
+      error: (err) => console.error('Error creating ticket:', err)
+    });
   }
-
 }

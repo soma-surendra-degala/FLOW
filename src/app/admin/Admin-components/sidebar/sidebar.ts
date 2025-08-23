@@ -43,6 +43,10 @@ export class Sidebar {
     this.router.navigate(['admin/practice']);
     this.isSidebarOpen = false;
   }
+    support() {
+    this.router.navigate(['admin/support']);
+    this.isSidebarOpen = false;
+  }
   logout() {
     this.router.navigate(['admin/login'])
   }

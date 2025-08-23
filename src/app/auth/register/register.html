@@ -1,138 +1,112 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-pink-500 via-purple-600 to-indigo-600 px-4">
-  <div class="w-full max-w-md bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-8">
+<div class="h-screen flex items-center justify-center bg-gradient-to-br from-neutral-950 via-neutral-900 to-black px-4">
+  <div class="w-full max-w-md bg-neutral-900 text-white rounded-2xl shadow-xl p-6">
 
     <!-- Logo / Title -->
-    <div class="text-center mb-8">
-      <div class="flex justify-center items-center mb-4">
-        <img src="assets/bg.png" alt="Logo" class="h-14 w-14">
-        <div class="ml-2 font-extrabold text-3xl text-gray-800">FLOW</div>
+    <div class="text-center mb-6">
+      <div class="flex justify-center items-center mb-3">
+        <img src="assets/bg.png" alt="Logo" class="h-12 w-12">
+        <div class="ml-2 font-extrabold text-2xl text-pink-500">FLOW</div>
       </div>
-      <h1 class="text-2xl font-bold text-gray-800">Create an Account 🚀</h1>
-      <p class="text-gray-500 mt-2">Join us and explore amazing features</p>
+      <h1 class="text-xl font-bold text-white">Create Account 🚀</h1>
+      <p class="text-gray-400 text-sm mt-1">Join us today</p>
     </div>
 
     <!-- Form -->
-    <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="space-y-6">
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="space-y-3">
 
       <!-- Name -->
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          [(ngModel)]="registerData.name"
-          required
-          class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none"
-          placeholder="John Doe"
-        />
-      </div>
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="registerData.name"
+        placeholder="Full Name"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
 
       <!-- Email -->
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          [(ngModel)]="registerData.email"
-          required
-          class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none"
-          placeholder="you@example.com"
-        />
-      </div>
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="registerData.email"
+        placeholder="Email"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
 
       <!-- Password -->
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          [(ngModel)]="registerData.password"
-          required
-          class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none"
-          placeholder="••••••••"
-        />
-      </div>
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="registerData.password"
+        placeholder="Password"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
 
       <!-- Confirm Password -->
-      <div>
-        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          [(ngModel)]="confirmPassword"
-          required
-          class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none"
-          placeholder="••••••••"
-        />
-      </div>
+      <input
+        type="password"
+        name="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        placeholder="Confirm Password"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
 
       <!-- Location -->
-<div>
-  <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-  <input
-    type="text"
-    id="location"
-    name="location"
-    [(ngModel)]="registerData.location"
-    required
-    class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none"
-    placeholder="City, Country"
-  />
-</div>
+      <input
+        type="text"
+        name="location"
+        [(ngModel)]="registerData.location"
+        placeholder="Location"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
 
-
-<!-- Gender -->
-<div>
-  <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
-  <select
-    id="gender"
-    name="gender"
-    [(ngModel)]="registerData.gender"
-    required
-    class="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none"
-  >
-    <option value="" disabled selected>Select Gender</option>
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
-
+      <!-- Gender -->
+      <select
+        name="gender"
+        [(ngModel)]="registerData.gender"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      >
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male" class="bg-neutral-900">Male</option>
+        <option value="Female" class="bg-neutral-900">Female</option>
+        <option value="Other" class="bg-neutral-900">Other</option>
+      </select>
 
       <!-- Register Button -->
       <button
         type="submit"
-        class="w-full bg-pink-600 text-white py-2 rounded-lg shadow-lg hover:bg-pink-700 transition-colors duration-300"
+        class="w-full bg-pink-600 text-white text-sm font-medium py-2 rounded-lg shadow-md hover:bg-pink-700 transition"
       >
         Sign Up
       </button>
     </form>
 
     <!-- Divider -->
-    <div class="flex items-center my-6">
-      <div class="flex-grow border-t border-gray-300"></div>
-      <span class="px-3 text-sm text-gray-500">OR</span>
-      <div class="flex-grow border-t border-gray-300"></div>
+    <div class="flex items-center my-4">
+      <div class="flex-grow border-t border-neutral-700"></div>
+      <span class="px-2 text-xs text-gray-400">OR</span>
+      <div class="flex-grow border-t border-neutral-700"></div>
     </div>
 
     <!-- Social Logins -->
-    <div class="grid grid-cols-2 gap-4">
-      <button class="flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition">
+    <div class="grid grid-cols-2 gap-3">
+      <button class="flex items-center justify-center gap-1 bg-neutral-800 border border-neutral-700 py-2 rounded-lg text-xs hover:bg-neutral-700 transition">
         <i class="bi bi-google"></i> Google
       </button>
-      <button class="flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-50 transition">
+      <button class="flex items-center justify-center gap-1 bg-neutral-800 border border-neutral-700 py-2 rounded-lg text-xs hover:bg-neutral-700 transition">
         <i class="bi bi-github"></i> GitHub
       </button>
     </div>
 
     <!-- Login Link -->
-    <p class="text-center text-gray-600 mt-6 text-sm">
+    <p class="text-center text-gray-400 mt-4 text-xs">
       Already have an account?
-      <a (click)="login()" class="text-pink-600 font-medium hover:text-pink-700">Login</a>
+      <a (click)="login()" class="text-pink-500 font-medium hover:text-pink-600">Login</a>
     </p>
   </div>
 </div>

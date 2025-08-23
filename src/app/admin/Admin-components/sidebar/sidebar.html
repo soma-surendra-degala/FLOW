@@ -50,11 +50,11 @@
     </a>
 
     <a
-      routerLink="/admin/settings"
+      routerLink="/admin/support" (click)="support()"
       class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
     >
       <i class="bi bi-gear text-cyan-400"></i>
-      <span *ngIf="isOpen">Settings</span>
+      <span *ngIf="isOpen">Support</span>
     </a>
   </nav>
   <button class="flex items-center justify-center pt-20 gap-3 px-3 py-2 rounded-lg  w-full" (click)="logout()">

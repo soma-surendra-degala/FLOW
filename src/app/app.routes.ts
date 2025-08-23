@@ -11,6 +11,7 @@ import { AdminLogin } from './admin/admin-login/admin-login';
 import { ManageCourses } from './admin/manage-courses/manage-courses';
 import { ManagePractice } from './admin/manage-practice/manage-practice';
 import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
+import { AdminSupport } from './admin/admin-support/admin-support';
 
 // Layouts
 import { MainLayout } from './layouts/main-layout/main-layout';
@@ -20,6 +21,7 @@ import { BlankLayout } from './layouts/blank-layout/blank-layout';
 import { authGuard } from './auth/guards/auth-guard';
 import { AdminGuard } from './auth/admin/admin-guard';
 import { StudentSupport } from './student/student-support/student-support';
+
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -90,6 +92,10 @@ export const routes: Routes = [
         component: UpcomingCourses,
         canActivate: [AdminGuard],
       },
+      { path: 'support',
+         component: AdminSupport 
+        }, 
+
 {
   path: 'students/:id',
   loadComponent: () =>
