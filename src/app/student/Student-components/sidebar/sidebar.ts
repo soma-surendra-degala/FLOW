@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,   // 👈 make it standalone
-  imports: [CommonModule],  // 👈 ngClass, ngIf, ngFor live here
+  imports: [CommonModule,FormsModule],  // 👈 ngClass, ngIf, ngFor live here
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.css']
 })
@@ -29,11 +30,12 @@ export class Sidebar {
   private checkScreenSize() {
     this.isMobile = window.innerWidth < 768;
     if (this.isMobile) {
-      this.isOpen = false; // start closed on mobile
+      this.isOpen = false; // Closed by default on mobile
     } else {
-      this.isOpen = true; // start open on desktop
+      this.isOpen = true; // Open by default on desktop
     }
   }
+
 
     constructor(private router: Router) {}
 

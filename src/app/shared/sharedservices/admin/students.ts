@@ -24,11 +24,15 @@ export class StudentService {
       Authorization: `Bearer ${token || ''}`
     });
   }
+getProfile(): Observable<Student> {
+  const token = localStorage.getItem('studentToken');
+  return this.http.get<Student>(`${this.apiUrl}/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
 
-  getProfile(): Observable<Student> {
-    return this.http.get<Student>(`${this.apiUrl}/profile`, { headers: this.getAuthHeaders() })
-      .pipe(catchError(err => throwError(() => err)));
-  }
 
 updateProfile(data: FormData) {
   const token = localStorage.getItem('token');

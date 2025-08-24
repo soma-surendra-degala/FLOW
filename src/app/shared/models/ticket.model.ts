@@ -1,3 +1,10 @@
+export interface Reply {
+  _id: string;         // ✅ add this
+  sender: string;
+  message: string;
+  createdAt: string;
+}
+
 export interface Ticket {
   _id?: string;
   subject: string;
@@ -10,5 +17,5 @@ export interface Ticket {
     _id: string;
     name: string;
   };
-  replies: { sender: string; message: string; createdAt: string }[]; // ✅ not optional
+  replies: Reply[];   // ✅ use Reply type
 }

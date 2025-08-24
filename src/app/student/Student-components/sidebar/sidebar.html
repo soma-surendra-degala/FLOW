@@ -2,11 +2,12 @@
 <aside
   class="transition-all duration-300 border-r 
          bg-neutral-950 border-neutral-800 text-white 
-         dark:bg-white dark:border-gray-200 dark:text-gray-900"
+         dark:bg-white dark:border-gray-200 dark:text-gray-900
+         flex flex-col justify-between"
   [ngClass]="{
-    'w-64 fixed top-18 bottom-0 left-0 z-50': isMobile && isOpen,  
-    'hidden': isMobile && !isOpen,                                
-    'w-64 fixed top-18 bottom-0 left-0': !isMobile                
+    'w-64 h-full': true,
+    'fixed top-0 bottom-0 left-0 z-50 shadow-xl': isMobile && isOpen,  
+    'hidden': isMobile && !isOpen                                     
   }"
 >
   <!-- Mobile Close Button -->
@@ -18,69 +19,80 @@
     </button>
   </div>
 
-  <!-- Sidebar Links -->
-  <nav class="flex flex-col justify-center p-4 gap-2">
-    <button 
-      (click)="navigate('dashboard')" 
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
-             hover:bg-neutral-800 hover:text-cyan-400 
-             dark:hover:bg-gray-200 dark:hover:text-cyan-600">
-      <i class="bi bi-speedometer2 text-lg"></i>
-      <span>Dashboard</span>
-    </button>
+  <!-- Sidebar Content -->
+  <div class="flex flex-1">
+    <!-- Vertical FLOW Branding -->
+    <div class="w-12 flex items-center justify-center bg-cyan-700 text-white font-bold">
+      <span class="rotate-text">FLOW</span>
+    </div>
 
-    <button 
-      (click)="navigate('courses')" 
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
-             hover:bg-neutral-800 hover:text-cyan-400 
-             dark:hover:bg-gray-200 dark:hover:text-cyan-600">
-      <i class="bi bi-book text-lg"></i>
-      <span>Courses</span>
-    </button>
+    <!-- Sidebar Links -->
+    <nav class="flex flex-col p-4 gap-2 flex-1">
+      <button 
+        (click)="navigate('dashboard')" 
+        class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
+               hover:bg-neutral-800 hover:text-cyan-400 
+               dark:hover:bg-gray-200 dark:hover:text-cyan-600">
+        <i class="bi bi-speedometer2 text-lg"></i>
+        <span>Dashboard</span>
+      </button>
 
-    <button 
-      (click)="navigate('practice')" 
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
-             hover:bg-neutral-800 hover:text-cyan-400 
-             dark:hover:bg-gray-200 dark:hover:text-cyan-600">
-      <i class="bi bi-journal-check text-lg"></i>
-      <span>Practice</span>
-    </button>
+      <button 
+        (click)="navigate('courses')" 
+        class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
+               hover:bg-neutral-800 hover:text-cyan-400 
+               dark:hover:bg-gray-200 dark:hover:text-cyan-600">
+        <i class="bi bi-book text-lg"></i>
+        <span>Courses</span>
+      </button>
 
-       <button 
-      (click)="navigate('upcoming-courses')" 
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
-             hover:bg-neutral-800 hover:text-cyan-400 
-             dark:hover:bg-gray-200 dark:hover:text-cyan-600">
-      <i class="bi bi-calendar-plus"></i>
-      <span>Upcoming Courses</span>
-    </button>
+      <button 
+        (click)="navigate('practice')" 
+        class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
+               hover:bg-neutral-800 hover:text-cyan-400 
+               dark:hover:bg-gray-200 dark:hover:text-cyan-600">
+        <i class="bi bi-journal-check text-lg"></i>
+        <span>Practice</span>
+      </button>
 
-    <button 
-      (click)="navigate('profile')" 
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
-             hover:bg-neutral-800 hover:text-cyan-400 
-             dark:hover:bg-gray-200 dark:hover:text-cyan-600">
-      <i class="bi bi-person text-lg"></i>
-      <span>Profile</span>
-    </button>
-       <button 
-      (click)="navigate('support')" 
-      class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
-             hover:bg-neutral-800 hover:text-cyan-400 
-             dark:hover:bg-gray-200 dark:hover:text-cyan-600">
-      <i class="bi bi-person text-lg"></i>
-      <span>Student Support</span>
-    </button>
-  </nav>
-  <div class="flex justify-center mt-10">
-    <button class="bg-cyan-700 px-4 py-3 rounded-lg text-white hover:bg-cyan-500 transition md:hidden">
+      <button 
+        (click)="navigate('upcoming-courses')" 
+        class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
+               hover:bg-neutral-800 hover:text-cyan-400 
+               dark:hover:bg-gray-200 dark:hover:text-cyan-600">
+        <i class="bi bi-calendar-plus"></i>
+        <span>Upcoming</span>
+      </button>
+
+      <button 
+        (click)="navigate('profile')" 
+        class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
+               hover:bg-neutral-800 hover:text-cyan-400 
+               dark:hover:bg-gray-200 dark:hover:text-cyan-600">
+        <i class="bi bi-person text-lg"></i>
+        <span>Profile</span>
+      </button>
+
+      <button 
+        (click)="navigate('support')" 
+        class="flex items-center gap-3 px-3 py-3 rounded-lg transition 
+               hover:bg-neutral-800 hover:text-cyan-400 
+               dark:hover:bg-gray-200 dark:hover:text-cyan-600">
+        <i class="bi bi-life-preserver text-lg"></i>
+        <span>Support</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Mobile Logout Button -->
+  <div class="flex justify-center p-4 md:hidden">
+    <button class="bg-cyan-700 px-4 py-3 rounded-lg text-white hover:bg-cyan-500 transition">
       Logout
     </button>
-</div>
+  </div>
+
   <!-- Footer -->
-  <div class="mt-50 p-4 text-sm 
-              text-neutral-500 dark:text-gray-500 flex justify-center">
-    © 2025 FLOW
+  <div class="p-4 text-sm text-neutral-500 dark:text-gray-500 text-center">
+    © 2025
   </div>
 </aside>

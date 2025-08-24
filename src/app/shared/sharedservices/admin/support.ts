@@ -30,24 +30,11 @@ createTicket(ticket: { subject: string; message: string }): Observable<any> {
   });
 }
 
-
-  // // Student
-  // getMyTickets(): Observable<Ticket[]> {
-  //   return this.http.get<Ticket[]>(`${this.apiUrl}/my-tickets`);
-  // }
-
   getMyTickets(): Observable<Ticket[]> {
   return this.http.get<Ticket[]>(`${this.apiUrl}/my-tickets`, {
     headers: this.getHeaders()
   });
 }
-
-
-  // submitTicket(ticket: Ticket): Observable<Ticket> {
-  //   return this.http.post<Ticket>(`${this.apiUrl}`, ticket);
-  // }
-
-  
 
   // Admin
   getTickets(): Observable<Ticket[]> {
@@ -58,11 +45,33 @@ createTicket(ticket: { subject: string; message: string }): Observable<any> {
     return this.http.put<Ticket>(`${this.apiUrl}/${ticketId}`, { status });
   }
   
-replyToTicket(ticketId: string, message: string) {
-  return this.http.post(`${this.apiUrl}/${ticketId}/reply`, { message }, {
-    headers: this.getHeaders()
-  });
+
+ replyToTicket(ticketId: string, data: { sender: string; message: string }): Observable<Ticket> {
+    return this.http.post<Ticket>(`${this.apiUrl}/${ticketId}/reply`, data);
+  }
+
+editReply(ticketId: string, replyId: string, message: string): Observable<Ticket> {
+  return this.http.put<Ticket>(
+    `${this.apiUrl}/${ticketId}/reply/${replyId}`, 
+    { message },
+    { headers: this.getHeaders() } // include token if needed
+  );
 }
+
+
+
+deleteReply(ticketId: string, replyId: string): Observable<Ticket> {
+  const token = localStorage.getItem('token');
+  return this.http.delete<Ticket>(
+    `${this.apiUrl}/${ticketId}/reply/${replyId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
 
 
   deleteTicket(ticketId: string): Observable<{ success: boolean }> {

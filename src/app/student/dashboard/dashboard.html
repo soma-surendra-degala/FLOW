@@ -2,14 +2,13 @@
   <!-- Header -->
   <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
 
-  <div class="flex flex-1">
+  <div class="flex flex-1 overflow-hidden">
     <!-- Sidebar -->
     <app-sidebar #sidebar></app-sidebar>
 
     <!-- Main Content -->
     <main
-      class="flex-1 p-8 transition-all duration-300 overflow-y-auto"
-      [ngClass]="{ 'ml-64': sidebar?.isOpen && !sidebar?.isMobile }"
+      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-8 transition-all duration-300 overflow-y-auto"
     >
       <!-- Page Title -->
       <h2 class="text-3xl font-bold text-cyan-400 mb-8">🎓 Student Dashboard</h2>
@@ -18,7 +17,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         <div
           *ngFor="let card of summaryCards"
-          class="border border-neutral-700 rounded-2xl p-6 shadow-xl hover:scale-[1.02] transition transform flex flex-col"
+          class="bg-neutral-800 dark:bg-gray-100 border border-neutral-700 dark:border-gray-300 rounded-2xl p-6 shadow-xl hover:scale-[1.02] transition transform flex flex-col"
         >
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-lg font-semibold">{{ card.title }}</h3>
@@ -34,12 +33,12 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         <!-- 📌 Recent Activity -->
-        <div class="rounded-2xl p-6 shadow-lg flex flex-col">
+        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col">
           <h3 class="text-xl font-semibold mb-4 text-cyan-600">📌 Recent Activity</h3>
-          <ul class="space-y-3 text-sm text-neutral-800 flex-1 overflow-y-auto">
+          <ul class="space-y-3 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto">
             <li
               *ngFor="let activity of recentActivities"
-              class="flex items-center gap-3 p-2 rounded-lg transition"
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
             >
               <i class="bi"
                  [ngClass]="[
@@ -54,23 +53,23 @@
         </div>
 
         <!-- 📅 Upcoming Courses -->
-        <div class="rounded-2xl p-6 shadow-lg flex flex-col">
+        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col">
           <h3 class="text-xl font-semibold mb-4 text-cyan-400">📅 Upcoming Courses</h3>
-          <ul class="space-y-4 text-sm text-neutral-300 flex-1 overflow-y-auto">
+          <ul class="space-y-4 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto">
             <li
               *ngFor="let course of upcomingCourses"
-              class="p-3 rounded transition"
+              class="p-3 rounded hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
             >
-              <p class="font-semibold text-black">{{ course.title }}</p>
-              <p class="text-xs text-gray-400">Starts: {{ course.startDate | date:'mediumDate' }}</p>
+              <p class="font-semibold text-white dark:text-black">{{ course.title }}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500">Starts: {{ course.startDate | date:'mediumDate' }}</p>
             </li>
           </ul>
         </div>
 
         <!-- 💬 Discussion Forum -->
-        <div class=" rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
+        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
           <h3 class="text-xl font-semibold text-cyan-400 mb-3">💬 Discussion Forum</h3>
-          <p class="text-sm text-gray-400 mb-4">
+          <p class="text-sm text-gray-400 dark:text-gray-600 mb-4">
             Join our student community to ask questions, share ideas & grow together.
           </p>
           <a
