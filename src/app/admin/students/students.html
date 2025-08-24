@@ -72,24 +72,27 @@
         </table>
       </div>
 
-      <!-- Mobile Cards -->
-      <div class="sm:hidden flex flex-col gap-3" *ngIf="students.length > 0">
-        <ng-container *ngFor="let student of students; index as i">
-          <div class="bg-neutral-800 p-3 rounded-lg shadow flex flex-col gap-2">
-            <div class="flex justify-between items-center">
-              <span class="font-semibold">{{ i + 1 }}. {{ student.name }}</span>
-            </div>
-            <p class="text-gray-400 text-sm">{{ student.email }}</p>
-            <input [(ngModel)]="student.location" (blur)="updateStudent(student)" placeholder="Location" class="bg-neutral-700 text-white rounded px-2 py-1 w-full text-sm"/>
-            <select [(ngModel)]="student.gender" (change)="updateStudent(student)" class="bg-neutral-700 text-white rounded px-2 py-1 text-sm w-full">
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </ng-container>
+    
+<!-- Mobile Cards -->
+<div class="sm:hidden flex flex-col gap-3" *ngIf="students.length > 0">
+  <ng-container *ngFor="let student of students; index as i">
+    <div class="bg-neutral-800 p-3 rounded-lg shadow flex flex-col gap-2 cursor-pointer hover:bg-neutral-700/40 transition"
+         (click)="viewDetails(student._id)">
+      <div class="flex justify-between items-center">
+        <span class="font-semibold">{{ i + 1 }}. {{ student.name }}</span>
       </div>
+      <p class="text-gray-400 text-sm">{{ student.email }}</p>
+      <input [(ngModel)]="student.location" (blur)="updateStudent(student)" placeholder="Location" class="bg-neutral-700 text-white rounded px-2 py-1 w-full text-sm"/>
+      <select [(ngModel)]="student.gender" (change)="updateStudent(student)" class="bg-neutral-700 text-white rounded px-2 py-1 text-sm w-full">
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </ng-container>
+</div>
+
 
       <!-- Empty State -->
       <div *ngIf="students.length === 0" class="text-center text-gray-500 mt-4">

@@ -5,6 +5,7 @@ import type { Student } from '../../models/student.model';
 import { Course } from '../../models/course.model';
 import { Practice } from '../../models/practice.model';
 import type { UpcomingCourse } from '../../models/upcoming-course.model';
+import { Ticket } from '../../models/ticket.model';
 
 
 export interface Stats {
@@ -33,6 +34,17 @@ getPractices() {
  getUpcomingCourses(): Observable<UpcomingCourse[]> {
     return this.http.get<UpcomingCourse[]>(`${this.baseUrl}/upcoming-courses`);
   }
+
+  getTickets() {
+  const token = localStorage.getItem('studentToken'); // or 'adminToken' if admin
+  return this.http.get<Ticket[]>('http://localhost:5000/api/support', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
+
 
 }
 

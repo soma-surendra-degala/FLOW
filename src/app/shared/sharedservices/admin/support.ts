@@ -22,6 +22,15 @@ export class SupportService {
     });
   }
 
+
+updateTicket(ticketId: string, updatedData: { subject?: string; message?: string }): Observable<any> {
+  return this.http.put(`${this.apiUrl}/update/${ticketId}`, updatedData, {
+    headers: this.getHeaders()
+  });
+}
+
+
+
 createTicket(ticket: { subject: string; message: string }): Observable<any> {
   return this.http.post(`${this.apiUrl}`, ticket, {
     headers: {
