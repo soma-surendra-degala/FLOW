@@ -21,6 +21,8 @@ import { ManageCourses } from './admin/manage-courses/manage-courses';
 import { ManagePractice } from './admin/manage-practice/manage-practice';
 import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
 import { AdminSupport } from './admin/admin-support/admin-support';
+import { AdminCareers } from './Careers/admin-careers/admin-careers';
+import { StudentCareers } from './Careers/student-careers/student-careers';
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -78,6 +80,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       { path: 'support', component: StudentSupport, canActivate: [authGuard] },
+      {path:'careers',component:StudentCareers,canActivate:[authGuard]}
     ],
   },
 
@@ -116,6 +119,12 @@ export const routes: Routes = [
           import('./admin/students/students').then((m) => m.Students),
         canActivate: [AdminGuard],
       },
+            {
+        path: 'careers',
+        component:AdminCareers,
+        canActivate: [AdminGuard],
+      },
+
     ],
   },
 
