@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+<div class="flex flex-col min-h-screen ">
   <!-- Header -->
   <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
 
@@ -6,142 +6,138 @@
     <!-- Sidebar -->
     <app-sidebar #sidebar></app-sidebar>
 
- <!-- Main Content -->
+    <!-- Main Content -->
     <main
-      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-8 transition-all duration-300 overflow-y-auto"
-    >
-      <!-- Page Title -->
-      <h2 class="text-2xl font-bold text-cyan-400 mb-6">Practice Exercises</h2>
+      class="flex-1 text-gray-100 p-8 transition-all duration-300 overflow-y-auto">
+      <h2 class="text-3xl font-bold text-cyan-400 mb-6">Practice Exercises</h2>
+
+      <!-- Category Filter Bar -->
+<div class="flex flex-wrap gap-3 mb-6">
+  <!-- Category Buttons -->
+  <button *ngFor="let cat of categories" 
+    (click)="toggleCategory(cat)" 
+    [ngClass]="{
+      'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg': selectedCategories.includes(cat),
+      'bg-neutral-800 text-gray-300 dark:bg-neutral-200 dark:text-gray-700': !selectedCategories.includes(cat)
+    }"
+    class="px-4 py-2 rounded-xl border border-neutral-700 dark:border-neutral-300 hover:scale-105 transition-transform">
+    {{ cat }}
+  </button>
+
+  <!-- Clear Button -->
+  <button (click)="clearCategories()" 
+    class="px-4 py-2 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 hover:scale-105 transition-transform">
+    Clear
+  </button>
+</div>
+
 
       <!-- Loading State -->
       <div *ngIf="loading" class="text-gray-400 text-center py-10">Loading practices...</div>
 
       <!-- Error State -->
-      <div *ngIf="error" class="text-red-400 text-center py-10">{{ error }}</div>
+      <div *ngIf="error" class="text-red-500 text-center py-10">{{ error }}</div>
 
       <!-- Practice Cards -->
-      <div
-        *ngIf="!loading && !error"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        <div
-          *ngFor="let practice of practiceList"
-          class="bg-neutral-800 dark:bg-neutral-100 border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow hover:shadow-lg transition flex flex-col"
-        >
+      <div *ngIf="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let practice of practiceList"
+          class="bg-neutral-900 dark:bg-white border border-neutral-700 dark:border-neutral-300 p-6 rounded-2xl shadow-md hover:shadow-cyan-500/30 transition-transform hover:scale-[1.02] flex flex-col">
           <!-- Title -->
-          <h3 class="text-lg font-semibold text-cyan-400 mb-2">
-            {{ practice.title }}
-          </h3>
+          <h3 class="text-xl font-semibold text-cyan-400 mb-3">{{ practice.title }}</h3>
+
+          <!-- Categories -->
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span *ngFor="let cat of practice.categories"
+              class="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-neutral-700 to-neutral-800 dark:from-neutral-200 dark:to-neutral-300 text-gray-200 dark:text-gray-800 shadow">
+              {{ cat }}
+            </span>
+          </div>
 
           <!-- Description -->
-          <p class="text-sm text-gray-300 dark:text-gray-700 mb-3">
-            {{ practice.description }}
-          </p>
+          <p class="text-sm text-gray-400 dark:text-gray-600 mb-4">{{ practice.description }}</p>
 
           <!-- Difficulty -->
-          <div class="text-xs text-gray-500 mb-4">
+          <div class="text-xs text-gray-400 font-semibold mb-4">
             Difficulty:
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'text-green-400': practice.difficulty === 'Easy',
                 'text-yellow-400': practice.difficulty === 'Medium',
-                'text-red-400': practice.difficulty === 'Hard'
-              }"
-            >
+                'text-red-500': practice.difficulty === 'Hard'
+              }">
               {{ practice.difficulty }}
             </span>
           </div>
 
-          <!-- Solve Button -->
-          <div class="mt-auto">
-            <button
-              type="button"
-              class="w-full px-4 py-2 rounded-lg bg-cyan-500 text-white hover:bg-cyan-600 transition"
-              (click)="onSolve(practice)"
-            >
+          <!-- Buttons -->
+          <div class="mt-auto flex gap-3">
+            <button type="button"
+              class="w-1/2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold hover:scale-105 transition-transform shadow-md"
+              (click)="onSolve(practice)">
               Solve
+            </button>
+            <button type="button"
+              class="w-1/2 px-4 py-2 rounded-lg bg-neutral-800 dark:bg-neutral-300 text-gray-200 dark:text-gray-700 hover:bg-neutral-700 dark:hover:bg-neutral-400 transition"
+              (click)="onViewSolution(practice)">
+              Solution
             </button>
           </div>
         </div>
       </div>
     </main>
-
-    <!-- Mobile Sidebar Overlay -->
-    <div
-      *ngIf="sidebar.isMobile && sidebar.isOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 z-40"
-      (click)="sidebar.toggleSidebar()"
-    ></div>
   </div>
 
   <!-- Modal -->
-  <div
-    *ngIf="showModal"
-    class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-    (click)="closeModal()"
-  >
+  <div *ngIf="showModal"
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 animate-fadeIn">
     <div
-      class="bg-neutral-900 text-white w-full max-w-2xl rounded-2xl p-5 border border-neutral-700 dark:bg-neutral-100 dark:text-neutral-900 shadow-xl"
-      (click)="$event.stopPropagation()"
-    >
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold">
-          {{ modalMode === 'solve' ? 'Solve Practice' : 'Solution' }}
-          <span *ngIf="activePractice" class="text-cyan-400">
-            — {{ activePractice.title }}
-          </span>
-        </h3>
-        <button
-          type="button"
-          (click)="closeModal()"
-          class="text-xl hover:text-red-400 transition"
-        >
-          ✖
-        </button>
-      </div>
+      class="bg-neutral-900 dark:bg-white p-6 rounded-2xl w-full max-w-2xl border border-neutral-700 dark:border-neutral-300 shadow-xl transform transition-all scale-95 animate-slideUp">
 
-      <!-- Solve View -->
+      <!-- Modal Title -->
+      <h3 class="text-2xl font-bold mb-3 text-cyan-400">
+        {{ modalMode === 'solve' ? 'Solve Practice – ' : 'Solution – ' }}{{ activePractice?.title }}
+      </h3>
+      <p class="text-gray-300 dark:text-gray-600 mb-4">{{ activePractice?.description }}</p>
+
+      <!-- Solve Mode -->
       <ng-container *ngIf="modalMode === 'solve'">
-        <textarea
-          [(ngModel)]="tempAnswer"
-          rows="8"
-          class="w-full p-3 rounded-xl bg-neutral-800 dark:bg-neutral-200 border border-neutral-700 dark:border-neutral-300 text-white dark:text-neutral-900 focus:ring-2 focus:ring-cyan-500 outline-none transition"
-          placeholder="Write your solution here..."
-        ></textarea>
-        <div class="mt-4 flex justify-end gap-2">
-          <button
-            type="button"
-            class="px-4 py-2 rounded-lg bg-neutral-700 dark:bg-neutral-300 hover:bg-neutral-600 dark:hover:bg-neutral-400 transition"
-            (click)="closeModal()"
-          >
-            Cancel
+        <label class="block mb-2 text-gray-400 dark:text-gray-600 font-medium">Write your solution:</label>
+        <textarea [(ngModel)]="userSolutions[activePractice?._id || '']"
+          class="w-full p-3 rounded-lg bg-neutral-800 dark:bg-neutral-200 text-white dark:text-neutral-900 border border-neutral-700 dark:border-neutral-300 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          rows="6" placeholder="Write your solution here..."></textarea>
+
+        <div class="flex justify-between items-center mt-5">
+          <button (click)="toggleSolution()"
+            class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-lg text-black font-semibold shadow-md">
+            {{ showSolution ? 'Hide Solution' : 'View Solution' }}
           </button>
-          <button
-            type="button"
-            class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 transition text-white"
-            (click)="submitSolution()"
-          >
-            Submit
-          </button>
+          <div class="flex gap-3">
+            <button (click)="closeModal()"
+              class="px-2 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white">Cancel</button>
+            <button (click)="submitSolution()"
+              class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 transition-transform rounded-lg text-white font-semibold shadow-lg">Submit</button>
+          </div>
+        </div>
+
+        <!-- Show Solution inside Solve Modal -->
+        <div *ngIf="showSolution"
+          class="mt-5 bg-neutral-800 dark:bg-neutral-200 p-4 rounded-lg border border-neutral-700 dark:border-neutral-300">
+          <h4 class="text-cyan-400 font-semibold mb-2">Official Solution:</h4>
+          <pre
+            class="text-gray-300 dark:text-gray-700 text-sm whitespace-pre-wrap">{{ activePractice?.solution || 'No solution available.' }}</pre>
         </div>
       </ng-container>
 
-      <!-- Solution View -->
+      <!-- Solution Mode -->
       <ng-container *ngIf="modalMode === 'solution'">
-        <pre
-          class="bg-neutral-800 dark:bg-neutral-200 rounded-xl p-4 overflow-auto border border-neutral-700 dark:border-neutral-300 text-white dark:text-neutral-900"
-        >
-{{ activePractice?.solution || 'Solution will be provided by the instructor.' }}
-        </pre>
-        <div class="mt-4 flex justify-end">
-          <button
-            type="button"
-            class="px-4 py-2 rounded-lg bg-neutral-700 dark:bg-neutral-300 hover:bg-neutral-600 dark:hover:bg-neutral-400 transition"
-            (click)="closeModal()"
-          >
-            Close
-          </button>
+        <div
+          class="mt-4 bg-neutral-800 dark:bg-neutral-200 p-4 rounded-lg border border-neutral-700 dark:border-neutral-300">
+          <h4 class="text-cyan-400 font-semibold mb-2">Official Solution:</h4>
+          <pre
+            class="text-gray-300 dark:text-gray-700 text-sm whitespace-pre-wrap">{{ activePractice?.solution || 'No solution available.' }}</pre>
+        </div>
+        <div class="flex justify-end mt-5">
+          <button (click)="closeModal()"
+            class="px-5 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white">Close</button>
         </div>
       </ng-container>
     </div>

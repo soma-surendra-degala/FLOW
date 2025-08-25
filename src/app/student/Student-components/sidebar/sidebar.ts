@@ -42,4 +42,8 @@ export class Sidebar {
   navigate(path: string) {
     this.router.navigate([`/student/${path}`]);
   }
+  openCareers() {
+  window.open('http://localhost:4200/careers', '_blank'); // Opens in new tab
+}
+
 }

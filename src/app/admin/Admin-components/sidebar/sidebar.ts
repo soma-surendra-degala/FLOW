@@ -50,4 +50,8 @@ export class Sidebar {
   logout() {
     this.router.navigate(['admin/login'])
   }
+  openCareers() {
+  this.router.navigate(['admin/careers'])
+}
+
 }

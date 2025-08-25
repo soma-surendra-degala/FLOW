@@ -1,18 +1,5 @@
 import { Routes } from '@angular/router';
 
-// Student Components
-import { Login } from './auth/login/login';
-import { Register } from './auth/register/register';
-import { Dashboard } from './student/dashboard/dashboard';
-import { Courses } from './student/courses/courses';
-
-// Admin Components
-import { AdminLogin } from './admin/admin-login/admin-login';
-import { ManageCourses } from './admin/manage-courses/manage-courses';
-import { ManagePractice } from './admin/manage-practice/manage-practice';
-import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
-import { AdminSupport } from './admin/admin-support/admin-support';
-
 // Layouts
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { BlankLayout } from './layouts/blank-layout/blank-layout';
@@ -20,8 +7,20 @@ import { BlankLayout } from './layouts/blank-layout/blank-layout';
 // Guards
 import { authGuard } from './auth/guards/auth-guard';
 import { AdminGuard } from './auth/admin/admin-guard';
+
+// Student Components (non-lazy loaded)
+import { Login } from './auth/login/login';
+import { Register } from './auth/register/register';
+import { Dashboard } from './student/dashboard/dashboard';
+import { Courses } from './student/courses/courses';
 import { StudentSupport } from './student/student-support/student-support';
 
+// Admin Components (non-lazy loaded)
+import { AdminLogin } from './admin/admin-login/admin-login';
+import { ManageCourses } from './admin/manage-courses/manage-courses';
+import { ManagePractice } from './admin/manage-practice/manage-practice';
+import { UpcomingCourses } from './admin/upcoming-courses/upcoming-courses';
+import { AdminSupport } from './admin/admin-support/admin-support';
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -32,21 +31,44 @@ export const routes: Routes = [
       { path: 'login', component: Login },
       { path: 'register', component: Register },
 
-      // Protected Routes
+      // Protected routes
       { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
       { path: 'courses', component: Courses, canActivate: [authGuard] },
+
       {
-        path: 'practice',
+        path: 'skills',
         loadComponent: () =>
-          import('./student/practice/practice').then((m) => m.Practices),
+          import('./student/practice-skills/practice-skills').then(
+            (m) => m.PracticeSkills
+          ),
         canActivate: [authGuard],
       },
+
+      // ✅ Practice page (supports /practice and /practice/:skill)
+      {
+        path: 'practice',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./student/practice/practice').then((m) => m.Practices),
+            canActivate: [authGuard],
+          },
+          {
+            path: ':skill',
+            loadComponent: () =>
+              import('./student/practice/practice').then((m) => m.Practices),
+            canActivate: [authGuard],
+          },
+        ],
+      },
+
       {
         path: 'upcoming-courses',
         loadComponent: () =>
-          import('./student/student-upcoming-courses/student-upcoming-courses').then(
-            (m) => m.StudentUpcomingCourses
-          ),
+          import(
+            './student/student-upcoming-courses/student-upcoming-courses'
+          ).then((m) => m.StudentUpcomingCourses),
         canActivate: [authGuard],
       },
       {
@@ -55,12 +77,7 @@ export const routes: Routes = [
           import('./student/profile/profile').then((m) => m.Profile),
         canActivate: [authGuard],
       },
-      {
-        path: 'support',
-        component:StudentSupport,
-        canActivate: [authGuard],
-      },
-
+      { path: 'support', component: StudentSupport, canActivate: [authGuard] },
     ],
   },
 
@@ -77,34 +94,22 @@ export const routes: Routes = [
         loadComponent: () => import('./admin/admin').then((m) => m.Admin),
         canActivate: [AdminGuard],
       },
-      {
-        path: 'courses',
-        component: ManageCourses,
-        canActivate: [AdminGuard],
-      },
-      {
-        path: 'practice',
-        component: ManagePractice,
-        canActivate: [AdminGuard],
-      },
+      { path: 'courses', component: ManageCourses, canActivate: [AdminGuard] },
+      { path: 'practice', component: ManagePractice, canActivate: [AdminGuard] },
       {
         path: 'upcoming-courses',
         component: UpcomingCourses,
         canActivate: [AdminGuard],
       },
-      { path: 'support',
-         component: AdminSupport 
-        }, 
-
-{
-  path: 'students/:id',
-  loadComponent: () =>
-    import('./admin/student-details/student-details').then(
-      (m) => m.AdminStudentDetail
-    ),
-  canActivate: [AdminGuard],
-},
-
+      { path: 'support', component: AdminSupport, canActivate: [AdminGuard] },
+      {
+        path: 'students/:id',
+        loadComponent: () =>
+          import('./admin/student-details/student-details').then(
+            (m) => m.AdminStudentDetail
+          ),
+        canActivate: [AdminGuard],
+      },
       {
         path: 'students',
         loadComponent: () =>
@@ -129,8 +134,7 @@ export const routes: Routes = [
       },
       {
         path: 'about',
-        loadComponent: () =>
-          import('./pages/about/about').then((m) => m.About),
+        loadComponent: () => import('./pages/about/about').then((m) => m.About),
       },
       {
         path: 'contact',
@@ -140,12 +144,16 @@ export const routes: Routes = [
       {
         path: 'services',
         loadComponent: () =>
-          import('./pages/ourservices/ourservices').then((m) => m.Ourservices),
+          import('./pages/ourservices/ourservices').then(
+            (m) => m.Ourservices
+          ),
       },
       {
         path: 'internships',
         loadComponent: () =>
-          import('./pages/interships/interships').then((m) => m.Interships),
+          import('./pages/interships/interships').then(
+            (m) => m.Interships
+          ),
       },
     ],
   },

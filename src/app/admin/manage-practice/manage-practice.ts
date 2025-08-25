@@ -7,14 +7,26 @@ import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-manage-practice',
-  imports: [FormsModule, CommonModule, Sidebar,HttpClientModule],
+  imports: [FormsModule, CommonModule, Sidebar, HttpClientModule],
   templateUrl: './manage-practice.html',
   styleUrls: ['./manage-practice.css']
 })
 export class ManagePractice implements OnInit {
+  categories: string[] = [
+    'Mathematics',
+    'Algorithms',
+    'C',
+    'C++',
+    'Java',
+    'Python',
+    'Data Structures',
+    'JavaScript',
+    'TypeScript',
+    'Regex'
+  ];
 
   isSidebarOpen = false;
-  practices: Practice[] = [];   // ✅ FIXED
+  practices: Practice[] = [];
   showModal = false;
   selectedPractice: Practice | null = null;
 
@@ -31,7 +43,13 @@ export class ManagePractice implements OnInit {
   // Load all practices
   loadPractices() {
     this.practiceService.getPractices().subscribe({
-      next: (data) => this.practices = data,
+      next: (data) => {
+        this.practices = data.map(p => ({
+          ...p,
+          categories: p.categories || [],
+          solution: p.solution || '' // ✅ Ensure solution field exists
+        }));
+      },
       error: (err) => console.error('Failed to load practices:', err)
     });
   }
@@ -41,7 +59,9 @@ export class ManagePractice implements OnInit {
     this.selectedPractice = {
       title: '',
       description: '',
-      difficulty: 'Easy'
+      difficulty: 'Easy',
+      categories: [],
+      solution: '' // ✅ Include solution
     };
     this.showModal = true;
   }
@@ -66,7 +86,6 @@ export class ManagePractice implements OnInit {
     if (!this.selectedPractice) return;
 
     if (this.selectedPractice._id) {
-      // Update
       this.practiceService.updatePractice(this.selectedPractice._id, this.selectedPractice).subscribe({
         next: () => {
           this.loadPractices();
@@ -75,7 +94,6 @@ export class ManagePractice implements OnInit {
         error: (err) => console.error('Update failed:', err)
       });
     } else {
-      // Add new
       this.practiceService.addPractice(this.selectedPractice).subscribe({
         next: () => {
           this.loadPractices();

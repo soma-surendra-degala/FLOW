@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 export interface Practice {
   _id?: string;
   title: string;
   description: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
-  solution?: string;      // 🔑 added
-  userAnswer?: string;    // optional, for student submissions
-  status?: 'Pending' | 'Completed'; // optional, UI tracking
-
+  solution?: string;
+  userAnswer?: string;
+  status?: 'Pending' | 'Completed';
+  categories?: string[]; // ✅ added
 }
 
 @Injectable({ providedIn: 'root' })
@@ -19,9 +19,22 @@ export class PracticeService {
 
   constructor(private http: HttpClient) {}
 
-  getPractices(): Observable<Practice[]> {
-    return this.http.get<Practice[]>(this.apiUrl);
+  getPractices(categories?: string[]): Observable<Practice[]> {
+  let params = new HttpParams();
+  if (categories && categories.length > 0) {
+    params = params.set('categories', categories.join(',')); // ✅ Comma-separated list
   }
+  return this.http.get<Practice[]>(this.apiUrl, { params });
+}
+getUserSolutions() {
+  return this.http.get<{ [key: string]: string }>('api/user/solutions');
+}
+
+submitSolution(practiceId: string, payload: { userId: string; solutionText: string }) {
+  return this.http.post(`http://localhost:5000/api/practices/${practiceId}/submit`, payload);
+}
+
+
 
   getPractice(id: string): Observable<Practice> {
     return this.http.get<Practice>(`${this.apiUrl}/${id}`);

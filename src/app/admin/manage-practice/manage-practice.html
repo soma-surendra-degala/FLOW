@@ -49,7 +49,9 @@
                 <th class="py-2 px-2">Title</th>
                 <th class="py-2 px-4">Description</th>
                 <th class="py-2 px-4">Difficulty</th>
-                <th class="py-2 text-right">Actions</th>
+                <th class="py-2 px-4">Categories</th>
+                <th class="py-2 px-4">Solution</th>
+                <th class="py-2 px-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -67,6 +69,12 @@
                   >
                     {{ practice.difficulty }}
                   </span>
+                </td>
+                <td class="px-4 py-2 text-gray-300">
+                  {{ practice.categories?.join(', ') || 'No Categories' }}
+                </td>
+                <td class="px-4 py-2 text-gray-300 truncate max-w-[150px]" title="{{ practice.solution || 'No Solution' }}">
+                  {{ practice.solution || 'No Solution' }}
                 </td>
                 <td class="py-2 flex justify-end gap-2">
                   <button (click)="editPractice(practice)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm">Edit</button>
@@ -101,6 +109,12 @@
               >
                 {{ practice.difficulty }}
               </span>
+              <div class="text-gray-400 text-sm">
+                {{ practice.categories?.join(', ') || 'No Categories' }}
+              </div>
+              <div class="text-gray-500 text-xs mt-2">
+                Solution: {{ practice.solution || 'No Solution' }}
+              </div>
             </div>
           </ng-container>
         </div>
@@ -127,6 +141,13 @@
           <option value="Medium">Medium</option>
           <option value="Hard">Hard</option>
         </select>
+        <select
+          [(ngModel)]="selectedPractice!.categories"
+          multiple
+          class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm h-32">
+          <option *ngFor="let cat of categories" [ngValue]="cat">{{ cat }}</option>
+        </select>
+        <textarea [(ngModel)]="selectedPractice!.solution" placeholder="Solution (optional)" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm resize-none" rows="4"></textarea>
       </div>
 
       <div class="flex justify-end gap-2 mt-4">

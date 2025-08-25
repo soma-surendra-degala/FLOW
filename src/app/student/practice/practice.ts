@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { Practice, PracticeService } from '../../shared/sharedservices/admin/practice';
-
+import { PracticeService } from '../../shared/sharedservices/admin/practice';
+import { Practice } from '../../shared/models/practice.model';
 
 @Component({
   selector: 'app-practice',
@@ -13,65 +13,120 @@ import { Practice, PracticeService } from '../../shared/sharedservices/admin/pra
   templateUrl: './practice.html',
   styleUrls: ['./practice.css'],
 })
-export class Practices implements OnInit {  
+export class Practices implements OnInit {
+  categories: string[] = [
+    'Mathematics', 'Algorithms', 'C', 'C++', 'Java',
+    'Python', 'Data Structures', 'JavaScript', 'TypeScript', 'Regex'
+  ];
+  clearCategories() {
+  this.selectedCategories = [];
+}
+
+
+  selectedCategories: string[] = [];
   practiceList: Practice[] = [];
-  loading = true;
+
+  userSolutions: { [key: string]: string } = {}; // ✅ Track user solutions by practice ID
+  loading = false;
   error: string | null = null;
 
-  // UI state for modal
   showModal = false;
   modalMode: 'solve' | 'solution' = 'solve';
   activePractice: Practice | null = null;
-  tempAnswer = '';
+  showSolution = false;
 
   constructor(private practiceService: PracticeService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loadPractices();
+  }
+
+  toggleCategory(cat: string) {
+    if (this.selectedCategories.includes(cat)) {
+      this.selectedCategories = this.selectedCategories.filter(c => c !== cat);
+    } else {
+      this.selectedCategories.push(cat);
+    }
     this.loadPractices();
   }
 
   loadPractices() {
-    this.practiceService.getPractices().subscribe({
+    this.loading = true;
+    this.error = null;
+
+    this.practiceService.getPractices(this.selectedCategories).subscribe({
       next: (data) => {
         this.practiceList = data;
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Failed to load practices:', err);
-        this.error = 'Could not load practices. Try again later.';
+      error: () => {
+        this.error = 'Failed to load practices';
         this.loading = false;
       }
     });
   }
 
-  // BUTTON HANDLERS
-  onSolve(item: Practice) {
-    this.activePractice = item;
+  onSolve(practice: Practice) {
+    this.activePractice = practice;
     this.modalMode = 'solve';
-    this.tempAnswer = (item as any).userAnswer || '';
+    this.showSolution = false;
     this.showModal = true;
-  }
 
-  onViewSolution(item: Practice) {
-    this.activePractice = item;
-    this.modalMode = 'solution';
-    this.showModal = true;
-  }
-
-  submitSolution() {
-    if (!this.activePractice) return;
-    if (!this.tempAnswer.trim()) {
-      alert('Please enter your solution first.');
-      return;
+    const id = practice._id!;
+    if (!this.userSolutions[id]) {
+      this.userSolutions[id] = '';
     }
-    (this.activePractice as any).userAnswer = this.tempAnswer.trim();
-    (this.activePractice as any).status = 'Completed';
-    this.closeModal();
   }
+
+  onViewSolution(practice: Practice) {
+    this.activePractice = practice;
+    this.modalMode = 'solution';
+    this.showSolution = true;
+    this.showModal = true;
+
+    const id = practice._id!;
+    if (!this.userSolutions[id]) {
+      this.userSolutions[id] = '';
+    }
+  }
+            
 
   closeModal() {
     this.showModal = false;
     this.activePractice = null;
-    this.tempAnswer = '';
+    this.showSolution = false;
   }
+
+  toggleSolution() {
+    this.showSolution = !this.showSolution;
+  }
+submitSolution() {
+  if (!this.activePractice) return;
+
+  const practiceId = this.activePractice._id!;
+  const solution = this.userSolutions[practiceId] || '';
+  const userId = '64f9e2c7d9b1a3b123456789'; // Replace with actual logged-in user ID
+
+  if (!solution.trim()) {
+    alert('Please enter a solution');
+    return;
+  }
+
+  const payload = {
+    userId: userId,
+    solutionText: solution
+  };
+
+  this.practiceService.submitSolution(practiceId, payload).subscribe({
+    next: (res) => {
+      console.log('Solution submitted:', res);
+      alert('Solution submitted successfully!');
+      this.closeModal();
+    },
+    error: (err) => {
+      console.error('Submit failed:', err);
+      alert('Failed to submit solution.');
+    }
+  });
+}
 }

@@ -64,45 +64,48 @@
       </div>
 
       <!-- Modal for Video -->
-      <div
-        *ngIf="selectedVideo"
-        class="fixed inset-0 bg-black bg-opacity-70 dark:bg-white dark:bg-opacity-70 flex items-center justify-center min-h-svh z-50"
-      >
-        <div class="bg-neutral-900 dark:bg-white p-4 rounded-2xl shadow-lg max-w-3xl w-full relative">
-          <!-- Close Button -->
-          <button
-            type="button"
-            (click)="closeVideo($event)"
-            class="absolute -top-3 -right-3 bg-black text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg z-50"
-          >
-            <i class="bi bi-x "></i>
-          </button>
+<div
+  *ngIf="selectedVideo"
+  class="fixed inset-0 bg-black bg-opacity-70 dark:bg-white dark:bg-opacity-70 flex items-center justify-center z-50 p-4"
+>
+  <div
+    class="bg-neutral-900 dark:bg-white p-4 rounded-2xl shadow-lg w-full max-w-5xl relative"
+  >
+    <!-- Close Button -->
+    <button
+      type="button"
+      (click)="closeVideo($event)"
+      class="absolute -top-3 -right-3 bg-black text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg z-50"
+    >
+      <i class="bi bi-x"></i>
+    </button>
 
-          <!-- Title -->
-          <h3 class="text-lg font-semibold text-cyan-400 mb-4">
-            {{ selectedVideoTitle }}
-          </h3>
+    <!-- Title -->
+    <h3 class="text-lg font-semibold text-cyan-400 mb-4">
+      {{ selectedVideoTitle }}
+    </h3>
 
-          <!-- If it's YouTube link -->
-          <iframe
-            *ngIf="selectedVideo.includes('youtube')"
-            [src]="selectedVideo | safeUrl"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-            class="w-full h-80 rounded-xl relative z-40"
-          ></iframe>
+   <!-- Video Container (Responsive with Larger Height) -->
+<div class="relative w-full" style="padding-top: 55%">
+  <!-- If it's YouTube link -->
+  <iframe
+    *ngIf="selectedVideo.includes('youtube')"
+    [src]="selectedVideo | safeUrl"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+    class="absolute top-0 left-0 w-full h-full rounded-xl"
+  ></iframe>
 
-          <!-- If it's MP4 link -->
-          <video
-            *ngIf="selectedVideo.endsWith('.mp4')"
-            [src]="selectedVideo"
-            controls
-            autoplay
-            class="w-full rounded-xl relative z-40"
-          ></video>
-        </div>
-      </div>
-    </main>
+  <!-- If it's MP4 link -->
+  <video
+    *ngIf="selectedVideo.endsWith('.mp4')"
+    [src]="selectedVideo"
+    controls
+    autoplay
+    class="absolute top-0 left-0 w-full h-full rounded-xl"
+  ></video>
+</div>
+
   </div>
 </div>
