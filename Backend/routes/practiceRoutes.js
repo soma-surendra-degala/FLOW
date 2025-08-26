@@ -1,5 +1,7 @@
-const express = require("express");
-const Practice = require("../models/Practice");
+import express from "express";
+import Practice from "../models/Practice.js";
+
+const router = express.Router();
 
 // ✅ GET all practices with optional category filtering
 router.get("/", async (req, res) => {
@@ -93,7 +95,7 @@ router.post("/:id/submit", async (req, res) => {
       return res.status(404).json({ message: "Practice not found" });
     }
 
-    // ✅ Push into userSolutions (NOT solutions)
+    // ✅ Push into userSolutions
     practice.userSolutions.push({
       userId,
       solutionText,
@@ -109,4 +111,4 @@ router.post("/:id/submit", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
