@@ -2,7 +2,7 @@
   import Student from "../models/studentModel.js";
   import bcrypt from "bcrypt";
   import jwt from "jsonwebtoken";
-  import { protectStudent } from "../Middleware/auth.js";
+  import { protectStudent } from "../middleware/auth.js";
   import multer from "multer";
   import path from "path";
 

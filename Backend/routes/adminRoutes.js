@@ -5,7 +5,7 @@ import Course from '../models/Course.js';
 import Practice from '../models/Practice.js';
 import Student from '../models/studentModel.js';
 import Admin from '../models/adminModel.js';   // ✅ you forgot this import
-import { protectAdmin } from '../Middleware/auth.js';  // ✅ protect admin-only routes
+import { protectAdmin } from '../middleware/auth.js';  // ✅ protect admin-only routes
 
 const router = express.Router();
 
