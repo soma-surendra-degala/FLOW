@@ -1,22 +1,27 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const upcomingCourseSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true
+const upcomingCourseSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    duration: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: { type: String, required: true },
+    skills: { type: [String], default: [] },
   },
-  startDate: {
-    type: Date,
-    required: true
-  },
-  duration: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  description: { type: String, required: true },
-  skills: { type: [String], default: [] }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("UpcomingCourse", upcomingCourseSchema);
+const UpcomingCourse = mongoose.model("UpcomingCourse", upcomingCourseSchema);
+
+export default UpcomingCourse; // ✅ ESM export
