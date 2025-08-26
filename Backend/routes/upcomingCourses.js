@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import UpcomingCourse from "../models/UpcomingCourses.js"; // ✅ Add .js extension for ESM
+
 const router = express.Router();
-const UpcomingCourse = require("../models/UpcomingCourses"); // ✅ Model
 
 // GET all upcoming courses
 router.get("/", async (req, res) => {
@@ -24,7 +25,9 @@ router.post("/", async (req, res) => {
       duration,
       skills: Array.isArray(skills)
         ? skills
-        : (skills ? skills.split(",").map(s => s.trim()) : [])
+        : skills
+        ? skills.split(",").map((s) => s.trim())
+        : [],
     });
 
     await course.save();
@@ -48,7 +51,9 @@ router.put("/:id", async (req, res) => {
         duration,
         skills: Array.isArray(skills)
           ? skills
-          : (skills ? skills.split(",").map(s => s.trim()) : [])
+          : skills
+          ? skills.split(",").map((s) => s.trim())
+          : [],
       },
       { new: true }
     );
@@ -69,4 +74,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router; // ✅ Important for ES Modules
