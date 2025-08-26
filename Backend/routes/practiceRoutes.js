@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const Practice = require("../models/Practice");
 
 // ✅ GET all practices with optional category filtering
