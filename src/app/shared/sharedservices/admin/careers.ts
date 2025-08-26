@@ -10,6 +10,10 @@ export class CareersService {
 
   constructor(private http: HttpClient) {}
 
+  getCareers(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
   getJobs(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
