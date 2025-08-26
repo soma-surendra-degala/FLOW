@@ -1,0 +1,56 @@
+<!-- Our Services Section -->
+<div id="services" class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
+  <!-- Background Image -->
+  <img src="assets/services-bg.png" alt="Services Background" 
+       class="absolute inset-0 -z-10 w-full h-full object-cover object-center opacity-20 blur-xs" />
+
+  <!-- Gradient Shape -->
+  <div aria-hidden="true" 
+       class="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl">
+    <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 
+                85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 
+                52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 
+                27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 
+                27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+         class="w-[60rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20">
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <!-- Section Title -->
+    <div class="text-center mb-12">
+      <h2 class="text-5xl font-semibold tracking-tight text-white">Our Services</h2>
+      <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+        We provide top-notch solutions tailored to your needs with expert care.
+      </p>
+
+      <!-- Feature Badges -->
+      <div class="flex flex-wrap justify-center gap-3 mt-6">
+        <span *ngFor="let badge of badges" 
+              class="{{ badge.color }} px-4 py-1 rounded-full text-sm">
+          {{ badge.text }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Services Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div *ngFor="let service of services"
+           class="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform duration-300">
+        
+        <i class="{{ service.icon }} text-4xl {{ service.color }} mb-4"></i>
+        <h3 class="text-2xl font-semibold text-black mb-2">{{ service.title }}</h3>
+        <p class="text-gray-800 mb-4">{{ service.description }}</p>
+
+        <ul class="text-black text-sm mb-4 space-y-1">
+          <li *ngFor="let feature of service.features">{{ feature }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer Text -->
+    <p class="text-center text-gray-400 mt-16 text-sm">
+      🚀 Providing excellence in every service we deliver.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,170 @@
+<div class="flex min-h-screen bg-neutral-950 text-white">
+  <!-- Sidebar -->
+  <div
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+    [ngClass]="{ '-translate-x-full': !isSidebarOpen, 'translate-x-0': isSidebarOpen }">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div 
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-cyan-400">Admin Dashboard</h2>
+
+      <!-- Hamburger -->
+      <button 
+        class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
+        (click)="toggleSidebar()">
+        <i class="bi bi-list text-2xl"></i>
+      </button>
+    </header>
+
+    <!-- Stats Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Total Courses -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-cyan-500/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-journal-code text-cyan-400 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">Total Courses</h3>
+        </div>
+        <p class="text-3xl font-bold text-cyan-400 mt-3">{{ stats.courses }}</p>
+      </div>
+
+      <!-- Practice Sets -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-cyan-500/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-pencil-square text-cyan-400 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">Practice Sets</h3>
+        </div>
+        <p class="text-3xl font-bold text-cyan-400 mt-3">{{ stats.practices }}</p>
+      </div>
+
+      <!-- Students -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-cyan-500/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-people text-cyan-400 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">Students</h3>
+        </div>
+        <p class="text-3xl font-bold text-cyan-400 mt-3">{{ stats.students }}</p>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+      <!-- Recent Activity -->
+      <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow hover:shadow-cyan-500/20 hover:scale-105 transition transform duration-300">
+        <h3 class="text-xl font-bold mb-4 text-cyan-400 flex items-center gap-2">
+          <i class="bi bi-activity text-cyan-400 text-2xl"></i>
+          Recent Activity
+        </h3>
+        <ul class="space-y-3">
+          <li *ngFor="let activity of recentActivity" class="flex items-center gap-3">
+            <i class="bi bi-check-circle-fill text-cyan-400"></i>
+            <span>{{ activity }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Most Recent Issue -->
+      <div class="bg-neutral-900 border border-neutral-800 p-6 rounded-2xl shadow hover:shadow-cyan-500/20 hover:scale-105 transition transform duration-300">
+        <h3 class="text-lg font-semibold text-cyan-400 mb-4 flex items-center gap-2">
+          <i class="bi bi-bug-fill text-cyan-400 text-2xl"></i>
+          Most Recent Issue
+        </h3>
+
+        <div *ngIf="recentIssue; else noIssues" class="gap-3">
+          <p class="text-lg text-gray-400">{{ recentIssue.studentName }} • {{ recentIssue.status }}</p>
+          <h4 class="text-cyan-400 font-bold mt-1">{{ recentIssue.subject }}</h4>
+          <p class="text-gray-500 text-lg mt-1">{{ recentIssue.message }}</p>
+        </div>
+
+        <ng-template #noIssues>
+          <p class="text-gray-500">No recent issue available.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Support Overview Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
+      <!-- Total Issues -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-cyan-500/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-exclamation-circle text-red-500 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">Total Issues</h3>
+        </div>
+        <p class="text-3xl font-bold text-red-500 mt-3">{{ stats.totalIssues }}</p>
+      </div>
+
+      <!-- Open Issues -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-yellow-400/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-hourglass-split text-yellow-400 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">Open Issues</h3>
+        </div>
+        <p class="text-3xl font-bold text-yellow-400 mt-3">{{ stats.openIssues }}</p>
+      </div>
+
+      <!-- In Progress -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-blue-400/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-tools text-blue-400 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">In Progress</h3>
+        </div>
+        <p class="text-3xl font-bold text-blue-400 mt-3">{{ stats.inProgressIssues }}</p>
+      </div>
+
+      <!-- Resolved Issues -->
+      <div class="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 shadow hover:shadow-green-400/30 hover:scale-105 transition transform duration-300">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-check-circle text-green-400 text-3xl hover:animate-pulse"></i>
+          <h3 class="text-lg font-semibold">Resolved Issues</h3>
+        </div>
+        <p class="text-3xl font-bold text-green-400 mt-3">{{ stats.resolvedIssues }}</p>
+      </div>
+    </div>
+
+    <!-- Recent Students -->
+    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow hover:shadow-cyan-500/20 hover:scale-105 transition transform duration-300">
+      <h3 class="text-xl font-bold mb-4 text-cyan-400 flex items-center gap-2">
+        <i class="bi bi-person-lines-fill text-cyan-400 text-2xl"></i>
+        Recent Students
+      </h3>
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="text-gray-400 border-b border-neutral-800">
+            <th class="py-2">#</th>
+            <th class="py-2 px-4">Name</th>
+            <th class="py-2 px-4">Email</th>
+            <th class="py-2 px-4 hidden sm:table-cell">Location</th>
+            <th class="py-2 px-4 hidden sm:table-cell">Gender</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of recentStudents; index as i" class="border-b border-neutral-800 hover:bg-neutral-800/30 transition">
+            <td class="py-2 px-2">{{ i + 1 }}</td>
+            <td class="py-2 px-2">{{ student.name }}</td>
+            <td class="py-2 px-2">{{ student.email }}</td>
+            <td class="py-2 px-2 hidden sm:table-cell">{{ student.location }}</td>
+            <td class="py-2 px-2 hidden sm:table-cell">{{ student.gender }}</td>
+            <td class="py-2 px-2">
+              <span [ngClass]="{
+                'text-green-400': student.status === 'Active',
+                'text-red-400': student.status === 'Inactive'
+              }">
+                {{ student.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>

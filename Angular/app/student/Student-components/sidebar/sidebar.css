@@ -1,0 +1,7 @@
+
+.rotate-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 0.2rem;
+  font-size: 1.2rem;
+}

@@ -1,0 +1,227 @@
+<div class="flex min-h-screen bg-neutral-950 text-white">
+
+  <!-- Sidebar -->
+  <div
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+    [ngClass]="{ '-translate-x-full': !isSidebarOpen, 'translate-x-0': isSidebarOpen }">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Main content -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <header class="flex justify-between items-center p-4 border-b border-neutral-800 md:px-6">
+      <h1 class="text-xl md:text-2xl font-bold text-cyan-400">Support Tickets</h1>
+      <button
+        class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
+        (click)="toggleSidebar()">
+        <i class="bi bi-list text-2xl"></i>
+      </button>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 overflow-auto p-4 md:p-6">
+      <div class="bg-neutral-900 rounded-2xl border border-neutral-800 shadow p-4 md:p-6">
+
+        <!-- Table for Desktop -->
+        <div class="overflow-x-auto hidden sm:block" *ngIf="tickets.length > 0">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="text-gray-400 border-b border-neutral-800">
+                <th class="py-2 px-2">Student</th>
+                <th class="py-2 px-2">Subject</th>
+                <th class="py-2 px-2">Message</th>
+                <th class="py-2 px-2">Status</th>
+                <th class="py-2 px-2">Replies</th>
+                <th class="py-2 px-2 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ticket of tickets" class="border-b border-neutral-800 hover:bg-neutral-800/40 transition align-top">
+                <td class="px-2 py-2">{{ getStudentName(ticket) }}</td>
+                <td class="px-2 py-2">{{ ticket.subject }}</td>
+                <td class="px-2 py-2">{{ ticket.message }}</td>
+                <td class="px-2 py-2">
+                  <select 
+                    [ngModel]="ticket.status" 
+                    (ngModelChange)="updateStatus(ticket._id!, $event)"
+                    class="border rounded px-2 py-1 bg-neutral-800 text-white"
+                  >
+                    <option value="open">Open</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="closed">Closed</option>
+                  </select>
+                </td>
+                <td class="px-2 py-2">
+                  <div *ngIf="ticket.replies && ticket.replies.length > 0" class="mt-2">
+                    <h4 class="font-semibold text-cyan-400">Replies:</h4>
+                    <div *ngFor="let reply of ticket.replies" class="mt-1 text-sm flex justify-between items-center">
+                      <span *ngIf="!editingReplies[reply._id]">
+                        <strong>{{ reply.sender }}:</strong> {{ reply.message }}
+                        <i class="text-gray-500">({{ reply.createdAt | date:'short' }})</i>
+                      </span>
+
+                      <span *ngIf="editingReplies[reply._id]">
+                        <input type="text" [(ngModel)]="editedMessages[reply._id]" class="p-1 rounded bg-neutral-800 text-white border border-neutral-700"/>
+                      </span>
+
+                      <div class="flex gap-2">
+                        <!-- Edit / Save / Cancel -->
+                        <button *ngIf="!editingReplies[reply._id]"
+                          class="bg-yellow-500 text-white px-2 py-1 rounded"
+                          (click)="startEdit(reply._id, reply.message)">
+                          Edit
+                        </button>
+                        <button *ngIf="editingReplies[reply._id]"
+                          class="bg-green-500 text-white px-2 py-1 rounded"
+                          (click)="saveEdit(ticket._id!, reply._id!)">
+                          Save
+                        </button>
+                        <button *ngIf="editingReplies[reply._id]"
+                          class="bg-gray-500 text-white px-2 py-1 rounded"
+                          (click)="cancelEdit(reply._id)">
+                          Cancel
+                        </button>
+
+                        <!-- Delete -->
+                        <button 
+                          class="bg-red-500 text-white px-2 py-1 rounded"
+                          (click)="deleteReply(ticket._id!, reply._id!)">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Reply input -->
+                  <div class="mt-3">
+                    <input
+                      type="text"
+                      placeholder="Type a reply..."
+                      [(ngModel)]="replyMessages[ticket._id!]"
+                      class="w-full p-2 rounded bg-neutral-800 text-white border border-neutral-700"
+                    />
+                    <button
+                      class="mt-2 bg-cyan-400 text-black px-3 py-1 rounded"
+                      (click)="sendReply(ticket._id!)"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </td>
+                <td class="px-2 py-2 text-right">
+                  <button 
+                    (click)="deleteTicket(ticket._id!)" 
+                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="sm:hidden flex flex-col gap-4" *ngIf="tickets.length > 0">
+          <div *ngFor="let ticket of tickets" class="bg-neutral-800 p-4 rounded-lg shadow flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 class="font-semibold">{{ ticket.subject }}</h3>
+                <p class="text-sm mt-1 text-gray-400">{{ ticket.message }}</p>
+                <p class="text-sm mt-1 text-gray-400">
+                  <strong>Student:</strong> {{ getStudentName(ticket) }}
+                </p>
+                <p class="mt-1 text-sm">
+                  <strong>Status:</strong>
+                  <span [ngClass]="{
+                    'text-yellow-400': ticket.status === 'open',
+                    'text-blue-400': ticket.status === 'in-progress',
+                    'text-green-400': ticket.status === 'closed'
+                  }">
+                    {{ ticket.status }}
+                  </span>
+                </p>
+              </div>
+              <button (click)="deleteTicket(ticket._id!)" class="px-2 py-1 bg-red-500 rounded text-sm">Delete</button>
+            </div>
+
+            <!-- Replies -->
+            <div *ngIf="ticket.replies && ticket.replies.length > 0" class="mt-2">
+              <h4 class="font-semibold text-cyan-400">Replies:</h4>
+              <div *ngFor="let reply of ticket.replies" class="mt-1 text-xs text-gray-300 flex justify-between items-center">
+                <span *ngIf="!editingReplies[reply._id]">
+                  <strong>{{ reply.sender }}:</strong> {{ reply.message }}
+                  <i class="text-gray-500">({{ reply.createdAt | date:'short' }})</i>
+                </span>
+
+                <span *ngIf="editingReplies[reply._id.toString()]">
+                  <input type="text" [(ngModel)]="editedMessages[reply._id.toString()]" class="p-1 rounded bg-neutral-800 text-white border border-neutral-700"/>
+                </span>
+
+                <div class="flex gap-2">
+                  <button *ngIf="!editingReplies[reply._id]"
+                    class="bg-yellow-500 text-white px-2 py-1 rounded"
+                    (click)="startEdit(reply._id, reply.message)">
+                    Edit
+                  </button>
+                  <!-- <button *ngIf="editingReplies[reply._id]"
+                    class="bg-green-500 text-white px-2 py-1 rounded"
+                    (click)="saveEdit(ticket._id!, reply._id!)">
+                    Save
+                  </button> -->
+                  <button *ngIf="editingReplies[reply._id.toString()]" 
+        class="bg-green-500 text-white px-2 py-1 rounded"
+        (click)="saveEdit(ticket._id!, reply._id!)">
+  Save
+                </button>
+                  <button *ngIf="editingReplies[reply._id]"
+                    class="bg-gray-500 text-white px-2 py-1 rounded"
+                    (click)="cancelEdit(reply._id)">
+                    Cancel
+                  </button>
+
+                  <button 
+                    class="bg-red-500 text-white px-2 py-1 rounded"
+                    (click)="deleteReply(ticket._id!, reply._id!)">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reply input -->
+            <div class="mt-3">
+              <input
+                type="text"
+                placeholder="Type a reply..."
+                [(ngModel)]="replyMessages[ticket._id!]"
+                class="w-full p-2 rounded bg-neutral-800 text-white border border-neutral-700"
+              />
+              <button
+                class="mt-2 bg-cyan-400 text-black px-3 py-1 rounded"
+                (click)="sendReply(ticket._id!)"
+              >
+                Send
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="tickets.length === 0" class="text-center text-gray-500 mt-6">
+          No tickets available.
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>

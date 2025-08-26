@@ -1,0 +1,4 @@
+/* Optional extra styles */
+:host {
+  display: block;
+}

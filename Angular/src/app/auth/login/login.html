@@ -1,0 +1,86 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-neutral-950 via-neutral-900 to-black px-4">
+  <div class="w-full max-w-md bg-gradient-to-br from-neutral-950 via-neutral-900 to-black text-white rounded-xl shadow-2xl p-8">
+    
+    <!-- Logo / Title -->
+    <div class="text-center mb-8">
+      <div class="flex justify-center items-center mb-3 gap-2">
+        <img src="assets/bg.png" alt="Logo" class="h-14 w-14">
+        <div class="font-extrabold text-2xl">FLOW</div>
+      </div>
+      <h1 class="text-3xl font-bold">Welcome Back 👋</h1>
+      <p class="text-gray-400 mt-1">Login to continue</p>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="space-y-5">
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="loginData.email"
+          required
+          class="mt-1 w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+          placeholder="you@example.com"
+        />
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="loginData.password"
+          required
+          class="mt-1 w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <!-- Remember Me + Forgot -->
+      <div class="flex items-center justify-between text-sm">
+        <label class="flex items-center text-gray-400">
+          <input type="checkbox" class="h-4 w-4 text-cyan-500 bg-neutral-800 border-gray-600 rounded">
+          <span class="ml-2">Remember me</span>
+        </label>
+        <a href="#" class="text-cyan-400 hover:text-cyan-300">Forgot password?</a>
+      </div>
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        class="w-full bg-cyan-600 text-white py-2 rounded-lg shadow-md hover:bg-cyan-500 transition"
+      >
+        Login
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="flex items-center my-6">
+      <div class="flex-grow border-t border-neutral-700"></div>
+      <span class="px-3 text-sm text-gray-500">OR</span>
+      <div class="flex-grow border-t border-neutral-700"></div>
+    </div>
+
+    <!-- Social Logins -->
+    <div class="grid grid-cols-2 gap-4">
+      <button class="flex items-center justify-center gap-2 border border-neutral-700 py-2 rounded-lg hover:bg-neutral-800 transition">
+        <i class="bi bi-google"></i> Google
+      </button>
+      <button class="flex items-center justify-center gap-2 border border-neutral-700 py-2 rounded-lg hover:bg-neutral-800 transition">
+        <i class="bi bi-facebook"></i> Facebook
+      </button>
+    </div>
+
+    <!-- Signup Link -->
+    <p class="text-center text-gray-400 mt-6 text-sm">
+      Don’t have an account?
+      <a routerLink="/register" (click)="register()" class="text-cyan-400 font-medium hover:text-cyan-300">Sign up</a>
+    </p>
+  </div>
+</div>

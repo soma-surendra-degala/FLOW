@@ -1,0 +1,133 @@
+<div class="flex min-h-screen bg-neutral-950 text-white"> 
+  <!-- Sidebar -->
+  <div
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+    [ngClass]="{ '-translate-x-full': !isSidebarOpen, 'translate-x-0': isSidebarOpen }">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div 
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 overflow-y-auto">
+    <header class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-cyan-400">Upcoming Courses</h2>
+
+      <!-- Hamburger -->
+      <button 
+        class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
+        (click)="toggleSidebar()">
+        <i class="bi bi-list text-2xl"></i>
+      </button>
+    </header>
+
+    <!-- Add Course -->
+    <div class="rounded-xl p-4 mb-6 bg-neutral-900 shadow">
+      <form class="grid grid-cols-1 sm:grid-cols-5 gap-4" (ngSubmit)="addCourse()" #courseForm="ngForm" novalidate>
+        
+        <input type="text" [(ngModel)]="newCourse.title" name="title" required
+               placeholder="Course Title"
+               class="p-2 rounded border border-neutral-700 w-full">
+
+        <input type="date" [(ngModel)]="newCourse.startDate" name="startDate" required
+               class="p-2 rounded border border-neutral-700 w-full">
+
+        <input type="text" [(ngModel)]="newCourse.duration" name="duration" required
+               placeholder="Duration (e.g., 6 weeks)"
+               class="p-2 rounded border border-neutral-700 w-full">
+
+        <input type="text" [(ngModel)]="newCourse.skills" name="skills"
+               placeholder="Skills (comma separated)"
+               class="p-2 rounded border border-neutral-700 w-full">
+
+        <input type="text" [(ngModel)]="newCourse.description" name="description"
+               placeholder="Description"
+               class="p-2 rounded border border-neutral-700 w-full sm:col-span-2">
+
+        <button type="submit"
+                [disabled]="courseForm.invalid"
+                class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded sm:col-span-3">
+          Add
+        </button>
+      </form>
+    </div>
+
+    <!-- Courses Table -->
+    <div class="rounded-xl py-4 bg-neutral-900 shadow">
+      <h3 class="text-lg font-semibold mb-3 px-3">Upcoming Courses List</h3>
+      <table class="w-full text-left border-collapse">
+    <tbody>
+  <!-- Mobile Card View -->
+  <tr *ngFor="let course of courses"
+      class=" md:table-row flex flex-col md:flex-row gap-2 md:gap-0 mb-3 md:mb-0 border border-neutral-800 md:border-0 rounded-lg md:rounded-none p-3 md:p-0 bg-neutral-900 md:bg-transparent">
+
+    <!-- Title -->
+    <td class="py-1 px-2 font-semibold text-cyan-400 md:py-2 md:px-3 md:font-normal">
+      {{ course.title }}
+    </td>
+
+    <!-- Start Date -->
+    <td class="py-1 px-2 text-sm text-gray-300 md:py-2 md:px-3">
+      {{ course.startDate | date:'mediumDate' }}
+    </td>
+
+    <!-- Duration -->
+    <td class="py-1 px-2 text-sm md:py-2 md:px-3">
+      {{ course.duration }}
+    </td>
+
+    <!-- Skills -->
+    <td class="py-1 px-2 md:py-2 md:px-3">
+      <ul *ngIf="course.skills?.length" class="flex flex-wrap gap-1">
+        <li *ngFor="let skill of course.skills" class="bg-neutral-700 text-xs px-2 py-1 rounded-full">
+          {{ skill }}
+        </li>
+      </ul>
+    </td>
+
+    <!-- Description -->
+    <td class="py-1 px-2 text-xs text-gray-400 md:text-sm md:py-2 md:px-3">
+      {{ course.description }}
+    </td>
+
+    <!-- Actions -->
+    <td class="py-1 px-2 flex gap-3 md:py-2 md:px-3">
+      <!-- Mobile: icons only, Desktop: text -->
+      <button (click)="editCourse(course)" class="text-yellow-400 hover:underline flex items-center gap-1">
+        <i class="bi bi-pencil md:hidden"></i>
+        <span class="hidden md:inline">Edit</span>
+      </button>
+      <button (click)="deleteCourse(course._id!)" class="text-red-400 hover:underline flex items-center gap-1">
+        <i class="bi bi-trash md:hidden"></i>
+        <span class="hidden md:inline">Delete</span>
+      </button>
+    </td>
+  </tr>
+</tbody>
+
+      </table>
+    </div>
+
+    <!-- Edit Modal -->
+    <div *ngIf="editingCourse" class="mt-6 border rounded-xl p-4 bg-neutral-900 shadow">
+      <h3 class="text-lg font-semibold mb-3">Edit Course</h3>
+      <form class="grid grid-cols-1 sm:grid-cols-5 gap-4" (ngSubmit)="updateCourse()">
+        <input type="text" [(ngModel)]="editingCourse.title" name="editTitle" class="p-2 rounded border w-full">
+        <input type="date" [(ngModel)]="editingCourse.startDate" name="editStartDate" class="p-2 rounded border w-full">
+        <input type="text" [(ngModel)]="editingCourse.duration" name="editDuration" class="p-2 rounded border w-full">
+        <input type="text" [(ngModel)]="editingCourse.skills" name="editSkills"
+               placeholder="Skills (comma separated)" class="p-2 rounded border w-full">
+        <input type="text" [(ngModel)]="editingCourse.description" name="editDescription"
+               placeholder="Description" class="p-2 rounded border w-full sm:col-span-2">
+        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded sm:col-span-3">
+          Update
+        </button>
+      </form>
+    </div>
+  </main>
+</div>

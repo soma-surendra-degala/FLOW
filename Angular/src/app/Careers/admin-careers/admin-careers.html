@@ -1,0 +1,148 @@
+<div class="flex flex-col md:flex-row min-h-screen bg-neutral-950 text-white">
+  <!-- Sidebar -->
+  <div
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+    [ngClass]="{ '-translate-x-full': !isSidebarOpen, 'translate-x-0': isSidebarOpen }">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Main Content -->
+  <main class="p-4 md:p-6 max-w-6xl mx-auto w-full">
+    <h2 class="text-2xl font-bold mb-6 text-cyan-500 text-center md:text-left">Manage Careers</h2>
+
+    <!-- Add Job Form -->
+    <div class="bg-neutral-900 p-4 md:p-6 rounded-xl shadow-lg border border-neutral-700 mb-6">
+      <h3 class="text-lg font-semibold mb-4 text-gray-300">Add New Job</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" [(ngModel)]="newJob.company" placeholder="Company Name"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+        <input type="text" [(ngModel)]="newJob.role" placeholder="Role"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+
+        <input type="text" [(ngModel)]="newJob.skills" placeholder="Skills (comma separated)"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+        <input type="text" [(ngModel)]="newJob.salary" placeholder="Salary"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+
+        <input type="text" [(ngModel)]="newJob.education" placeholder="Qualifications"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+        <input type="text" [(ngModel)]="newJob.experience" placeholder="Experience (e.g., 2-5 years)"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+
+        <select [(ngModel)]="newJob.workType"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full">
+          <option value="" disabled>Select Work Type</option>
+          <option value="WFH">Work From Home</option>
+          <option value="WFO">Work From Office</option>
+          <option value="Hybrid">Hybrid</option>
+        </select>
+
+        <input type="text" [(ngModel)]="newJob.location" placeholder="Job Location"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+        <input type="date" [(ngModel)]="newJob.lastDate" placeholder="Last Date"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 w-full" />
+
+        <input type="text" [(ngModel)]="newJob.applyUrl" placeholder="Apply URL"
+          class="p-3 rounded-lg bg-neutral-800 text-white border border-neutral-700 col-span-1 md:col-span-2" />
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-col md:flex-row gap-4 mt-4">
+        <button (click)="addJob()"
+          class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-lg font-semibold transition">
+          Add Job
+        </button>
+
+        <button *ngIf="editMode" (click)="updateJob()"
+          class="flex-1 bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition">
+          Update Job
+        </button>
+      </div>
+    </div>
+
+    <!-- Jobs Table / Cards -->
+    <div class="bg-neutral-900 p-4 md:p-6 rounded-xl shadow-lg border border-neutral-700">
+      <h3 class="text-lg font-semibold mb-4 text-gray-300">Job Listings</h3>
+
+      <!-- Desktop Table -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full border-collapse border border-neutral-700 text-gray-300">
+          <thead>
+            <tr class="bg-neutral-800 text-cyan-400 text-sm">
+              <th class="p-3 border border-neutral-700">Company</th>
+              <th class="p-3 border border-neutral-700">Role</th>
+              <th class="p-3 border border-neutral-700">Skills</th>
+              <th class="p-3 border border-neutral-700">Education</th>
+              <th class="p-3 border border-neutral-700">Experience</th>
+              <th class="p-3 border border-neutral-700">Work Type</th>
+              <th class="p-3 border border-neutral-700">Location</th>
+              <th class="p-3 border border-neutral-700">Salary</th>
+              <th class="p-3 border border-neutral-700">Last Date</th>
+              <th class="p-3 border border-neutral-700">Apply</th>
+              <th class="p-3 border border-neutral-700">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let job of jobs" class="hover:bg-neutral-800">
+              <td class="p-3 border border-neutral-700">{{ job.company }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.role }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.skills }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.education }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.experience }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.workType }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.location }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.salary }}</td>
+              <td class="p-3 border border-neutral-700">{{ job.lastDate | date }}</td>
+              <td class="p-3 border border-neutral-700">
+                <a [href]="job.applyUrl" target="_blank" class="text-cyan-400 hover:underline">Apply</a>
+              </td>
+              <td class="p-3 border border-neutral-700 flex gap-2 justify-center">
+                <button (click)="startEdit(job)" class="text-blue-400 hover:text-blue-200">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button (click)="deleteJob(job._id)" class="text-red-500 hover:text-red-300">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards -->
+      <div class="space-y-4 md:hidden">
+        <div *ngFor="let job of jobs" class="p-4 bg-neutral-800 rounded-lg border border-neutral-700">
+          <div class="flex justify-between items-center mb-2">
+            <h4 class="text-lg font-semibold text-cyan-400">{{ job.company }}</h4>
+            <div class="flex gap-3">
+              <button (click)="startEdit(job)" class="text-blue-400 hover:text-blue-200">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button (click)="deleteJob(job._id)" class="text-red-500 hover:text-red-300">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+          <p><span class="font-semibold">Role:</span> {{ job.role }}</p>
+          <p><span class="font-semibold">Skills:</span> {{ job.skills }}</p>
+          <p><span class="font-semibold">Education:</span> {{ job.education }}</p>
+          <p><span class="font-semibold">Experience:</span> {{ job.experience }}</p>
+          <p><span class="font-semibold">Work Type:</span> {{ job.workType }}</p>
+          <p><span class="font-semibold">Location:</span> {{ job.location }}</p>
+          <p><span class="font-semibold">Salary:</span> {{ job.salary }}</p>
+          <p><span class="font-semibold">Last Date:</span> {{ job.lastDate | date }}</p>
+          <a [href]="job.applyUrl" target="_blank"
+            class="inline-block mt-2 text-cyan-400 hover:underline">Apply</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

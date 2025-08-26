@@ -1,0 +1,87 @@
+<div class="flex flex-col min-h-screen">
+  <!-- Header -->
+  <app-header (toggleSidebar)="sidebar.toggleSidebar()"></app-header>
+
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <app-sidebar #sidebar></app-sidebar>
+
+    <!-- Main Content -->
+    <main
+      class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-8 transition-all duration-300 overflow-y-auto"
+    >
+      <!-- Page Title -->
+      <h2 class="text-3xl font-bold text-cyan-400 mb-8">🎓 Student Dashboard</h2>
+
+      <!-- Row 1: Quick Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div
+          *ngFor="let card of summaryCards"
+          class="bg-neutral-800 dark:bg-gray-100 border border-neutral-700 dark:border-gray-300 rounded-2xl p-6 shadow-xl hover:scale-[1.02] transition transform flex flex-col"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-semibold">{{ card.title }}</h3>
+            <i class="bi" [ngClass]="card.icon" [class]="'text-' + card.color + ' text-2xl'"></i>
+          </div>
+          <p class="text-3xl font-bold mt-2" [ngClass]="'text-' + card.color">
+            {{ card.value }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Row 2: Panels -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- 📌 Recent Activity -->
+        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col">
+          <h3 class="text-xl font-semibold mb-4 text-cyan-600">📌 Recent Activity</h3>
+          <ul class="space-y-3 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto">
+            <li
+              *ngFor="let activity of recentActivities"
+              class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
+            >
+              <i class="bi"
+                 [ngClass]="[
+                   activity.type === 'submission' ? 'bi-check-circle text-green-400' :
+                   activity.type === 'enrollment' ? 'bi-book text-blue-400' :
+                   'bi-star text-yellow-400'
+                 ]"></i>
+              <span>{{ activity.text }} <span class="text-cyan-400">{{ activity.course }}</span></span>
+              <span class="ml-auto text-xs text-gray-500">{{ activity.timeAgo }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 📅 Upcoming Courses -->
+        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col">
+          <h3 class="text-xl font-semibold mb-4 text-cyan-400">📅 Upcoming Courses</h3>
+          <ul class="space-y-4 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto">
+            <li
+              *ngFor="let course of upcomingCourses"
+              class="p-3 rounded hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
+            >
+              <p class="font-semibold text-white dark:text-black">{{ course.title }}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500">Starts: {{ course.startDate | date:'mediumDate' }}</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 💬 Discussion Forum -->
+        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
+          <h3 class="text-xl font-semibold text-cyan-400 mb-3">💬 Discussion Forum</h3>
+          <p class="text-sm text-gray-400 dark:text-gray-600 mb-4">
+            Join our student community to ask questions, share ideas & grow together.
+          </p>
+          <a
+            href="https://t.me/FLOW_Discussion_Forum"
+            target="_blank"
+            class="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-medium shadow-md transition"
+          >
+            🚀 Join Telegram Group
+          </a>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>

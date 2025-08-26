@@ -1,0 +1,112 @@
+<div class="h-screen flex items-center justify-center bg-gradient-to-br from-neutral-950 via-neutral-900 to-black px-4">
+  <div class="w-full max-w-md bg-neutral-900 text-white rounded-2xl shadow-xl p-6">
+
+    <!-- Logo / Title -->
+    <div class="text-center mb-6">
+      <div class="flex justify-center items-center mb-3">
+        <img src="assets/bg.png" alt="Logo" class="h-12 w-12">
+        <div class="ml-2 font-extrabold text-2xl text-pink-500">FLOW</div>
+      </div>
+      <h1 class="text-xl font-bold text-white">Create Account 🚀</h1>
+      <p class="text-gray-400 text-sm mt-1">Join us today</p>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="space-y-3">
+
+      <!-- Name -->
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="registerData.name"
+        placeholder="Full Name"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
+
+      <!-- Email -->
+      <input
+        type="email"
+        name="email"
+        [(ngModel)]="registerData.email"
+        placeholder="Email"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
+
+      <!-- Password -->
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="registerData.password"
+        placeholder="Password"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
+
+      <!-- Confirm Password -->
+      <input
+        type="password"
+        name="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        placeholder="Confirm Password"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
+
+      <!-- Location -->
+      <input
+        type="text"
+        name="location"
+        [(ngModel)]="registerData.location"
+        placeholder="Location"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      />
+
+      <!-- Gender -->
+      <select
+        name="gender"
+        [(ngModel)]="registerData.gender"
+        class="w-full px-3 py-2 text-sm bg-neutral-800 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+        required
+      >
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male" class="bg-neutral-900">Male</option>
+        <option value="Female" class="bg-neutral-900">Female</option>
+        <option value="Other" class="bg-neutral-900">Other</option>
+      </select>
+
+      <!-- Register Button -->
+      <button
+        type="submit"
+        class="w-full bg-pink-600 text-white text-sm font-medium py-2 rounded-lg shadow-md hover:bg-pink-700 transition"
+      >
+        Sign Up
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="flex items-center my-4">
+      <div class="flex-grow border-t border-neutral-700"></div>
+      <span class="px-2 text-xs text-gray-400">OR</span>
+      <div class="flex-grow border-t border-neutral-700"></div>
+    </div>
+
+    <!-- Social Logins -->
+    <div class="grid grid-cols-2 gap-3">
+      <button class="flex items-center justify-center gap-1 bg-neutral-800 border border-neutral-700 py-2 rounded-lg text-xs hover:bg-neutral-700 transition">
+        <i class="bi bi-google"></i> Google
+      </button>
+      <button class="flex items-center justify-center gap-1 bg-neutral-800 border border-neutral-700 py-2 rounded-lg text-xs hover:bg-neutral-700 transition">
+        <i class="bi bi-github"></i> GitHub
+      </button>
+    </div>
+
+    <!-- Login Link -->
+    <p class="text-center text-gray-400 mt-4 text-xs">
+      Already have an account?
+      <a (click)="login()" class="text-pink-500 font-medium hover:text-pink-600">Login</a>
+    </p>
+  </div>
+</div>
