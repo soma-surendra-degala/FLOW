@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const userSolutionSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
@@ -31,10 +31,11 @@ const practiceSchema = new mongoose.Schema(
       ],
       default: []
     },
-    solution: { type: String, default: "" }, // Official solution
-    userSolutions: [userSolutionSchema] // ✅ Correct array for user submissions
+    solution: { type: String, default: "" },
+    userSolutions: [userSolutionSchema]
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Practice", practiceSchema);
+const Practice = mongoose.model("Practice", practiceSchema);
+export default Practice;
