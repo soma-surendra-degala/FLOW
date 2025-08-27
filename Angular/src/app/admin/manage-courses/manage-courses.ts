@@ -28,7 +28,7 @@ export class ManageCourses implements OnInit {
   selectedCourse: Course | null = null;
   selectedFile: File | null = null;
 
-  private apiUrl = 'http://localhost:5000/api/courses'; // ✅ backend URL
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/courses'; // ✅ backend URL
 
   constructor(private http: HttpClient) {
     console.log("📘 ManageCourses Loaded!");

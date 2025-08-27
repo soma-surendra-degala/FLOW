@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CareersService {
-  private apiUrl = 'http://localhost:5000/api/careers';
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/careers';
 
   constructor(private http: HttpClient) {}
 

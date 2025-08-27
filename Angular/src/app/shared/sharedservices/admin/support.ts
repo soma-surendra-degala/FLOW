@@ -8,7 +8,7 @@ import { Ticket } from '../../models/ticket.model';
   providedIn: 'root'
 })
 export class SupportService {
-  private apiUrl = 'http://localhost:5000/api/support';
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/support';
 
   constructor(private http: HttpClient) {}
 

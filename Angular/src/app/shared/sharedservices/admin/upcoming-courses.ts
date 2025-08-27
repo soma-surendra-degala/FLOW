@@ -13,7 +13,7 @@ export interface UpcomingCourse {
   providedIn: 'root'
 })
 export class UpcomingCoursesService {
-  private apiUrl = 'http://localhost:5000/api/admin/upcoming-courses'; // check your backend route
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/admin/upcoming-courses'; // check your backend route
 
   constructor(private http: HttpClient) {}
 

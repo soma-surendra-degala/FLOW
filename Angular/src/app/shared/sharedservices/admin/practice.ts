@@ -15,7 +15,7 @@ export interface Practice {
 
 @Injectable({ providedIn: 'root' })
 export class PracticeService {
-  private apiUrl = 'http://localhost:5000/api/practices';
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/practices';
 
   constructor(private http: HttpClient) {}
 
@@ -31,7 +31,7 @@ getUserSolutions() {
 }
 
 submitSolution(practiceId: string, payload: { userId: string; solutionText: string }) {
-  return this.http.post(`http://localhost:5000/api/practices/${practiceId}/submit`, payload);
+  return this.http.post(`https://flow-hp2a.onrender.com/api/practices/${practiceId}/submit`, payload);
 }
 
 

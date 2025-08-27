@@ -16,19 +16,19 @@ export interface Stats {
 
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  private baseUrl = 'http://localhost:5000/api/admin'; // ✅ Correct
+  private baseUrl = 'https://flow-hp2a.onrender.com/api/admin'; // ✅ Correct
 
 constructor(private http: HttpClient) {}
 getStudents() {
-  return this.http.get<Student[]>('http://localhost:5000/api/students'); // remove /admin
+  return this.http.get<Student[]>('https://flow-hp2a.onrender.com/api/students'); // remove /admin
 }
 
 getCourses() {
-  return this.http.get<Course[]>('http://localhost:5000/api/courses');
+  return this.http.get<Course[]>('https://flow-hp2a.onrender.com/api/courses');
 }
 
 getPractices() {
-  return this.http.get<Practice[]>('http://localhost:5000/api/practices');
+  return this.http.get<Practice[]>('https://flow-hp2a.onrender.com/api/practices');
 }
 
  getUpcomingCourses(): Observable<UpcomingCourse[]> {
@@ -36,8 +36,8 @@ getPractices() {
   }
 
   getTickets() {
-  const token = localStorage.getItem('studentToken'); // or 'adminToken' if admin
-  return this.http.get<Ticket[]>('http://localhost:5000/api/support', {
+  const token = localStorage.getItem('studentToken');
+  return this.http.get<Ticket[]>('https://flow-hp2a.onrender.com/api/support', {
     headers: {
       Authorization: `Bearer ${token}`
     }

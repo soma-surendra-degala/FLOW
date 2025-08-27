@@ -15,7 +15,7 @@ export interface RegisterData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/api/students';
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/students';
   private tokenKey = 'studentToken';
 
   constructor(private http: HttpClient) {}

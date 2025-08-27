@@ -15,7 +15,7 @@ export interface Course {
   providedIn: 'root'
 })
 export class CourseService {
-  private apiUrl = 'http://localhost:5000/api/courses';
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/courses';
 
   constructor(private http: HttpClient) {}
 

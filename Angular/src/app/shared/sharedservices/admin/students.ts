@@ -10,7 +10,7 @@ import { Student } from '../../models/student.model';
   providedIn: 'root'
 })
 export class StudentService {
-  private apiUrl = 'http://localhost:5000/api/students'; // adjust API URL
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/students'; // adjust API URL
 
   constructor(private http: HttpClient) {}
 
