@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "dist/frontend/index.html", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
+  "framework": "angular",
+  "buildCommand": "ng build --configuration production",
+  "outputDirectory": "dist/frontend",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
