@@ -1,10 +1,15 @@
 {
   "version": 2,
-  "framework": "angular",
-  "buildCommand": "ng build --configuration production",
-  "outputDirectory": "dist/frontend",
-    "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "builds": [
+    {
+      "src": "dist/frontend/browser/index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/frontend/browser/index.html"
+    }
   ]
-
 }
