@@ -44,20 +44,12 @@ mobileNavigate(sectionId: string) {
 }
 
 login() {
-  // Logic to handle login navigation
-  // This could be a redirect to the login page or opening a modal
-  console.log('Login clicked');
-  // For example, you might want to navigate to the login page:
-  window.open('student/login','_blank');
-  
+  window.open('/student/login', '_blank');
 }
 
 admin() {
-  // Logic to handle admin navigation
-  // This could be a redirect to the admin page or opening a modal
-  console.log('Admin clicked');
-  // For example, you might want to navigate to the admin page:
- window.open('admin/login','_blank');
+  window.open('/admin/login', '_blank');
 }
+
 
 }

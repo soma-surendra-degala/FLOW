@@ -22,8 +22,6 @@ onLogin() {
     next: (res: { token: string; student: any }) => {
       // Save JWT token
       localStorage.setItem('token', res.token);
-
-      alert('Login successful!');
       this.router.navigate(['/student/dashboard']);
     },
     error: (err: any) => {
