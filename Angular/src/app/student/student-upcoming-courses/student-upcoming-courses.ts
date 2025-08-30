@@ -14,17 +14,19 @@ import { UpcomingCourse } from '../../shared/models/upcoming-course.model';
 })
 export class StudentUpcomingCourses implements OnInit {
   courses: UpcomingCourse[] = [];
+  loading = true;
 
   constructor(private upcomingService: UpcomingCoursesService) {}
 
   ngOnInit(): void {
     this.upcomingService.getAll().subscribe({
       next: (data) => {
-        console.log("Student fetched courses:", data);
         this.courses = Array.isArray(data) ? data : (data.courses || []);
+        this.loading = false;
       },
       error: (err) => {
         console.error("❌ Error loading upcoming courses:", err);
+        this.loading = false;
       }
     });
   }

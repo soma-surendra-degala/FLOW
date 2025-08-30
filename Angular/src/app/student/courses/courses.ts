@@ -25,6 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
 export class Courses implements OnInit {
   courses: Course[] = [];
   selectedVideo: string | null = null;
+  isVideoLoading: boolean = false;
+
+
 
   constructor(private courseService: CourseService, private router: Router) {}
 
@@ -51,6 +54,11 @@ export class Courses implements OnInit {
   });
 }
 
+  onVideoLoad() {
+    this.isVideoLoading = false; // hide loader once video is ready
+  }
+
+
 
   playVideo(url: string) {
     this.selectedVideo = url;
@@ -59,6 +67,10 @@ export class Courses implements OnInit {
   closeVideo(event?: Event) {
     if (event) event.stopPropagation();
     this.selectedVideo = null;
+        this.isVideoLoading = false;
+            this.isVideoLoading = false;
+
+
   }
 
   get selectedVideoTitle(): string | null {

@@ -11,66 +11,142 @@
       class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-8 transition-all duration-300 overflow-y-auto"
     >
       <!-- Page Title -->
-      <h2 class="text-3xl font-bold text-cyan-400 mb-8">🎓 Student Dashboard</h2>
+      <h2 class="text-3xl font-bold text-cyan-400 mb-8">
+        🎓 Student Dashboard
+      </h2>
 
       <!-- Row 1: Quick Stats -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-        <div
-          *ngFor="let card of summaryCards"
-          class="bg-neutral-800 dark:bg-gray-100 border border-neutral-700 dark:border-gray-300 rounded-2xl p-6 shadow-xl hover:scale-[1.02] transition transform flex flex-col"
-        >
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-lg font-semibold">{{ card.title }}</h3>
-            <i class="bi" [ngClass]="card.icon" [class]="'text-' + card.color + ' text-2xl'"></i>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"
+      >
+        <ng-container *ngIf="summaryCards?.length; else statsLoader">
+          <div
+            *ngFor="let card of summaryCards"
+            class="bg-neutral-800 dark:bg-gray-100 border border-neutral-700 dark:border-gray-300 rounded-2xl p-6 shadow-xl hover:scale-[1.02] transition transform flex flex-col"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-semibold">{{ card.title }}</h3>
+              <i
+                class="bi"
+                [ngClass]="card.icon"
+                [class]="'text-' + card.color + ' text-2xl'"
+              ></i>
+            </div>
+            <p
+              class="text-3xl font-bold mt-2"
+              [ngClass]="'text-' + card.color"
+            >
+              {{ card.value }}
+            </p>
           </div>
-          <p class="text-3xl font-bold mt-2" [ngClass]="'text-' + card.color">
-            {{ card.value }}
-          </p>
-        </div>
+        </ng-container>
+
+        <!-- Loader -->
+        <ng-template #statsLoader>
+          <div
+            class="col-span-3 text-center text-gray-400 py-10 animate-pulse"
+          >
+            ⏳ Loading stats...
+          </div>
+        </ng-template>
       </div>
 
       <!-- Row 2: Panels -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
         <!-- 📌 Recent Activity -->
-        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col">
-          <h3 class="text-xl font-semibold mb-4 text-cyan-600">📌 Recent Activity</h3>
-          <ul class="space-y-3 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto">
-            <li
-              *ngFor="let activity of recentActivities"
-              class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
+        <div
+          class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col"
+        >
+          <h3 class="text-xl font-semibold mb-4 text-cyan-600">
+            📌 Recent Activity
+          </h3>
+          <ng-container
+            *ngIf="recentActivities?.length; else noActivity"
+          >
+            <ul
+              class="space-y-3 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto max-h-64"
             >
-              <i class="bi"
-                 [ngClass]="[
-                   activity.type === 'submission' ? 'bi-check-circle text-green-400' :
-                   activity.type === 'enrollment' ? 'bi-book text-blue-400' :
-                   'bi-star text-yellow-400'
-                 ]"></i>
-              <span>{{ activity.text }} <span class="text-cyan-400">{{ activity.course }}</span></span>
-              <span class="ml-auto text-xs text-gray-500">{{ activity.timeAgo }}</span>
-            </li>
-          </ul>
+              <li
+                *ngFor="let activity of recentActivities"
+                class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
+              >
+                <i
+                  class="bi"
+                  [ngClass]="[
+                    activity.type === 'submission'
+                      ? 'bi-check-circle text-green-400'
+                      : activity.type === 'enrollment'
+                      ? 'bi-book text-blue-400'
+                      : 'bi-star text-yellow-400'
+                  ]"
+                ></i>
+                <span
+                  >{{ activity.text }}
+                  <span class="text-cyan-400">{{
+                    activity.course
+                  }}</span></span
+                >
+                <span class="ml-auto text-xs text-gray-500">{{
+                  activity.timeAgo
+                }}</span>
+              </li>
+            </ul>
+          </ng-container>
+
+          <!-- No Activity -->
+          <ng-template #noActivity>
+            <p class="text-gray-400 text-sm">No recent activity yet 🚀</p>
+          </ng-template>
         </div>
 
         <!-- 📅 Upcoming Courses -->
-        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col">
-          <h3 class="text-xl font-semibold mb-4 text-cyan-400">📅 Upcoming Courses</h3>
-          <ul class="space-y-4 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto">
-            <li
-              *ngFor="let course of upcomingCourses"
-              class="p-3 rounded hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
+        <div
+          class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col"
+        >
+          <h3 class="text-xl font-semibold mb-4 text-cyan-400">
+            📅 Upcoming Courses
+          </h3>
+          <ng-container *ngIf="upcomingCourses?.length; else noCourses">
+            <ul
+              class="space-y-4 text-sm text-gray-300 dark:text-gray-700 flex-1 overflow-y-auto max-h-64"
             >
-              <p class="font-semibold text-white dark:text-black">{{ course.title }}</p>
-              <p class="text-xs text-gray-400 dark:text-gray-500">Starts: {{ course.startDate | date:'mediumDate' }}</p>
-            </li>
-          </ul>
+              <li
+                *ngFor="let course of upcomingCourses"
+                class="p-3 rounded hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
+              >
+                <p class="font-semibold text-white dark:text-black">
+                  {{ course.title }}
+                </p>
+                <p
+                  class="text-xs text-gray-400 dark:text-gray-500"
+                >
+                  Starts:
+                  {{ course.startDate | date : "mediumDate" }}
+                </p>
+              </li>
+            </ul>
+          </ng-container>
+
+          <!-- No Courses -->
+          <ng-template #noCourses>
+            <p class="text-gray-400 text-sm">
+              No upcoming courses 📭
+            </p>
+          </ng-template>
         </div>
 
         <!-- 💬 Discussion Forum -->
-        <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center">
-          <h3 class="text-xl font-semibold text-cyan-400 mb-3">💬 Discussion Forum</h3>
-          <p class="text-sm text-gray-400 dark:text-gray-600 mb-4">
-            Join our student community to ask questions, share ideas & grow together.
+        <div
+          class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center"
+        >
+          <h3 class="text-xl font-semibold text-cyan-400 mb-3">
+            💬 Discussion Forum
+          </h3>
+          <p
+            class="text-sm text-gray-400 dark:text-gray-600 mb-4"
+          >
+            Join our student community to ask questions, share ideas &
+            grow together.
           </p>
           <a
             href="https://t.me/FLOW_Discussion_Forum"
@@ -80,7 +156,6 @@
             🚀 Join Telegram Group
           </a>
         </div>
-
       </div>
     </main>
   </div>

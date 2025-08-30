@@ -33,7 +33,10 @@
 
 
       <!-- Loading State -->
-      <div *ngIf="loading" class="text-gray-400 text-center py-10">Loading practices...</div>
+         <!-- Loader -->
+      <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-cyan-500 border-solid"></div>
+      </div>
 
       <!-- Error State -->
       <div *ngIf="error" class="text-red-500 text-center py-10">{{ error }}</div>

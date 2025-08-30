@@ -12,6 +12,8 @@
     >
       <h1 class="text-2xl font-bold text-cyan-400 mb-6">Community & Support</h1>
 
+       
+
       <!-- Discussion Forum -->
       <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow mb-8 text-center">
         <h2 class="text-xl font-semibold text-cyan-400">Discussion Forum / Q&A</h2>
@@ -73,6 +75,11 @@
       <!-- My Tickets -->
       <div class="bg-neutral-800 dark:bg-gray-100 rounded-2xl p-6 shadow">
         <h2 class="text-xl font-semibold text-cyan-400 mb-5">My Tickets</h2>
+
+          <!-- Loader -->
+      <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-cyan-500 border-solid"></div>
+      </div>
 
         <div *ngIf="myTickets.length === 0" class="text-gray-400 dark:text-gray-600">
           You haven’t raised any support tickets yet.

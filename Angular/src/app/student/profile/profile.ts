@@ -43,7 +43,7 @@ export class Profile implements OnInit {
       next: data => {
         this.profile = { ...data };
         if (data.avatar && !data.avatar.startsWith('http')) {
-          this.profile.avatar = `http://localhost:5000${data.avatar}`;
+          this.profile.avatar = `https://flow-hp2a.onrender.com/${data.avatar}`;
         }
         this.loading = false;
       },

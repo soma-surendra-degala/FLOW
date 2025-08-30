@@ -14,7 +14,10 @@
       <h2 class="text-3xl font-bold text-cyan-500 mb-6">Available Careers</h2>
 
       <!-- Loading Spinner -->
-      <div *ngIf="loading" class="text-center text-gray-400">Loading careers...</div>
+         <!-- Loader -->
+      <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-cyan-500 border-solid"></div>
+      </div>
 
       <!-- No Data -->
       <div *ngIf="!loading && jobs.length === 0" class="text-center text-gray-400">

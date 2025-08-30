@@ -19,6 +19,7 @@ export class StudentSupport implements OnInit {
   myTickets: Ticket[] = [];
   editMode = false;
   editingTicketId: string | null = null;
+  loading = true;
 
   constructor(private supportService: SupportService) {}
 
@@ -29,9 +30,12 @@ export class StudentSupport implements OnInit {
   loadMyTickets() {
     this.supportService.getMyTickets().subscribe({
       next: (tickets) => {
-        this.myTickets = tickets;
+        this.myTickets = tickets;this.loading = false;
       },
-      error: (err:any) => console.error(err)
+      error: (err:any) =>{ 
+        console.error(err);
+      this.loading = false;
+    }
     });
   }
 
