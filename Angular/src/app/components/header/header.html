@@ -5,7 +5,7 @@
   >
     <!-- Logo -->
     <a routerLink="/" class="flex items-center gap-2">
-      <img src="assets/bg.png" alt="Logo" class="w-9 h-9" />
+      <img src="assets/bg.png" alt="Logo" class="w-9 h-9" (click)='admin()' />
       <span class="font-extrabold text-lg tracking-wide">FLOW</span>
     </a>
 
@@ -21,7 +21,6 @@
 
     <!-- Desktop Buttons -->
     <div class="hidden min-[871px]:flex items-center gap-5">
-      <a routerLink="/admin"(click)='admin()' class="px-2 rounded-md shadow-2xl font-bold hover:text-pink-400">Admin</a>
       <a routerLink="student/login" (click)='login()' class="px-2 rounded-md shadow-2xl font-bold hover:text-pink-400">LogIn</a>
     </div>
 
