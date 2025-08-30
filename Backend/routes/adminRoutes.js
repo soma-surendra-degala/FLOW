@@ -4,8 +4,8 @@ import bcrypt from 'bcrypt';
 import Course from '../models/Course.js';
 import Practice from '../models/Practice.js';
 import Student from '../models/studentModel.js';
-import Admin from '../models/adminModel.js';   // ✅ you forgot this import
-import { protectAdmin } from '../middleware/auth.js';  // ✅ protect admin-only routes
+import Admin from '../models/adminModel.js'; 
+import { protectAdmin } from '../middleware/auth.js'; 
 
 const router = express.Router();
 
@@ -56,7 +56,7 @@ router.get('/recent-activity', protectAdmin, async (req, res) => {
   try {
     const latestStudent = await Student.findOne().sort({ createdAt: -1 });
     const latestCourse = await Course.findOne().sort({ createdAt: -1 });
-    const latestPractice = await Practice.findOne().sort({ createdAt: -1 }); // ✅ should be -1 (most recent)
+    const latestPractice = await Practice.findOne().sort({ createdAt: -1 }); 
 
     res.json({
       recentActivity: [

@@ -23,9 +23,12 @@ const __dirname = path.dirname(__filename);
 
 // ✅ CORS config (only once)
 app.use(cors({
-  origin: "http://localhost:4200",   // Angular frontend
+  origin: [
+    "http://localhost:4200",       // Angular local dev
+    "https://flowlms.netlify.app"  // Deployed Angular app
+  ],
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"], // allow JWT token
+  allowedHeaders: ["Content-Type", "Authorization"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
 

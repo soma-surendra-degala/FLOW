@@ -70,7 +70,7 @@
       // Convert avatar path to full URL
       const studentObj = student.toObject();
       if (studentObj.avatar && !studentObj.avatar.startsWith("http")) {
-        studentObj.avatar = `http://localhost:5000${studentObj.avatar}`;
+        studentObj.avatar = `https://flow-hp2a.onrender.com${studentObj.avatar}`;
       }
 
       res.json({ token, student: studentObj });
