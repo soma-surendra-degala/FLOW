@@ -10,14 +10,16 @@
     <main
       class="flex-1 bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 p-8 transition-all duration-300 overflow-y-auto relative"
     >
-      <h1 class="text-3xl font-bold mb-8 flex items-center gap-3 text-cyan-400 dark:text-blue-600">
-        <i class="bi bi-person-circle"></i> Student Profile
-      </h1>
-        <!-- Loader (Overlay) -->
-      <div *ngIf="loading" 
-           class="absolute inset-0  bg-opacity-10 backdrop-blur-xs flex justify-center items-center z-50">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-cyan-500 border-solid"></div>
-      </div>
+    <h1 class="text-3xl font-bold mb-8 flex items-center gap-3 text-cyan-400 dark:text-blue-600 relative z-50">
+  <i class="bi bi-person-circle"></i> Student Profile
+</h1>
+
+<!-- Loader (Overlay, excluding h1) -->
+<div *ngIf="loading" 
+     class="absolute left-0 right-0 top-[5rem] bottom-0 bg-opacity-10 backdrop-blur-xs flex justify-center items-center z-40">
+  <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-cyan-500 border-solid"></div>
+</div>
+
 
       <div class="max-w-3xl mx-auto bg-neutral-800 dark:bg-white border border-neutral-700 dark:border-gray-300 rounded-3xl shadow-xl p-8">
         <!-- Avatar -->

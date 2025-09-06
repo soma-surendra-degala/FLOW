@@ -16,9 +16,11 @@ export class UpcomingCourses implements OnInit {
   isSidebarOpen = false;
   courses: UpcomingCourse[] = [];
 
-  // ✅ description added
   newCourse: UpcomingCourse = { title: '', description: '', startDate: '', duration: '', skills: [] };
   editingCourse: UpcomingCourse | null = null;
+
+  // ✅ Loader state
+  isLoading = true;
 
   constructor(private upcomingService: UpcomingCoursesService) {}
 
@@ -31,9 +33,9 @@ export class UpcomingCourses implements OnInit {
   }
 
   loadCourses() {
+    this.isLoading = true;
     this.upcomingService.getAll().subscribe({
       next: (data) => {
-
         let rawCourses = Array.isArray(data) ? data : (data?.courses ?? []);
 
         this.courses = rawCourses.map((c: any) => ({
@@ -43,14 +45,20 @@ export class UpcomingCourses implements OnInit {
             ? c.skills.split(',').map((s: string) => s.trim())
             : (c.skills ?? [])
         }));
+
+        this.isLoading = false;
       },
-      error: (err) => console.error('❌ Error fetching courses:', err)
+      error: (err) => {
+        console.error('❌ Error fetching courses:', err);
+        this.isLoading = false;
+      }
     });
   }
 
   addCourse() {
     if (!this.newCourse.title || !this.newCourse.startDate || !this.newCourse.duration) return;
 
+    this.isLoading = true;
     const payload: UpcomingCourse = {
       ...this.newCourse,
       startDate: new Date(this.newCourse.startDate).toISOString(),
@@ -64,8 +72,12 @@ export class UpcomingCourses implements OnInit {
       next: () => {
         this.loadCourses();
         this.newCourse = { title: '', description: '', startDate: '', duration: '', skills: [] };
+        this.isLoading = false;
       },
-      error: (err) => console.error('Error adding course:', err)
+      error: (err) => {
+        console.error('Error adding course:', err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -76,6 +88,7 @@ export class UpcomingCourses implements OnInit {
   updateCourse() {
     if (!this.editingCourse || !this.editingCourse._id) return;
 
+    this.isLoading = true;
     const payload: UpcomingCourse = {
       ...this.editingCourse,
       startDate: new Date(this.editingCourse.startDate).toISOString(),
@@ -89,15 +102,26 @@ export class UpcomingCourses implements OnInit {
       next: () => {
         this.loadCourses();
         this.editingCourse = null;
+        this.isLoading = false;
       },
-      error: (err) => console.error('Error updating course:', err)
+      error: (err) => {
+        console.error('Error updating course:', err);
+        this.isLoading = false;
+      }
     });
   }
 
   deleteCourse(id: string) {
+    this.isLoading = true;
     this.upcomingService.delete(id).subscribe({
-      next: () => this.loadCourses(),
-      error: (err) => console.error('Error deleting course:', err)
+      next: () => {
+        this.loadCourses();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error deleting course:', err);
+        this.isLoading = false;
+      }
     });
   }
 

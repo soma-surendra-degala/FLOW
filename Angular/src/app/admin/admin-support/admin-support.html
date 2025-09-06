@@ -27,6 +27,11 @@
       </button>
     </header>
 
+<!-- Loader Overlay -->
+<div *ngIf="isLoading" class="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999]">
+  <div class="w-12 h-12 border-6 border-gray-300 border-t-[#007bff] rounded-full animate-spin"></div>
+</div>
+
     <!-- Content -->
     <main class="flex-1 overflow-auto p-4 md:p-6">
       <div class="bg-neutral-900 rounded-2xl border border-neutral-800 shadow p-4 md:p-6">
@@ -217,9 +222,10 @@
         </div>
 
         <!-- Empty State -->
-        <div *ngIf="tickets.length === 0" class="text-center text-gray-500 mt-6">
-          No tickets available.
-        </div>
+<div *ngIf="!isLoading && tickets.length === 0" class="text-center text-gray-500 mt-6">
+  No tickets available.
+</div>
+ 
 
       </div>
     </main>

@@ -13,22 +13,38 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // CREATE course
-router.post("/", upload.single("file"), async (req, res) => {
+router.post("/", upload.array("files", 10), async (req, res) => {
   try {
-    const { title, description, skills, icon, videoUrl } = req.body; // ✅ include skills
-    const fileUrl = req.file ? `/uploads/${req.file.filename}` : "";
+    const { title, description, skills, icon, videos } = req.body;
+
+    // Handle files
+    const files = req.files
+      ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
+      : [];
+
+    // Handle skills (string -> array)
+    const skillArray = typeof skills === "string"
+      ? skills.split(",").map((s) => s.trim())
+      : skills;
+
+    // Handle videos (parse JSON if sent as string)
+    let parsedVideos = [];
+    if (videos) {
+      parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
+    }
 
     const newCourse = await CourseModel.create({
       title,
       description,
-      skills,
+      skills: skillArray,
       icon,
-      videoUrl,
-      fileUrl,
+      videos: parsedVideos,
+      files,
     });
 
     res.json(newCourse);
   } catch (err) {
+    console.error("❌ Error creating course:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -44,19 +60,35 @@ router.get("/", async (req, res) => {
 });
 
 // UPDATE course
-router.put("/:id", upload.single("file"), async (req, res) => {
+router.put("/:id", upload.array("files", 10), async (req, res) => {
   try {
-    const { title, description, skills, icon, videoUrl } = req.body; // ✅ include skills
-    const fileUrl = req.file ? `/uploads/${req.file.filename}` : req.body.fileUrl;
+    const { title, description, skills, icon, videos } = req.body;
+
+    // Handle files
+    const files = req.files
+      ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
+      : JSON.parse(req.body.files || "[]"); // keep existing if none uploaded
+
+    // Handle skills
+    const skillArray = typeof skills === "string"
+      ? skills.split(",").map((s) => s.trim())
+      : skills;
+
+    // Handle videos
+    let parsedVideos = [];
+    if (videos) {
+      parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
+    }
 
     const updated = await CourseModel.findByIdAndUpdate(
       req.params.id,
-      { title, description, skills, icon, videoUrl, fileUrl },
+      { title, description, skills: skillArray, icon, videos: parsedVideos, files },
       { new: true }
     );
 
     res.json(updated);
   } catch (err) {
+    console.error("❌ Error updating course:", err);
     res.status(500).json({ error: err.message });
   }
 });

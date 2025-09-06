@@ -37,9 +37,9 @@
     </header>
 
     <!-- Loading State -->
-    <div *ngIf="loading" class="text-center text-gray-500 dark:text-gray-400">
-      <span class="animate-pulse">Loading student details...</span>
-    </div>
+   <div *ngIf="loading" class="loader-overlay">
+  <div class="spinner"></div>
+</div> 
 
     <!-- Student Detail Card -->
     <div

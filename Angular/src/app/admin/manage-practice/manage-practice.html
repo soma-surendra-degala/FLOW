@@ -20,6 +20,11 @@
     <!-- Header -->
     <header class="flex justify-between items-center p-4 border-b border-neutral-800 md:px-6">
       <h1 class="text-xl md:text-2xl font-bold text-cyan-400">Manage Practice Exercises</h1>
+
+<div *ngIf="isLoading" class="loader-overlay">
+  <div class="spinner"></div>
+</div>
+
       <button
         class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
         (click)="toggleSidebar()">

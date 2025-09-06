@@ -29,6 +29,7 @@ export class ManagePractice implements OnInit {
   practices: Practice[] = [];
   showModal = false;
   selectedPractice: Practice | null = null;
+  isLoading = true; // ✅ Loader flag
 
   constructor(private practiceService: PracticeService) {}
 
@@ -42,6 +43,7 @@ export class ManagePractice implements OnInit {
 
   // Load all practices
   loadPractices() {
+    this.isLoading = true; // ✅ start loader
     this.practiceService.getPractices().subscribe({
       next: (data) => {
         this.practices = data.map(p => ({
@@ -49,8 +51,12 @@ export class ManagePractice implements OnInit {
           categories: p.categories || [],
           solution: p.solution || '' // ✅ Ensure solution field exists
         }));
+        this.isLoading = false; // ✅ stop loader
       },
-      error: (err) => console.error('Failed to load practices:', err)
+      error: (err) => {
+        console.error('Failed to load practices:', err);
+        this.isLoading = false; // ✅ stop loader even if error
+      }
     });
   }
 
@@ -75,15 +81,22 @@ export class ManagePractice implements OnInit {
   // Delete
   deletePractice(id?: string) {
     if (!id) return;
+    this.isLoading = true; // ✅ show loader during delete
     this.practiceService.deletePractice(id).subscribe({
-      next: () => this.loadPractices(),
-      error: (err) => console.error('Delete failed:', err)
+      next: () => {
+        this.loadPractices();
+      },
+      error: (err) => {
+        console.error('Delete failed:', err);
+        this.isLoading = false;
+      }
     });
   }
 
   // Save (create/update)
   savePractice() {
     if (!this.selectedPractice) return;
+    this.isLoading = true; // ✅ show loader during save
 
     if (this.selectedPractice._id) {
       this.practiceService.updatePractice(this.selectedPractice._id, this.selectedPractice).subscribe({
@@ -91,7 +104,10 @@ export class ManagePractice implements OnInit {
           this.loadPractices();
           this.closeModal();
         },
-        error: (err) => console.error('Update failed:', err)
+        error: (err) => {
+          console.error('Update failed:', err);
+          this.isLoading = false;
+        }
       });
     } else {
       this.practiceService.addPractice(this.selectedPractice).subscribe({
@@ -99,7 +115,10 @@ export class ManagePractice implements OnInit {
           this.loadPractices();
           this.closeModal();
         },
-        error: (err) => console.error('Add failed:', err)
+        error: (err) => {
+          console.error('Add failed:', err);
+          this.isLoading = false;
+        }
       });
     }
   }

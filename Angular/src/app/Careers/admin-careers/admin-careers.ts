@@ -28,6 +28,8 @@ interface Job {
 })
 export class AdminCareers {
     isSidebarOpen = false;
+    isLoading: boolean = false;
+
 toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
@@ -53,37 +55,59 @@ toggleSidebar(): void {
     this.loadJobs();
   }
 
-loadJobs() {
-    this.careersService.getJobs().subscribe(data => {
-      this.jobs = data;
-    });
-  }
 
-  addJob() {
-    if (this.newJob.company && this.newJob.role && this.newJob.applyUrl) {
-      this.careersService.addJob(this.newJob).subscribe(() => {
-        this.newJob = { 
-  company: '', 
-  role: '', 
-  skills: '', 
-  salary: '', 
-  lastDate: '', 
-  education: '', 
-  experience: '',
-  workType: '', 
-  location: '', 
-  applyUrl: '' 
-};
-        this.loadJobs();
-      });
-    }
-  }
-
- deleteJob(id?: string) {
-  if (!id) return; // Do nothing if no id
-  this.careersService.deleteJob(id).subscribe(() => this.loadJobs());
-}
  
+loadJobs() {
+  this.isLoading = true;
+  this.careersService.getJobs().subscribe({
+    next: (data) => {
+      this.jobs = data;
+      this.isLoading = false;
+    },
+    error: () => {
+      this.isLoading = false;
+    }
+  });
+}
+
+addJob() {
+  if (this.newJob.company && this.newJob.role && this.newJob.applyUrl) {
+    this.isLoading = true;
+    this.careersService.addJob(this.newJob).subscribe(() => {
+      this.newJob = { 
+        company: '', role: '', skills: '', salary: '', lastDate: '',
+        education: '', experience: '', workType: '', location: '', applyUrl: ''
+      };
+      this.loadJobs();
+      this.isLoading = false;
+    }, () => this.isLoading = false);
+  }
+}
+
+deleteJob(id?: string) {
+  if (!id) return;
+  this.isLoading = true;
+  this.careersService.deleteJob(id).subscribe(() => {
+    this.loadJobs();
+    this.isLoading = false;
+  }, () => this.isLoading = false);
+}
+
+updateJob() {
+  if (this.editJobId) {
+    this.isLoading = true;
+    this.careersService.updateJob(this.editJobId, this.newJob).subscribe(() => {
+      this.editMode = false;
+      this.editJobId = null;
+      this.newJob = { 
+        company: '', role: '', skills: '', salary: '', lastDate: '',
+        education: '', experience: '', workType: '', location: '', applyUrl: ''
+      };
+      this.loadJobs();
+      this.isLoading = false;
+    }, () => this.isLoading = false);
+  }
+}
 
   editMode: boolean = false;
 editJobId: string | null = null;
@@ -94,27 +118,6 @@ startEdit(job: any) {
   this.newJob = { ...job }; // Populate form with existing data
 }
 
-updateJob() {
-  if (this.editJobId) {
-    this.careersService.updateJob(this.editJobId, this.newJob).subscribe(() => {
-      this.editMode = false;
-      this.editJobId = null;
-      this.newJob = { 
-  company: '', 
-  role: '', 
-  skills: '', 
-  salary: '', 
-  lastDate: '', 
-  education: '', 
-  experience: '',
-  workType: '', 
-  location: '', 
-  applyUrl: '' 
-};
-      this.loadJobs();
-    });
-  }
-}
 
 
 }

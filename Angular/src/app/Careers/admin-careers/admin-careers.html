@@ -17,6 +17,10 @@
   <main class="p-4 md:p-6 max-w-6xl mx-auto w-full">
     <h2 class="text-2xl font-bold mb-6 text-cyan-500 text-center md:text-left">Manage Careers</h2>
 
+    <div *ngIf="isLoading" class="loader-overlay">
+  <div class="spinner"></div>
+    </div>
+
     <!-- Add Job Form -->
     <div class="bg-neutral-900 p-4 md:p-6 rounded-xl shadow-lg border border-neutral-700 mb-6">
       <h3 class="text-lg font-semibold mb-4 text-gray-300">Add New Job</h3>

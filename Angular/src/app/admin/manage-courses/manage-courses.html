@@ -1,14 +1,13 @@
 <div class="flex min-h-screen bg-neutral-950 text-white">
-
   <!-- Sidebar -->
-  <div 
+  <div
     class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
     [ngClass]="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
     <app-sidebar></app-sidebar>
   </div>
 
   <!-- Overlay for mobile -->
-  <div 
+  <div
     class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
     *ngIf="sidebarOpen"
     (click)="toggleSidebar()">
@@ -16,11 +15,15 @@
 
   <!-- Main Content -->
   <div class="flex-1 flex flex-col">
-
     <!-- Header -->
     <header class="flex justify-between items-center p-4 border-b border-neutral-800 md:px-6">
       <h2 class="text-xl md:text-2xl font-bold text-cyan-400">Manage Courses</h2>
-      <button 
+
+      <div *ngIf="isLoading" class="loader-overlay">
+        <div class="spinner"></div>
+      </div>
+
+      <button
         class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400"
         (click)="toggleSidebar()">
         <i class="bi bi-list text-2xl"></i>
@@ -40,7 +43,7 @@
           </button>
         </div>
 
-        <!-- Table for Desktop -->
+        <!-- Table -->
         <div class="overflow-x-auto hidden sm:block">
           <table class="w-full text-left text-sm">
             <thead>
@@ -48,7 +51,8 @@
                 <th class="py-2">Title</th>
                 <th class="py-2 px-4">Description</th>
                 <th class="py-2 px-4">Skills</th>
-                <th class="py-2 px-4">Video / File</th>
+                <th class="py-2 px-4">Videos</th>
+                <th class="py-2 px-4">Files</th>
                 <th class="py-2 px-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -59,18 +63,44 @@
                     <i [class]="course.icon + ' text-cyan-400 text-xl'"></i>
                     <span>{{ course.title }}</span>
                   </td>
-                  
                   <td class="px-6 py-2 text-gray-400 text-sm italic">{{ course.description }}</td>
-                  <td class="px-6 py-2 text-gray-400 text-sm">{{ course.skills }}</td>
+
+                  <!-- Skills -->
                   <td class="px-6 py-2 text-gray-400 text-sm">
-                    <ng-container *ngIf="course.videoUrl; else fileBlock">
-                      🎥 <a [href]="course.videoUrl" target="_blank" class="underline text-cyan-400">Video</a>
+                    <ng-container *ngIf="course.skills.length > 0; else noSkills">
+                      <span *ngFor="let s of course.skills; let last = last">
+                        {{ s }}<span *ngIf="!last">, </span>
+                      </span>
                     </ng-container>
-                    <ng-template #fileBlock>
-                      <a *ngIf="course.fileUrl" [href]="course.fileUrl" target="_blank" class="text-cyan-400 underline">📂 File</a>
-                      <span *ngIf="!course.fileUrl" class="text-gray-500">-</span>
+                    <ng-template #noSkills>
+                      <span class="text-gray-500">-</span>
                     </ng-template>
                   </td>
+
+                  <!-- Videos -->
+                  <td class="px-6 py-2 text-gray-400 text-sm">
+                    <ng-container *ngIf="course.videos.length > 0; else noVideos">
+                      <div *ngFor="let v of course.videos">
+                        🎥 <a [href]="v.url" target="_blank" class="underline text-cyan-400">{{ v.title || 'Video' }}</a>
+                      </div>
+                    </ng-container>
+                    <ng-template #noVideos>
+                      <span class="text-gray-500">-</span>
+                    </ng-template>
+                  </td>
+
+                  <!-- Files -->
+                  <td class="px-6 py-2 text-gray-400 text-sm">
+                    <ng-container *ngIf="course.files.length > 0; else noFiles">
+                      <div *ngFor="let f of course.files">
+                        📂 <a [href]="f.url" target="_blank" class="underline text-cyan-400">{{ f.name }}</a>
+                      </div>
+                    </ng-container>
+                    <ng-template #noFiles>
+                      <span class="text-gray-500">-</span>
+                    </ng-template>
+                  </td>
+
                   <td class="py-2 flex justify-end gap-2">
                     <button (click)="editCourse(course)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">Edit</button>
                     <button (click)="deleteCourse(course._id)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded">Delete</button>
@@ -95,21 +125,32 @@
                   <button (click)="deleteCourse(course._id)" class="px-2 py-1 bg-red-500 rounded text-sm">Delete</button>
                 </div>
               </div>
-              <p class="text-gray-400 text-sm">🛠 Skills: {{ course.skills }}</p>
+
               <p class="text-gray-400 text-sm italic">{{ course.description }}</p>
-              <div class="text-gray-400 text-sm">
-                <ng-container *ngIf="course.videoUrl; else mobileFileBlock">
-                  🎥 <a [href]="course.videoUrl" target="_blank" class="underline text-cyan-400">Video</a>
+              <p class="text-gray-400 text-sm">🛠 Skills:
+                <ng-container *ngIf="course.skills.length > 0; else noSkillsMobile">
+                  <span *ngFor="let s of course.skills; let last = last">
+                    {{ s }}<span *ngIf="!last">, </span>
+                  </span>
                 </ng-container>
-                <ng-template #mobileFileBlock>
-                  <a *ngIf="course.fileUrl" [href]="course.fileUrl" target="_blank" class="text-cyan-400 underline">📂 File</a>
-                  <span *ngIf="!course.fileUrl" class="text-gray-500">-</span>
-                </ng-template>
+                <ng-template #noSkillsMobile>-</ng-template>
+              </p>
+
+              <div class="text-gray-400 text-sm">
+                <div *ngIf="course.videos.length > 0">
+                  <div *ngFor="let v of course.videos">
+                    🎥 <a [href]="v.url" target="_blank" class="underline text-cyan-400">{{ v.title }}</a>
+                  </div>
+                </div>
+                <div *ngIf="course.files.length > 0">
+                  <div *ngFor="let f of course.files">
+                    📂 <a [href]="f.url" target="_blank" class="underline text-cyan-400">{{ f.name }}</a>
+                  </div>
+                </div>
               </div>
             </div>
           </ng-container>
         </div>
-
       </div>
     </main>
   </div>
@@ -122,12 +163,35 @@
       <div class="space-y-3">
         <input [(ngModel)]="selectedCourse!.title" placeholder="Course Title" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
         <textarea [(ngModel)]="selectedCourse!.description" placeholder="Description" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm resize-none" rows="3"></textarea>
-        <input [(ngModel)]="selectedCourse!.skills" placeholder="Skills (comma separated)" 
-  class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
+        
+        <!-- Skills -->
+<!-- Skills -->
+<input
+  [ngModel]="skillsToString(selectedCourse!.skills)"
+  (ngModelChange)="updateSkills($event)"
+  placeholder="Skills (comma separated)"
+  class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"
+/>
+
 
         <input [(ngModel)]="selectedCourse!.icon" placeholder="Icon class" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
-        <input [(ngModel)]="selectedCourse!.videoUrl" placeholder="Video URL" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
-        <input type="file" (change)="onFileSelected($event)" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
+
+        <!-- Videos -->
+        <div>
+          <label class="text-sm font-semibold text-gray-300 mb-2 block">Videos</label>
+          <div *ngFor="let v of selectedCourse!.videos; let i = index" class="flex gap-2 mb-2">
+            <input [(ngModel)]="v.title" placeholder="Video Title" class="flex-1 px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
+            <input [(ngModel)]="v.url" placeholder="Video URL" class="flex-1 px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
+            <button (click)="removeVideo(i)" class="px-2 bg-red-500 rounded text-white">✖</button>
+          </div>
+          <button (click)="addVideo()" class="px-3 py-1 bg-cyan-500 rounded text-white text-sm">+ Add Video</button>
+        </div>
+
+        <!-- Files -->
+        <div>
+          <label class="text-sm font-semibold text-gray-300 mb-2 block">Documents</label>
+          <input type="file" multiple (change)="onFilesSelected($event)" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
+        </div>
       </div>
 
       <div class="flex justify-end gap-2 mt-4">
@@ -136,5 +200,4 @@
       </div>
     </div>
   </div>
-
 </div>
