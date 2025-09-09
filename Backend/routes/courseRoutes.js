@@ -1,10 +1,134 @@
+// import express from "express";
+// import multer from "multer";
+// import CourseModel from "../models/Course.js";
+
+// const router = express.Router();
+
+// // File upload setup
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, "uploads/"),
+//   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+// });
+
+// const upload = multer({ storage });
+
+// // CREATE course
+// router.post("/", upload.array("files", 10), async (req, res) => {
+//   try {
+//     const { title, description, skills, icon, videos } = req.body;
+
+//     // Handle uploaded files
+//     const files = req.files
+//       ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
+//       : [];
+
+//     // Parse skills
+//     const skillArray = typeof skills === "string"
+//       ? skills.split(",").map((s) => s.trim())
+//       : skills || [];
+
+//     // Parse videos
+//     let parsedVideos = [];
+//     if (videos) {
+//       parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
+//       // Ensure each video has isYouTube flag
+//       parsedVideos = parsedVideos.map(v => ({
+//         title: v.title || "",
+//         url: v.url || "",
+//         isYouTube: v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false
+//       }));
+//     }
+
+//     const newCourse = await CourseModel.create({
+//       title,
+//       description,
+//       skills: skillArray,
+//       icon,
+//       videos: parsedVideos,
+//       files
+//     });
+
+//     res.json(newCourse);
+//   } catch (err) {
+//     console.error("❌ Error creating course:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // READ all courses
+// router.get("/", async (req, res) => {
+//   try {
+//     const courses = await CourseModel.find();
+//     res.json(courses);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // UPDATE course
+// router.put("/:id", upload.array("files", 10), async (req, res) => {
+//   try {
+//     const { title, description, skills, icon, videos, files: existingFiles } = req.body;
+
+//     // Handle uploaded files
+//     const uploadedFiles = req.files
+//       ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
+//       : [];
+
+//     // Merge uploaded files with existing files
+//     const files = [
+//       ...(existingFiles ? (typeof existingFiles === "string" ? JSON.parse(existingFiles) : existingFiles) : []),
+//       ...uploadedFiles
+//     ];
+
+//     // Parse skills
+//     const skillArray = typeof skills === "string"
+//       ? skills.split(",").map((s) => s.trim())
+//       : skills || [];
+
+//     // Parse videos
+//     let parsedVideos = [];
+//     if (videos) {
+//       parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
+//       parsedVideos = parsedVideos.map(v => ({
+//         title: v.title || "",
+//         url: v.url || "",
+//         isYouTube: v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false
+//       }));
+//     }
+
+//     const updated = await CourseModel.findByIdAndUpdate(
+//       req.params.id,
+//       { title, description, skills: skillArray, icon, videos: parsedVideos, files },
+//       { new: true }
+//     );
+
+//     res.json(updated);
+//   } catch (err) {
+//     console.error("❌ Error updating course:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // DELETE course
+// router.delete("/:id", async (req, res) => {
+//   try {
+//     await CourseModel.findByIdAndDelete(req.params.id);
+//     res.json({ message: "Course deleted" });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// export default router;
+
 import express from "express";
 import multer from "multer";
 import CourseModel from "../models/Course.js";
 
 const router = express.Router();
 
-// File upload setup
+// ---------- Multer Storage ----------
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
@@ -12,50 +136,73 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// CREATE course
-router.post("/", upload.array("files", 10), async (req, res) => {
-  try {
-    const { title, description, skills, icon, videos } = req.body;
+// ---------- CREATE Course ----------
+router.post(
+  "/",
+  upload.fields([
+    { name: "files", maxCount: 10 },
+    { name: "videoFiles", maxCount: 10 },
+  ]),
+  async (req, res) => {
+    try {
+      const { title, description, skills, icon, videos } = req.body;
 
-    // Handle uploaded files
-    const files = req.files
-      ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
-      : [];
+      // Parse skills
+      const skillArray =
+        typeof skills === "string"
+          ? skills.split(",").map((s) => s.trim())
+          : skills || [];
 
-    // Parse skills
-    const skillArray = typeof skills === "string"
-      ? skills.split(",").map((s) => s.trim())
-      : skills || [];
+      // Parse YouTube videos
+      let parsedVideos = [];
+      if (videos) {
+        parsedVideos =
+          typeof videos === "string" ? JSON.parse(videos) : videos;
+        parsedVideos = parsedVideos.map((v) => ({
+          title: v.title || "",
+          url: v.url || "",
+          isYouTube:
+            v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false,
+        }));
+      }
 
-    // Parse videos
-    let parsedVideos = [];
-    if (videos) {
-      parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
-      // Ensure each video has isYouTube flag
-      parsedVideos = parsedVideos.map(v => ({
-        title: v.title || "",
-        url: v.url || "",
-        isYouTube: v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false
-      }));
+      // Handle uploaded video files
+      let uploadedVideos = [];
+      if (req.files["videoFiles"]) {
+        uploadedVideos = req.files["videoFiles"].map((f) => ({
+          title: f.originalname,
+          url: `/uploads/${f.filename}`,
+          isYouTube: false,
+        }));
+      }
+
+      // Handle uploaded documents
+      const uploadedFiles = req.files["files"]
+        ? req.files["files"].map((f) => ({
+            name: f.originalname,
+            url: `/uploads/${f.filename}`,
+          }))
+        : [];
+
+      // Create course
+      const newCourse = await CourseModel.create({
+        title,
+        description,
+        skills: skillArray,
+        icon,
+        videos: [...parsedVideos, ...uploadedVideos],
+        files: uploadedFiles,
+      });
+
+      res.json(newCourse);
+    } catch (err) {
+      console.error("❌ Error creating course:", err);
+      res.status(500).json({ error: err.message });
     }
-
-    const newCourse = await CourseModel.create({
-      title,
-      description,
-      skills: skillArray,
-      icon,
-      videos: parsedVideos,
-      files
-    });
-
-    res.json(newCourse);
-  } catch (err) {
-    console.error("❌ Error creating course:", err);
-    res.status(500).json({ error: err.message });
   }
-});
+);
 
-// READ all courses
+// ---------- READ All Courses ----------
 router.get("/", async (req, res) => {
   try {
     const courses = await CourseModel.find();
@@ -65,52 +212,86 @@ router.get("/", async (req, res) => {
   }
 });
 
-// UPDATE course
-router.put("/:id", upload.array("files", 10), async (req, res) => {
-  try {
-    const { title, description, skills, icon, videos, files: existingFiles } = req.body;
+// ---------- UPDATE Course ----------
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "files", maxCount: 10 },
+    { name: "videoFiles", maxCount: 10 },
+  ]),
+  async (req, res) => {
+    try {
+      const { title, description, skills, icon, videos, files: existingFiles } =
+        req.body;
 
-    // Handle uploaded files
-    const uploadedFiles = req.files
-      ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
-      : [];
+      // Skills
+      const skillArray =
+        typeof skills === "string"
+          ? skills.split(",").map((s) => s.trim())
+          : skills || [];
 
-    // Merge uploaded files with existing files
-    const files = [
-      ...(existingFiles ? (typeof existingFiles === "string" ? JSON.parse(existingFiles) : existingFiles) : []),
-      ...uploadedFiles
-    ];
+      // Existing files (from frontend)
+      const existingFilesArray = existingFiles
+        ? typeof existingFiles === "string"
+          ? JSON.parse(existingFiles)
+          : existingFiles
+        : [];
 
-    // Parse skills
-    const skillArray = typeof skills === "string"
-      ? skills.split(",").map((s) => s.trim())
-      : skills || [];
+      // Uploaded new docs
+      const uploadedFiles = req.files["files"]
+        ? req.files["files"].map((f) => ({
+            name: f.originalname,
+            url: `/uploads/${f.filename}`,
+          }))
+        : [];
 
-    // Parse videos
-    let parsedVideos = [];
-    if (videos) {
-      parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
-      parsedVideos = parsedVideos.map(v => ({
-        title: v.title || "",
-        url: v.url || "",
-        isYouTube: v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false
-      }));
+      const mergedFiles = [...existingFilesArray, ...uploadedFiles];
+
+      // Parse YouTube videos
+      let parsedVideos = [];
+      if (videos) {
+        parsedVideos =
+          typeof videos === "string" ? JSON.parse(videos) : videos;
+        parsedVideos = parsedVideos.map((v) => ({
+          title: v.title || "",
+          url: v.url || "",
+          isYouTube:
+            v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false,
+        }));
+      }
+
+      // Handle uploaded video files
+      let uploadedVideos = [];
+      if (req.files["videoFiles"]) {
+        uploadedVideos = req.files["videoFiles"].map((f) => ({
+          title: f.originalname,
+          url: `/uploads/${f.filename}`,
+          isYouTube: false,
+        }));
+      }
+
+      const updated = await CourseModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          title,
+          description,
+          skills: skillArray,
+          icon,
+          videos: [...parsedVideos, ...uploadedVideos],
+          files: mergedFiles,
+        },
+        { new: true }
+      );
+
+      res.json(updated);
+    } catch (err) {
+      console.error("❌ Error updating course:", err);
+      res.status(500).json({ error: err.message });
     }
-
-    const updated = await CourseModel.findByIdAndUpdate(
-      req.params.id,
-      { title, description, skills: skillArray, icon, videos: parsedVideos, files },
-      { new: true }
-    );
-
-    res.json(updated);
-  } catch (err) {
-    console.error("❌ Error updating course:", err);
-    res.status(500).json({ error: err.message });
   }
-});
+);
 
-// DELETE course
+// ---------- DELETE Course ----------
 router.delete("/:id", async (req, res) => {
   try {
     await CourseModel.findByIdAndDelete(req.params.id);
@@ -121,3 +302,4 @@ router.delete("/:id", async (req, res) => {
 });
 
 export default router;
+
