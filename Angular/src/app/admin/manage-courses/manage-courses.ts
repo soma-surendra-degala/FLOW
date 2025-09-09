@@ -6,7 +6,8 @@ import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
 export interface Video {
   title: string;
-  url: string;
+  url?: string;
+  localFile?: File;
 }
 
 export interface FileItem {
@@ -19,9 +20,9 @@ export interface Course {
   title: string;
   description: string;
   icon: string;
-  skills: string[];             // ✅ always array
-  videos: Video[];              // ✅ always array
-  files: FileItem[];            // ✅ always array
+  skills: string[];
+  videos: Video[];
+  files: FileItem[];
 }
 
 @Component({
@@ -83,14 +84,18 @@ export class ManageCourses implements OnInit {
       videos: [],
       files: []
     };
+    this.selectedFiles = [];
     this.showModal = true;
   }
 
   editCourse(course: Course) {
     this.selectedCourse = {
       ...course,
-      skills: Array.isArray(course.skills) ? course.skills : []
+      skills: course.skills || [],
+      videos: course.videos || [],
+      files: course.files || []
     };
+    this.selectedFiles = [];
     this.showModal = true;
   }
 
@@ -111,20 +116,24 @@ export class ManageCourses implements OnInit {
     }
   }
 
-  // Add new video row
   addVideo() {
-    if (this.selectedCourse) {
-      this.selectedCourse.videos.push({ title: '', url: '' });
-    }
+    if (!this.selectedCourse?.videos) this.selectedCourse!.videos = [];
+    this.selectedCourse!.videos.push({ title: '', url: '' });
   }
 
   removeVideo(index: number) {
-    if (this.selectedCourse) {
-      this.selectedCourse.videos.splice(index, 1);
+    this.selectedCourse?.videos?.splice(index, 1);
+  }
+
+  onVideoSelected(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0 && this.selectedCourse?.videos?.[index]) {
+      const file = input.files[0];
+      this.selectedCourse.videos[index].localFile = file;
+      delete this.selectedCourse.videos[index].url;
     }
   }
 
-  // Handle multiple file selection
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -132,49 +141,47 @@ export class ManageCourses implements OnInit {
     }
   }
 
+  removeFile(course: Course, index: number) {
+    if (confirm('Are you sure you want to delete this file?')) {
+      course.files.splice(index, 1);
+      // Optionally, send delete request to server here
+    }
+  }
+
   saveCourse() {
     if (!this.selectedCourse) return;
-
     this.isLoading = true;
+
     const formData = new FormData();
     formData.append('title', this.selectedCourse.title);
     formData.append('description', this.selectedCourse.description);
-    formData.append('skills', this.selectedCourse.skills.join(',')); // ✅ always string
+    formData.append('skills', this.selectedCourse.skills.join(','));
     formData.append('icon', this.selectedCourse.icon);
 
     // Videos
-    formData.append('videos', JSON.stringify(this.selectedCourse.videos));
-
-    // Files
-    this.selectedFiles.forEach((file) => {
-      formData.append('files', file);
+    this.selectedCourse.videos.forEach(v => {
+      if (v.localFile) formData.append('videoFiles', v.localFile);
+      else if (v.url) formData.append('videos', JSON.stringify([{ title: v.title, url: v.url }]));
     });
 
-    if (this.selectedCourse._id) {
-      this.http.put(`${this.apiUrl}/${this.selectedCourse._id}`, formData).subscribe({
-        next: () => {
-          this.loadCourses();
-          this.closeModal();
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('❌ Error updating course:', err);
-          this.isLoading = false;
-        },
-      });
-    } else {
-      this.http.post(this.apiUrl, formData).subscribe({
-        next: () => {
-          this.loadCourses();
-          this.closeModal();
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('❌ Error adding course:', err);
-          this.isLoading = false;
-        },
-      });
-    }
+    // Files
+    this.selectedFiles.forEach(f => formData.append('files', f));
+
+    const request = this.selectedCourse._id
+      ? this.http.put(`${this.apiUrl}/${this.selectedCourse._id}`, formData)
+      : this.http.post(this.apiUrl, formData);
+
+    request.subscribe({
+      next: () => {
+        this.loadCourses();
+        this.closeModal();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('❌ Error saving course:', err);
+        this.isLoading = false;
+      }
+    });
   }
 
   closeModal() {
@@ -183,16 +190,13 @@ export class ManageCourses implements OnInit {
     this.selectedFiles = [];
   }
 
-  // Convert skills array to string for input binding
-skillsToString(skills: string[] = []): string {
-  return skills.join(', ');
-}
+  skillsToString(skills: string[] = []): string {
+    return skills.join(', ');
+  }
 
-// Convert input string back to array when user types
-updateSkills(value: string) {
-  this.selectedCourse!.skills = value.split(',')
-    .map(s => s.trim())
-    .filter(s => s.length > 0);
-}
-
+  updateSkills(value: string) {
+    this.selectedCourse!.skills = value.split(',')
+      .map((s: string) => s.trim())
+      .filter(s => s.length > 0);
+  }
 }

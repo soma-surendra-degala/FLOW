@@ -17,20 +17,26 @@ router.post("/", upload.array("files", 10), async (req, res) => {
   try {
     const { title, description, skills, icon, videos } = req.body;
 
-    // Handle files
+    // Handle uploaded files
     const files = req.files
       ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
       : [];
 
-    // Handle skills (string -> array)
+    // Parse skills
     const skillArray = typeof skills === "string"
       ? skills.split(",").map((s) => s.trim())
-      : skills;
+      : skills || [];
 
-    // Handle videos (parse JSON if sent as string)
+    // Parse videos
     let parsedVideos = [];
     if (videos) {
       parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
+      // Ensure each video has isYouTube flag
+      parsedVideos = parsedVideos.map(v => ({
+        title: v.title || "",
+        url: v.url || "",
+        isYouTube: v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false
+      }));
     }
 
     const newCourse = await CourseModel.create({
@@ -39,7 +45,7 @@ router.post("/", upload.array("files", 10), async (req, res) => {
       skills: skillArray,
       icon,
       videos: parsedVideos,
-      files,
+      files
     });
 
     res.json(newCourse);
@@ -62,22 +68,33 @@ router.get("/", async (req, res) => {
 // UPDATE course
 router.put("/:id", upload.array("files", 10), async (req, res) => {
   try {
-    const { title, description, skills, icon, videos } = req.body;
+    const { title, description, skills, icon, videos, files: existingFiles } = req.body;
 
-    // Handle files
-    const files = req.files
+    // Handle uploaded files
+    const uploadedFiles = req.files
       ? req.files.map((f) => ({ name: f.originalname, url: `/uploads/${f.filename}` }))
-      : JSON.parse(req.body.files || "[]"); // keep existing if none uploaded
+      : [];
 
-    // Handle skills
+    // Merge uploaded files with existing files
+    const files = [
+      ...(existingFiles ? (typeof existingFiles === "string" ? JSON.parse(existingFiles) : existingFiles) : []),
+      ...uploadedFiles
+    ];
+
+    // Parse skills
     const skillArray = typeof skills === "string"
       ? skills.split(",").map((s) => s.trim())
-      : skills;
+      : skills || [];
 
-    // Handle videos
+    // Parse videos
     let parsedVideos = [];
     if (videos) {
       parsedVideos = typeof videos === "string" ? JSON.parse(videos) : videos;
+      parsedVideos = parsedVideos.map(v => ({
+        title: v.title || "",
+        url: v.url || "",
+        isYouTube: v.url?.includes("youtube.com") || v.url?.includes("youtu.be") || false
+      }));
     }
 
     const updated = await CourseModel.findByIdAndUpdate(

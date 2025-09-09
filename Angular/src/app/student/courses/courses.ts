@@ -24,10 +24,9 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class Courses implements OnInit {
   courses: Course[] = [];
-  selectedVideo: string | null = null;
+  selectedCourse: Course | null = null;
+  currentVideo: { title: string; url: string } | null = null;
   isVideoLoading: boolean = false;
-
-
 
   constructor(private courseService: CourseService, private router: Router) {}
 
@@ -35,52 +34,74 @@ export class Courses implements OnInit {
     this.loadCourses();
   }
 
-
   loadCourses() {
-  this.courseService.getCourses().subscribe({
-    next: (data: any[]) => {
-      this.courses = data.map(course => ({
-        ...course,
-        skills: Array.isArray(course.skills)
-          ? course.skills
-          : typeof course.skills === 'string'
-            ? course.skills.split(',').map((s: string) => s.trim())
-            : []
-      })) as Course[];
-    },
-    error: (err: any) => {
-      console.error('❌ Error fetching courses:', err);
-    }
-  });
-}
+    this.courseService.getCourses().subscribe({
+      next: (data: any[]) => {
+        this.courses = data.map(course => ({
+  ...course,
+  skills: Array.isArray(course.skills)
+    ? course.skills
+    : typeof course.skills === 'string'
+      ? course.skills.split(',').map((s: string) => s.trim())
+      : [],
+  videos: Array.isArray(course.videos) ? course.videos : [],   // ✅ always array
+  files: Array.isArray(course.files) ? course.files : []       // ✅ always array
+})) as Course[];
 
-  onVideoLoad() {
-    this.isVideoLoading = false; // hide loader once video is ready
+      },
+      error: (err: any) => {
+        console.error('❌ Error fetching courses:', err);
+      }
+    });
   }
 
+  
 
-
-  playVideo(url: string) {
-    this.selectedVideo = url;
+  onVideoLoad() {
+    this.isVideoLoading = false;
   }
 
   closeVideo(event?: Event) {
     if (event) event.stopPropagation();
-    this.selectedVideo = null;
-        this.isVideoLoading = false;
-            this.isVideoLoading = false;
-
-
-  }
-
-  get selectedVideoTitle(): string | null {
-    const course = this.courses.find(c => c.videoUrl === this.selectedVideo);
-    return course ? course.title : null;
+    this.selectedCourse = null;
+    this.currentVideo = null;
+    this.isVideoLoading = false;
   }
 
   coursesbtn() {
     this.router.navigate(['/student/courses']);
   }
+
+
+  currentIndex: number = 0;
+
+openCourse(course: Course) {
+  this.selectedCourse = course;
+  if (course.videos?.length) {
+    this.currentIndex = 0;
+    this.currentVideo = { ...course.videos[0] }; // ✅ ensures object copy
+    this.isVideoLoading = true;
+  }
+}
+
+playFromPlaylist(video: { title: string; url: string }, index: number) {
+  if (!video?.url) return; // ✅ safeguard
+  this.currentIndex = index;
+  this.currentVideo = { ...video };
+  this.isVideoLoading = true;
 }
 
 
+prevVideo() {
+  if (this.selectedCourse && this.currentIndex > 0) {
+    this.playFromPlaylist(this.selectedCourse.videos![this.currentIndex - 1], this.currentIndex - 1);
+  }
+}
+
+nextVideo() {
+  if (this.selectedCourse && this.currentIndex < this.selectedCourse.videos!.length - 1) {
+    this.playFromPlaylist(this.selectedCourse.videos![this.currentIndex + 1], this.currentIndex + 1);
+  }
+}
+
+}

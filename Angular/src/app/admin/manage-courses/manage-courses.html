@@ -81,7 +81,18 @@
                   <td class="px-6 py-2 text-gray-400 text-sm">
                     <ng-container *ngIf="course.videos.length > 0; else noVideos">
                       <div *ngFor="let v of course.videos">
-                        🎥 <a [href]="v.url" target="_blank" class="underline text-cyan-400">{{ v.title || 'Video' }}</a>
+                        🎥
+                        <!-- YouTube Link -->
+                        <ng-container *ngIf="v.url?.includes('youtube') || v.url?.includes('youtu.be')">
+                          <a [href]="v.url" target="_blank" class="underline text-cyan-400">{{ v.title || 'YouTube Video' }}</a>
+                        </ng-container>
+
+                        <!-- Uploaded Video File -->
+                        <ng-container *ngIf="v.localFile">
+                          <video width="150" controls>
+                            <source [src]="v.localFile ? v.localFile : ''" type="video/mp4" />
+                          </video>
+                        </ng-container>
                       </div>
                     </ng-container>
                     <ng-template #noVideos>
@@ -92,8 +103,9 @@
                   <!-- Files -->
                   <td class="px-6 py-2 text-gray-400 text-sm">
                     <ng-container *ngIf="course.files.length > 0; else noFiles">
-                      <div *ngFor="let f of course.files">
+                      <div *ngFor="let f of course.files; let i = index" class="flex items-center justify-between">
                         📂 <a [href]="f.url" target="_blank" class="underline text-cyan-400">{{ f.name }}</a>
+                        <button (click)="removeFile(course, i)" class="px-2 py-1 bg-red-500 rounded text-white text-sm">Delete</button>
                       </div>
                     </ng-container>
                     <ng-template #noFiles>
@@ -139,12 +151,22 @@
               <div class="text-gray-400 text-sm">
                 <div *ngIf="course.videos.length > 0">
                   <div *ngFor="let v of course.videos">
-                    🎥 <a [href]="v.url" target="_blank" class="underline text-cyan-400">{{ v.title }}</a>
+                    🎥
+                    <ng-container *ngIf="v.url?.includes('youtube') || v.url?.includes('youtu.be')">
+                      <a [href]="v.url" target="_blank" class="underline text-cyan-400">{{ v.title }}</a>
+                    </ng-container>
+                    <ng-container *ngIf="v.localFile">
+                      <video width="150" controls>
+                        <source [src]="v.localFile ? v.localFile : ''" type="video/mp4" />
+                      </video>
+                    </ng-container>
                   </div>
                 </div>
+
                 <div *ngIf="course.files.length > 0">
-                  <div *ngFor="let f of course.files">
+                  <div *ngFor="let f of course.files; let i = index" class="flex items-center justify-between">
                     📂 <a [href]="f.url" target="_blank" class="underline text-cyan-400">{{ f.name }}</a>
+                    <button (click)="removeFile(course, i)" class="px-2 py-1 bg-red-500 rounded text-white text-sm">Delete</button>
                   </div>
                 </div>
               </div>
@@ -163,31 +185,30 @@
       <div class="space-y-3">
         <input [(ngModel)]="selectedCourse!.title" placeholder="Course Title" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
         <textarea [(ngModel)]="selectedCourse!.description" placeholder="Description" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm resize-none" rows="3"></textarea>
-        
-        <!-- Skills -->
-<!-- Skills -->
-<input
-  [ngModel]="skillsToString(selectedCourse!.skills)"
-  (ngModelChange)="updateSkills($event)"
-  placeholder="Skills (comma separated)"
-  class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"
-/>
 
+        <!-- Skills -->
+        <input
+          [ngModel]="skillsToString(selectedCourse!.skills)"
+          (ngModelChange)="updateSkills($event)"
+          placeholder="Skills (comma separated)"
+          class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"
+        />
 
         <input [(ngModel)]="selectedCourse!.icon" placeholder="Icon class" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
 
         <!-- Videos -->
-        <div>
-          <label class="text-sm font-semibold text-gray-300 mb-2 block">Videos</label>
-          <div *ngFor="let v of selectedCourse!.videos; let i = index" class="flex gap-2 mb-2">
-            <input [(ngModel)]="v.title" placeholder="Video Title" class="flex-1 px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
-            <input [(ngModel)]="v.url" placeholder="Video URL" class="flex-1 px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>
-            <button (click)="removeVideo(i)" class="px-2 bg-red-500 rounded text-white">✖</button>
+        <div class="mb-4">
+          <label class="block text-sm font-semibold mb-2">Videos</label>
+          <div *ngFor="let v of selectedCourse?.videos; let i = index" class="flex gap-2 mb-2">
+            <input [(ngModel)]="v.title" name="videoTitle{{ i }}" placeholder="Video Title" class="flex-1 border rounded p-2 text-sm"/>
+            <input [(ngModel)]="v.url" name="videoUrl{{ i }}" placeholder="YouTube URL" class="flex-1 border rounded p-2 text-sm"/>
+            <input type="file" (change)="onVideoSelected($event, i)" class="px-2 py-1 border rounded text-sm"/>
+            <button type="button" (click)="removeVideo(i)" class="px-3 py-1 bg-red-500 text-white rounded">✖</button>
           </div>
-          <button (click)="addVideo()" class="px-3 py-1 bg-cyan-500 rounded text-white text-sm">+ Add Video</button>
+          <button type="button" (click)="addVideo()" class="mt-2 px-4 py-2 bg-cyan-500 text-white rounded hover:bg-cyan-600">➕ Add Video</button>
         </div>
 
-        <!-- Files -->
+        <!-- Documents -->
         <div>
           <label class="text-sm font-semibold text-gray-300 mb-2 block">Documents</label>
           <input type="file" multiple (change)="onFilesSelected($event)" class="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm"/>

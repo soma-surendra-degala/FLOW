@@ -1,23 +1,9 @@
-// import mongoose from "mongoose";
-
-// const courseSchema = new mongoose.Schema(
-//   {
-//     title: { type: String, required: true },
-//     description: { type: String },
-//     skills: { type: String, required: true },
-//     icon: { type: String },
-//     videoUrl: { type: String },
-//     fileUrl: { type: String },
-//   },
-//   { timestamps: true }
-// );
-
-// export default mongoose.model("Course", courseSchema);
 import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
   title: { type: String, required: false },
-  url: { type: String, required: true }
+  url: { type: String },       // URL for YouTube or uploaded file
+  isYouTube: { type: Boolean } // distinguish YouTube vs uploaded video
 });
 
 const fileSchema = new mongoose.Schema({
@@ -29,10 +15,10 @@ const courseSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String },
-    skills: { type: [String], required: true }, // ✅ now array of strings
+    skills: { type: [String], required: true },
     icon: { type: String },
-    videos: [videoSchema], // ✅ multiple videos
-    files: [fileSchema],   // ✅ multiple files
+    videos: [videoSchema],
+    files: [fileSchema]
   },
   { timestamps: true }
 );

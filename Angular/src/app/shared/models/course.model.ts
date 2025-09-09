@@ -3,8 +3,19 @@ export interface Course {
   title: string;
   description: string;
   icon: string;
-  videoUrl: string;
-  progress: number;
+
+  // ✅ Skills
+  skills?: string[];
+
+  // ✅ Multiple videos
+  videos?: { title: string; url: string }[];
+
+  // ✅ Multiple files
+  files?: { name: string; url: string }[];
+
+  // Optional legacy support
+  videoUrl?: string;
   fileUrl?: string;
-   skills?: string[];
+
+  progress?: number;
 }
