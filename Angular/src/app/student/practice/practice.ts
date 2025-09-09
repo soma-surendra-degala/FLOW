@@ -15,18 +15,12 @@ import { Practice } from '../../shared/models/practice.model';
 })
 export class Practices implements OnInit {
   categories: string[] = [
-    'Mathematics', 'Algorithms', 'C', 'C++', 'Java',
+    'C', 'Mathematics', 'Algorithms', 'C++', 'Java',
     'Python', 'Data Structures', 'JavaScript', 'TypeScript', 'Regex'
   ];
-  clearCategories() {
-  this.selectedCategories = [];
-}
-
-
   selectedCategories: string[] = [];
   practiceList: Practice[] = [];
-
-  userSolutions: { [key: string]: string } = {}; // ✅ Track user solutions by practice ID
+  userSolutions: { [key: string]: string } = {};
   loading = false;
   error: string | null = null;
 
@@ -47,6 +41,11 @@ export class Practices implements OnInit {
     } else {
       this.selectedCategories.push(cat);
     }
+    this.loadPractices();
+  }
+
+  clearCategories() {
+    this.selectedCategories = [];
     this.loadPractices();
   }
 
@@ -89,7 +88,10 @@ export class Practices implements OnInit {
       this.userSolutions[id] = '';
     }
   }
-            
+
+  toggleSolution() {
+    this.showSolution = !this.showSolution;
+  }
 
   closeModal() {
     this.showModal = false;
@@ -97,36 +99,37 @@ export class Practices implements OnInit {
     this.showSolution = false;
   }
 
-  toggleSolution() {
-    this.showSolution = !this.showSolution;
-  }
-submitSolution() {
-  if (!this.activePractice) return;
+  submitSolution() {
+    if (!this.activePractice) return;
+    const practiceId = this.activePractice._id!;
+    const solution = this.userSolutions[practiceId] || '';
+    const userId = '64f9e2c7d9b1a3b123456789'; // Replace with actual user ID
 
-  const practiceId = this.activePractice._id!;
-  const solution = this.userSolutions[practiceId] || '';
-  const userId = '64f9e2c7d9b1a3b123456789'; // Replace with actual logged-in user ID
-
-  if (!solution.trim()) {
-    alert('Please enter a solution');
-    return;
-  }
-
-  const payload = {
-    userId: userId,
-    solutionText: solution
-  };
-
-  this.practiceService.submitSolution(practiceId, payload).subscribe({
-    next: (res) => {
-      console.log('Solution submitted:', res);
-      alert('Solution submitted successfully!');
-      this.closeModal();
-    },
-    error: (err) => {
-      console.error('Submit failed:', err);
-      alert('Failed to submit solution.');
+    if (!solution.trim()) {
+      alert('Please enter a solution');
+      return;
     }
-  });
-}
+
+    const payload = { userId, solutionText: solution };
+
+    this.practiceService.submitSolution(practiceId, payload).subscribe({
+      next: (res) => {
+        alert('Solution submitted successfully!');
+        this.closeModal();
+      },
+      error: () => alert('Failed to submit solution.')
+    });
+  }
+
+  runCode() {
+    if (!this.activePractice) return;
+
+    const code = this.userSolutions[this.activePractice._id || ''] || '';
+    if (!code.trim()) {
+      alert('Please write some code first!');
+      return;
+    }
+    console.log('Running code:', code);
+    alert('Code executed successfully! (placeholder)');
+  }
 }
