@@ -63,15 +63,20 @@
 
           <!-- Files -->
           <div *ngIf="course.files?.length" class="mb-3 sm:mb-4">
-            <h4 class="text-xs sm:text-sm font-semibold text-neutral-800 mb-1 sm:mb-2">Documents:</h4>
-            <ul class="flex flex-col gap-1 text-xs sm:text-sm">
-              <li *ngFor="let f of course.files">
-                📂 <a [href]="f.url" target="_blank" class="underline text-cyan-400">{{ f.name }}</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+  <h4 class="text-xs sm:text-sm font-semibold text-neutral-800 mb-1 sm:mb-2">Documents:</h4>
+  <ul class="flex flex-col gap-1 text-xs sm:text-sm">
+    <li *ngFor="let f of course.files" class="flex items-center justify-between">
+      <span>📂 <a class=" text-black">{{ f.name }}</a></span>
+      <button 
+        (click)="downloadFile(f.url, f.name)"
+        class="ml-2 px-2 py-1 bg-cyan-500 hover:bg-cyan-600 text-white rounded text-xs sm:text-sm"
+      >
+        ⬇ Download
+      </button>
+    </li>
+  </ul>
+</div>
+
 
       <!-- Video Modal -->
       <div
@@ -166,8 +171,10 @@
   </div>
 </div>
 
+      </div>
+      </div>
         </div>
       </div>
     </main>
-  </div>
-</div>
+  </div></div>
+  

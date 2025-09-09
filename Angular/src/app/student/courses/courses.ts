@@ -104,4 +104,15 @@ nextVideo() {
   }
 }
 
+downloadFile(url: string, filename: string) {
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename; // sets the filename for download
+  link.target = '_blank';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
 }
