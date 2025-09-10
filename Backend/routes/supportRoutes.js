@@ -26,20 +26,23 @@ router.post("/:id/reply", async (req, res) => {
     await ticket.save();
 
     // ✅ Send Email if Admin replied
-    if (sender === "Admin" && ticket.studentId?.email) {
-      const subject = `Reply to your support ticket: ${ticket.subject}`;
-      const html = `
-        <p>Hi ${ticket.studentId.name},</p>
-        <p>The admin has replied to your support ticket:</p>
-        <blockquote>${message}</blockquote>
-        <p><strong>Ticket Subject:</strong> ${ticket.subject}</p>
-        <p>Please login to your account to continue the conversation.</p>
-        <br>
-        <small>This is an automated email, please do not reply directly.</small>
-      `;
+if (sender === "Admin" && ticket.studentId?.email) {
+  const subject = `Reply to your support ticket: ${ticket.subject}`;
+  const html = `
+    <p>Hi ${ticket.studentId.name},</p>
+    <p>The admin has replied to your support ticket:</p>
+    <blockquote>${message}</blockquote>
+    <p><strong>Ticket Subject:</strong> ${ticket.subject}</p>
+    <p>Please <a href="https://flowlms.netlify.app/student/login" 
+      style="color: #2563eb; text-decoration: none; font-weight: bold;">login to your account</a> 
+      to continue the conversation.</p>
+    <br>
+    <small>This is an automated email, please do not reply directly.</small>
+  `;
 
-      await sendMail(ticket.studentId.email, subject, html);
-    }
+  await sendMail(ticket.studentId.email, subject, html);
+}
+
 
     res.json(ticket);
   } catch (err) {
