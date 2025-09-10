@@ -91,29 +91,35 @@ router.get('/profile', protectStudent, async (req, res) => {
 });
 
 
+router.put("/profile", protectStudent, upload.single("avatar"), async (req, res) => {
+  try {
+    const updatedData = {};
 
-  router.put("/profile", protectStudent, upload.single("avatar"), async (req, res) => {
-    try {
-      const updatedData = {};
+    ["college", "course", "year", "phone"].forEach((field) => {
+      if (req.body[field] !== undefined) updatedData[field] = req.body[field];
+    });
 
-      ["college", "course", "year", "phone"].forEach((field) => {
-        if (req.body[field] !== undefined) updatedData[field] = req.body[field];
-      });
+    if (req.file) updatedData.avatar = `/uploads/${req.file.filename}`;
 
-      if (req.file) updatedData.avatar = `/uploads/${req.file.filename}`;
+    const student = await Student.findByIdAndUpdate(
+      req.student.id, // ✅ fix from req.user.id
+      { $set: updatedData },
+      { new: true, select: "-password" }
+    );
 
-      const student = await Student.findByIdAndUpdate(
-        req.student.id,
-        { $set: updatedData },
-        { new: true, select: "-password" }
-      );
+    if (!student) return res.status(404).json({ message: "Student not found" });
 
-      if (!student) return res.status(404).json({ message: "Student not found" });
-      res.json(student);
-    } catch (err) {
-      res.status(500).json({ message: "Internal server error" });
+    // ✅ Fix avatar URL
+    if (student.avatar && !student.avatar.startsWith("http")) {
+      student.avatar = `https://flow-hp2a.onrender.com${student.avatar}`;
     }
-  });
+
+    res.json(student);
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
   // ---------------- GET ALL STUDENTS ----------------
   router.get("/", async (req, res) => {

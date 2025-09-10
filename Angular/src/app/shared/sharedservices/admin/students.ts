@@ -25,20 +25,17 @@ export class StudentService {
     });
   }
 getProfile(): Observable<Student> {
-  const token = localStorage.getItem('studentToken');
   return this.http.get<Student>(`${this.apiUrl}/profile`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+    headers: this.getAuthHeaders()
   });
 }
 
-updateProfile(data: FormData) {
-  const token = localStorage.getItem('studentToken');
+updateProfile(data: FormData): Observable<Student> {
   return this.http.put<Student>(`${this.apiUrl}/profile`, data, {
-    headers: { Authorization: `Bearer ${token}` } // DO NOT set Content-Type manually
+    headers: this.getAuthHeaders() // don't set Content-Type manually
   });
 }
+
 
   // Admin: get all students
   getStudents(): Observable<Student[]> {
