@@ -1,13 +1,13 @@
 import express from "express";
 import Support from "../models/supportModel.js";
 import { protectStudent } from "../middleware/auth.js";
+import { sendMail } from "../utils/mailer.js"; 
 
 const router = express.Router();
 
 /**
  * 🔹 Add Reply (Admin or Student)
  */
-
 router.post("/:id/reply", async (req, res) => {
   try {
     const { sender, message } = req.body;
@@ -16,22 +16,41 @@ router.post("/:id/reply", async (req, res) => {
       return res.status(400).json({ message: "Sender and message are required" });
     }
 
-    const ticket = await Support.findById(req.params.id);
+    const ticket = await Support.findById(req.params.id).populate("studentId", "name email");
     if (!ticket) {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
+    // Add reply
     ticket.replies.push({ sender, message, createdAt: new Date() });
     await ticket.save();
 
+    // ✅ Send Email if Admin replied
+    if (sender === "Admin" && ticket.studentId?.email) {
+      const subject = `Reply to your support ticket: ${ticket.subject}`;
+      const html = `
+        <p>Hi ${ticket.studentId.name},</p>
+        <p>The admin has replied to your support ticket:</p>
+        <blockquote>${message}</blockquote>
+        <p><strong>Ticket Subject:</strong> ${ticket.subject}</p>
+        <p>Please login to your account to continue the conversation.</p>
+        <br>
+        <small>This is an automated email, please do not reply directly.</small>
+      `;
+
+      await sendMail(ticket.studentId.email, subject, html);
+    }
+
     res.json(ticket);
   } catch (err) {
+    console.error("Error in /reply:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-
-// PUT /api/support/:ticketId/reply/:replyId
+/**
+ * 🔹 Edit Reply
+ */
 router.put("/:ticketId/reply/:replyId", async (req, res) => {
   try {
     const { ticketId, replyId } = req.params;
@@ -45,18 +64,19 @@ router.put("/:ticketId/reply/:replyId", async (req, res) => {
     const reply = ticket.replies.id(replyId);
     if (!reply) return res.status(404).json({ message: "Reply not found" });
 
-    reply.message = message; // ✅ update the message
+    reply.message = message;
     await ticket.save();
 
     res.json(ticket);
   } catch (err) {
-    console.error(err);
+    console.error("Error editing reply:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-
-// DELETE Reply
+/**
+ * 🔹 Delete Reply
+ */
 router.delete("/:ticketId/reply/:replyId", async (req, res) => {
   try {
     const { ticketId, replyId } = req.params;
@@ -66,7 +86,6 @@ router.delete("/:ticketId/reply/:replyId", async (req, res) => {
       return res.status(404).json({ message: "Ticket not found" });
     }
 
-    // remove reply
     ticket.replies = ticket.replies.filter(
       (reply) => reply._id.toString() !== replyId
     );
@@ -74,6 +93,7 @@ router.delete("/:ticketId/reply/:replyId", async (req, res) => {
     await ticket.save();
     res.json({ message: "Reply deleted", ticket });
   } catch (err) {
+    console.error("Error deleting reply:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -81,20 +101,23 @@ router.delete("/:ticketId/reply/:replyId", async (req, res) => {
 /**
  * 🔹 Create a new support ticket
  */
-// Support Routes
 router.post("/", protectStudent, async (req, res) => {
-  const { subject, message } = req.body;
-  const ticket = await Support.create({
-    studentId: req.student.id,  // ✅ from token
-    subject,
-    message
-  });
-  res.json(ticket);
+  try {
+    const { subject, message } = req.body;
+    const ticket = await Support.create({
+      studentId: req.student.id,
+      subject,
+      message,
+    });
+    res.json(ticket);
+  } catch (err) {
+    console.error("Error creating ticket:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-
 /**
- * 🔹 Get all tickets (with student name & email)
+ * 🔹 Get all tickets (Admin)
  */
 router.get("/", async (req, res) => {
   try {
@@ -107,21 +130,22 @@ router.get("/", async (req, res) => {
 });
 
 /**
- * 🔹 Get my tickets (for logged-in student)
+ * 🔹 Get logged-in student's tickets
  */
-// Get all tickets of logged-in student
-router.get('/my-tickets', protectStudent, async (req, res) => {
+router.get("/my-tickets", protectStudent, async (req, res) => {
   try {
-    const tickets = await Support.find({ studentId: req.student.id }).sort({ createdAt: -1 });
+    const tickets = await Support.find({ studentId: req.student.id }).sort({
+      createdAt: -1,
+    });
     res.json(tickets);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching tickets' });
+    console.error("Error fetching my tickets:", err);
+    res.status(500).json({ message: "Error fetching tickets" });
   }
 });
 
-
 /**
- * 🔹 Update ticket status (admin only)
+ * 🔹 Update ticket status (Admin only)
  */
 router.put("/:id", async (req, res) => {
   try {
@@ -129,8 +153,21 @@ router.put("/:id", async (req, res) => {
       req.params.id,
       { status: req.body.status },
       { new: true }
-    );
+    ).populate("studentId", "name email");
+
     if (!ticket) return res.status(404).json({ message: "Ticket not found" });
+
+    // ✅ Optional: Notify student when status changes
+    if (ticket.studentId?.email) {
+      const subject = `Your support ticket is now ${ticket.status}`;
+      const html = `
+        <p>Hi ${ticket.studentId.name},</p>
+        <p>The status of your support ticket <strong>${ticket.subject}</strong> has been updated to <b>${ticket.status}</b>.</p>
+        <p>Please login to your account for more details.</p>
+      `;
+      await sendMail(ticket.studentId.email, subject, html);
+    }
+
     res.json(ticket);
   } catch (error) {
     console.error("Error updating status:", error);
@@ -138,6 +175,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+/**
+ * 🔹 Delete Ticket (Admin)
+ */
 router.delete("/:id", async (req, res) => {
   try {
     await Support.findByIdAndDelete(req.params.id);
@@ -148,14 +188,22 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Student updates their own ticket
+/**
+ * 🔹 Student updates their own ticket
+ */
 router.put("/update/:id", protectStudent, async (req, res) => {
   try {
     const { subject, message } = req.body;
 
-    const ticket = await Support.findOne({ _id: req.params.id, studentId: req.student.id });
+    const ticket = await Support.findOne({
+      _id: req.params.id,
+      studentId: req.student.id,
+    });
+
     if (!ticket) {
-      return res.status(404).json({ message: "Ticket not found or not authorized" });
+      return res
+        .status(404)
+        .json({ message: "Ticket not found or not authorized" });
     }
 
     if (subject) ticket.subject = subject;
@@ -165,10 +213,9 @@ router.put("/update/:id", protectStudent, async (req, res) => {
 
     res.json({ message: "Ticket updated successfully", ticket });
   } catch (err) {
-    console.error(err);
+    console.error("Error updating student ticket:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 export default router;
