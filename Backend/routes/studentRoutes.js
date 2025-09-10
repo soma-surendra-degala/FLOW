@@ -84,11 +84,22 @@ router.get('/profile', protectStudent, async (req, res) => {
     const student = await Student.findById(req.student.id).select(
       'name email college course year phone location gender avatar'
     );
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // ✅ Fix avatar path
+    if (student.avatar && !student.avatar.startsWith("http")) {
+      student.avatar = `https://flow-hp2a.onrender.com${student.avatar}`;
+    }
+
     res.json(student);
   } catch (err) {
     res.status(500).json({ message: 'Error fetching profile' });
   }
 });
+
 
 
 router.put("/profile", protectStudent, upload.single("avatar"), async (req, res) => {

@@ -37,23 +37,14 @@ export class Profile implements OnInit {
     this.loadProfile();
   }
 
-  loadProfile() {
-    this.loading = true;
-    this.studentService.getProfile().subscribe({
-      next: data => {
-        this.profile = { ...data };
-        if (data.avatar && !data.avatar.startsWith('http')) {
-          this.profile.avatar = `https://flow-hp2a.onrender.com/${data.avatar}`;
-        }
-        this.loading = false;
-      },
-      error: err => {
-        console.error('Error loading profile', err);
-        this.errorMessage = err?.error?.message || 'Failed to load profile';
-        this.loading = false;
-      }
-    });
-  }
+  private getAvatarUrl(avatar: string | undefined): string {
+  if (!avatar) return 'assets/default-avatar.png';
+  if (avatar.startsWith('http')) return avatar;
+  return `https://flow-hp2a.onrender.com/uploads/avatars/${avatar}`;
+}
+
+
+  
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -64,7 +55,31 @@ export class Profile implements OnInit {
       reader.readAsDataURL(this.selectedFile);
     }
   }
-  saveProfile() {
+ 
+
+  loadProfile() {
+  this.loading = true;
+  this.studentService.getProfile().subscribe({
+    next: data => {
+      this.profile = { ...data };
+
+      // if backend gives only filename
+      if (data.avatar && !data.avatar.startsWith('http')) {
+        this.profile.avatar = `https://flow-hp2a.onrender.com/uploads/avatars/${data.avatar}`;
+      }
+
+      this.loading = false;
+    },
+    error: err => {
+      console.error('Error loading profile', err);
+      this.errorMessage = err?.error?.message || 'Failed to load profile';
+      this.loading = false;
+    }
+  });
+}
+
+
+saveProfile() {
   const formData = new FormData();
   formData.append('college', this.profile.college || '');
   formData.append('course', this.profile.course || '');
@@ -73,13 +88,9 @@ export class Profile implements OnInit {
   if (this.selectedFile) formData.append('avatar', this.selectedFile, this.selectedFile.name);
 
   this.studentService.updateProfile(formData).subscribe({
-    next: updatedStudent => {
-      // Update local profile for immediate UI update
-      this.profile = { ...updatedStudent };
-      if (updatedStudent.avatar && !updatedStudent.avatar.startsWith('http')) {
-        this.profile.avatar = `https://flow-hp2a.onrender.com/${updatedStudent.avatar}`;
-      }
+    next: () => {
       alert('Profile updated successfully!');
+      this.loadProfile(); // 👈 reload from DB instead of trusting update response
     },
     error: err => {
       console.error('Update failed', err);

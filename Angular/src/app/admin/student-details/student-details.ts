@@ -56,4 +56,18 @@ export class AdminStudentDetail {
       });
     }
   }
+  // Returns the correct avatar URL
+getAvatarUrl(avatar: string): string {
+  // Use your deployed backend URL
+  const baseUrl = 'https://flow-hp2a.onrender.com';
+  if (!avatar) return 'assets/default-avatar.png';
+  return avatar.startsWith('http') ? avatar : `${baseUrl}${avatar}`;
+}
+
+// Fallback if image fails to load
+onAvatarError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.src = 'assets/default-avatar.png';
+}
+
 }

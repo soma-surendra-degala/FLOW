@@ -47,29 +47,29 @@
       class="max-w-3xl mx-auto bg-white dark:bg-neutral-900 p-8 rounded-2xl shadow-lg border border-gray-200 dark:border-neutral-800"
     >
       <!-- Header -->
-      <div class="flex items-center space-x-6 border-b pb-6 mb-6">
-        <img
-          *ngIf="student.avatar"
-          [src]="'http://localhost:5000' + student.avatar"
-          (error)="student.avatar = 'assets/default-avatar.png'"
-          class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400"
-        />
-        <img
-          *ngIf="!student.avatar"
-          src="assets/default-avatar.png"
-          class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400"
-        />
-        <div class="min-w-0"> <!-- ensures truncation works -->
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white truncate max-w-xs">
-            {{ student.name }}
-          </h2>
-          <p
-            class="text-gray-500 dark:text-gray-400 mt-2 break-words max-w-xs md:max-w-sm"
-          >
-            {{ student.email }}
-          </p>
-        </div>
-      </div>
+     <!-- Avatar -->
+<div class="flex items-center space-x-6 border-b pb-6 mb-6">
+  <img
+    *ngIf="student.avatar"
+    [src]="getAvatarUrl(student.avatar)"
+    (error)="onAvatarError($event)"
+    class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400"
+  />
+  <img
+    *ngIf="!student.avatar"
+    src="assets/default-avatar.png"
+    class="w-24 h-24 rounded-full object-cover border-4 border-cyan-400"
+  />
+  <div class="min-w-0">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white truncate max-w-xs">
+      {{ student.name }}
+    </h2>
+    <p class="text-gray-500 dark:text-gray-400 mt-2 break-words max-w-xs md:max-w-sm">
+      {{ student.email }}
+    </p>
+  </div>
+</div>
+
 
       <!-- Info Grid -->
       <div
