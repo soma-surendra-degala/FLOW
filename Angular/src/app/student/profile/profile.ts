@@ -77,7 +77,7 @@ export class Profile implements OnInit {
       // Update local profile for immediate UI update
       this.profile = { ...updatedStudent };
       if (updatedStudent.avatar && !updatedStudent.avatar.startsWith('http')) {
-        this.profile.avatar = `http://localhost:5000${updatedStudent.avatar}`;
+        this.profile.avatar = `https://flow-hp2a.onrender.com/${updatedStudent.avatar}`;
       }
       alert('Profile updated successfully!');
     },

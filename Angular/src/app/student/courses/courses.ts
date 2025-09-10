@@ -114,5 +114,13 @@ downloadFile(url: string, filename: string) {
   document.body.removeChild(link);
 }
 
+get currentVideoTitle(): string {
+  if (this.selectedCourse?.videos && this.currentIndex < this.selectedCourse.videos.length) {
+    return this.selectedCourse.videos[this.currentIndex]?.title || 'Watch Course';
+  }
+  return 'Watch Course';
+}
+
+
 
 }

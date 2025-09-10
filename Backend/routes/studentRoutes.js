@@ -69,11 +69,10 @@
 
       // Convert avatar path to full URL
       const studentObj = student.toObject();
-      if (studentObj.avatar && !studentObj.avatar.startsWith("http")) {
-        studentObj.avatar = `https://flow-hp2a.onrender.com${studentObj.avatar}`;
-      }
-
-      res.json({ token, student: studentObj });
+ if (student && student.avatar && !student.avatar.startsWith("http")) {
+  student.avatar = `https://flow-hp2a.onrender.com${student.avatar}`;
+}
+     res.json({ token, student: studentObj });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -104,7 +103,7 @@ router.get('/profile', protectStudent, async (req, res) => {
       if (req.file) updatedData.avatar = `/uploads/${req.file.filename}`;
 
       const student = await Student.findByIdAndUpdate(
-        req.user.id,
+        req.student.id,
         { $set: updatedData },
         { new: true, select: "-password" }
       );

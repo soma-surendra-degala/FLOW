@@ -99,7 +99,9 @@
           <div class="flex-1">
             <h3 class="text-base sm:text-lg font-semibold text-cyan-400 mb-2 sm:mb-4">
               <span *ngIf="selectedCourse?.videos?.length && currentIndex < (selectedCourse?.videos?.length || 0); else noVideo">
-                ▶ {{ selectedCourse?.videos?.[currentIndex]?.title || 'Watch Course' }}
+                ▶ {{ currentVideoTitle }}
+
+
               </span>
               <ng-template #noVideo>
                 ▶ Watch Course

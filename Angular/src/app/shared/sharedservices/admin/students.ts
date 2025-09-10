@@ -33,9 +33,8 @@ getProfile(): Observable<Student> {
   });
 }
 
-
 updateProfile(data: FormData) {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('studentToken');
   return this.http.put<Student>(`${this.apiUrl}/profile`, data, {
     headers: { Authorization: `Bearer ${token}` } // DO NOT set Content-Type manually
   });
