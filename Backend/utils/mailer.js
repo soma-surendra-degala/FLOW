@@ -11,7 +11,7 @@ export const sendMail = async (to, subject, html) => {
     });
 
     await transporter.sendMail({
-      from: `"Support Team" <${process.env.EMAIL_USER}>`,
+      from: `"FLOW Support Team" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,
