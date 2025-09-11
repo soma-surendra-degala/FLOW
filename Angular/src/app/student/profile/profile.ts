@@ -6,6 +6,7 @@ import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
 import { Student } from '../../shared/models/student.model';
 import { StudentService } from '../../shared/sharedservices/admin/students';
+import { ToasterService } from '../../shared/sharedservices/admin/toaster';
 
 @Component({
   selector: 'app-profile',
@@ -31,7 +32,7 @@ export class Profile implements OnInit {
   loading = false;
   errorMessage = '';
 
-  constructor(private studentService: StudentService) {}
+  constructor(private studentService: StudentService, private toaster: ToasterService) {}
 
   ngOnInit() {
     this.loadProfile();
@@ -89,7 +90,7 @@ saveProfile() {
 
   this.studentService.updateProfile(formData).subscribe({
     next: () => {
-      alert('Profile updated successfully!');
+      this.toaster.show('✅ Profile updated successfully!', 'success');
       this.loadProfile(); // 👈 reload from DB instead of trusting update response
     },
     error: err => {

@@ -5,6 +5,7 @@ import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
 import { PracticeService } from '../../shared/sharedservices/admin/practice';
 import { Practice } from '../../shared/models/practice.model';
+import { ToasterService } from '../../shared/sharedservices/admin/toaster';
 
 @Component({
   selector: 'app-practice',
@@ -29,7 +30,7 @@ export class Practices implements OnInit {
   activePractice: Practice | null = null;
   showSolution = false;
 
-  constructor(private practiceService: PracticeService) {}
+  constructor(private practiceService: PracticeService, private toaster: ToasterService) {}
 
   ngOnInit(): void {
     this.loadPractices();
@@ -103,10 +104,10 @@ export class Practices implements OnInit {
     if (!this.activePractice) return;
     const practiceId = this.activePractice._id!;
     const solution = this.userSolutions[practiceId] || '';
-    const userId = '64f9e2c7d9b1a3b123456789'; // Replace with actual user ID
+    const userId = '';
 
     if (!solution.trim()) {
-      alert('Please enter a solution');
+       this.toaster.show('⚠️ Please enter a solution', 'warning'); 
       return;
     }
 
@@ -114,10 +115,10 @@ export class Practices implements OnInit {
 
     this.practiceService.submitSolution(practiceId, payload).subscribe({
       next: (res) => {
-        alert('Solution submitted successfully!');
+        this.toaster.show('✅ Solution submitted successfully!', 'success');
         this.closeModal();
       },
-      error: () => alert('Failed to submit solution.')
+      error: () => this.toaster.show('❌ Failed to submit solution.', 'error')
     });
   }
 
@@ -126,10 +127,10 @@ export class Practices implements OnInit {
 
     const code = this.userSolutions[this.activePractice._id || ''] || '';
     if (!code.trim()) {
-      alert('Please write some code first!');
+      this.toaster.show('⚠️ Please write some code first!', 'warning');
       return;
     }
     console.log('Running code:', code);
-    alert('Code executed successfully! (placeholder)');
+    this.toaster.show('✅ Code executed successfully! (placeholder)', 'success');
   }
 }

@@ -4,6 +4,7 @@ import { UpcomingCoursesService } from '../../shared/sharedservices/admin/upcomi
 import { Header } from '../Student-components/header/header';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { UpcomingCourse } from '../../shared/models/upcoming-course.model';
+import { ToasterService } from '../../shared/sharedservices/admin/toaster';
 
 @Component({
   selector: 'app-student-upcoming-courses',
@@ -16,7 +17,7 @@ export class StudentUpcomingCourses implements OnInit {
   courses: UpcomingCourse[] = [];
   loading = true;
 
-  constructor(private upcomingService: UpcomingCoursesService) {}
+  constructor(private upcomingService: UpcomingCoursesService, private toaster: ToasterService) {}
 
   ngOnInit(): void {
     this.upcomingService.getAll().subscribe({
@@ -31,7 +32,7 @@ export class StudentUpcomingCourses implements OnInit {
     });
   }
   enroll(){
-    alert('Stay Tune Will Update!😊');
+    this.toaster.show('Stay Tuned! We will update you soon.😊', 'info');
   }
 
 }

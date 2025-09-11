@@ -3,6 +3,7 @@ import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { StudentService } from '../../../shared/sharedservices/admin/students';
 import { Student } from '../../../shared/models/student.model';
+import { ToasterService } from '../../../shared/sharedservices/admin/toaster';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,9 @@ export class Header implements OnInit {
   isSidebarOpen: boolean = false;
   isDarkMode = true;
 
-  constructor(private router: Router, private studentService: StudentService) {
+  constructor(private router: Router, private studentService: StudentService 
+    , private toaster: ToasterService
+  ) {
     // ✅ Load saved theme on page reload
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
@@ -52,6 +55,7 @@ export class Header implements OnInit {
   onLogout() {
     localStorage.removeItem('token'); // 👈 make sure same key used when login
     this.router.navigate(['/student/login']);
+    this.toaster.show('👋 Logged out successfully', 'success');
   }
 
   toggleTheme() {
