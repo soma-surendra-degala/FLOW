@@ -1,14 +1,22 @@
-@keyframes dropIn {
-  from {
+@keyframes dropInOut {
+  0% {
     opacity: 0;
-    transform: translate(-50%, -100%);
+    transform: translate(-50%, -120%);
   }
-  to {
+  10% {
     opacity: 1;
     transform: translate(-50%, 0);
   }
+  90% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
 }
 
-.animate-drop-in {
-  animation: dropIn 0.3s ease-out;
+.animate-drop-in-out {
+  animation: dropInOut 3s cubic-bezier(0.25, 1.25, 0.5, 1) forwards;
 }
