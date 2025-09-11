@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToasterService } from '../../../shared/sharedservices/admin/toaster';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,7 @@ export class Sidebar {
   isSidebarOpen = false;
    @Input() isOpen: boolean = true; // default open
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private toaster: ToasterService  ) {}
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -49,6 +50,7 @@ export class Sidebar {
   }
   logout() {
     this.router.navigate(['admin/login'])
+    this.toaster.show('Logged out successfully','success');
   }
   openCareers() {
   this.router.navigate(['admin/careers'])

@@ -56,8 +56,10 @@ updateProfile(data: FormData): Observable<Student> {
 }
 
 
-  // Delete student
-  deleteStudent(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
-  }
+ deleteStudent(id: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${id}`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
 }

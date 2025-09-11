@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService, LoginData } from '../services/auth';
+import { ToasterService } from '../../shared/sharedservices/admin/toaster';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { AuthService, LoginData } from '../services/auth';
 export class Login {
   loginData: LoginData = { email: '', password: '' };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,private toaster: ToasterService) {}
 
 onLogin() {
   this.authService.login(this.loginData).subscribe({
@@ -23,10 +24,11 @@ onLogin() {
       // Save JWT token
       localStorage.setItem('token', res.token);
       this.router.navigate(['/student/dashboard']);
+        this.toaster.show('Login successful!', 'success');
     },
     error: (err: any) => {
       console.error('Login error:', err);
-      alert(err.error?.message || 'Login failed');
+      this.toaster.show(err.error?.message || 'Login failed', 'error');
     }
   });
 }

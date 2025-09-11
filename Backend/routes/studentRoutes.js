@@ -191,6 +191,18 @@ router.put("/profile", protectStudent, upload.single("avatar"), async (req, res)
     }
   });
 
+  // ---------------- DELETE STUDENT (ADMIN) ----------------
+router.delete("/:id", async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) return res.status(404).json({ message: "Student not found" });
+    res.json({ message: "Student deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 
 
   export default router;

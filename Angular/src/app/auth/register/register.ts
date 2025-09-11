@@ -3,14 +3,15 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth';
+import { ToasterService } from '../../shared/sharedservices/admin/toaster';
 
 
 export interface RegisterData {
   name: string;
   email: string;
   password: string;
-    location:string;
-    gender: String
+  location: string;
+  gender: string;
 }
 
 @Component({
@@ -24,12 +25,16 @@ export class Register {
     name: '',
     email: '',
     password: '',
-    location: ''  ,
+    location: '',
     gender: ''
   };
   confirmPassword = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private toaster: ToasterService
+  ) {}
 
   // Navigate to login page
   login() {
@@ -39,21 +44,21 @@ export class Register {
   // Submit registration
   onRegister() {
     if (this.registerData.password !== this.confirmPassword) {
-      alert('Passwords do not match!');
+      this.toaster.show('Passwords do not match!', 'error'); 
       return;
     }
 
     this.authService.register(this.registerData).subscribe({
-      next: (res) => {
-        alert('Registration successful!');
+      next: () => {
+        this.toaster.show('Registration successful!', 'success'); 
         this.router.navigate(['student/login']);
       },
       error: (err) => {
         console.error('Registration error:', err);
         if (err.status === 400 && err.error?.message) {
-          alert(err.error.message); // Show backend validation message
+          this.toaster.show(err.error.message, 'error'); 
         } else {
-          alert('Registration failed. Please try again.');
+          this.toaster.show('Registration failed. Please try again.', 'error');
         }
       }
     });

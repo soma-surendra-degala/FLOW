@@ -132,13 +132,6 @@
                 <strong>ADMIN:</strong> {{ reply.message }}
                 <i class="text-gray-400">({{ reply.createdAt | date:'short' }})</i>
               </p>
-              <!-- Delete Reply Button -->
-              <button
-                class="text-red-500 text-xs hover:underline"
-                (click)="deleteReply(ticket._id || '', reply._id || '')"
-              >
-                Delete
-              </button>
             </div>
           </div>
         </div>
