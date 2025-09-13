@@ -104,27 +104,15 @@ nextVideo() {
   }
 }
 
-// downloadFile(url: string, filename: string) {
-//   const link = document.createElement('a');
-//   link.href = url;
-//   link.download = filename; // sets the filename for download
-//   link.target = '_blank';
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-// }
-
 downloadFile(url: string, filename: string) {
-  const fullUrl = `https://flow-hp2a.onrender.com${url}`;
   const link = document.createElement('a');
-  link.href = fullUrl;
-  link.download = filename;
+  link.href = url;
+  link.download = filename; // sets the filename for download
   link.target = '_blank';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
-
 
 get currentVideoTitle(): string {
   if (this.selectedCourse?.videos && this.currentIndex < this.selectedCourse.videos.length) {
@@ -132,7 +120,6 @@ get currentVideoTitle(): string {
   }
   return 'Watch Course';
 }
-
 
 
 
