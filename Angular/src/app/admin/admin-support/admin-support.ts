@@ -6,6 +6,7 @@ import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
 import { SupportService } from '../../shared/sharedservices/admin/support';
 import { Ticket } from '../../shared/models/ticket.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-support',
@@ -138,23 +139,47 @@ export class AdminSupport implements OnInit {
     });
   }
 
-  deleteTicket(ticketId: string) {
-    if (confirm("Are you sure you want to delete this ticket?")) {
+
+
+deleteTicket(ticketId: string) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'This ticket will be permanently deleted.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    customClass: {
+      confirmButton:
+        'bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg ml-2',
+      cancelButton:
+        'bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg',
+    },
+    buttonsStyling: false,
+  }).then((result) => {
+    if (result.isConfirmed) {
       this.isLoading = true;
       this.supportService.deleteTicket(ticketId).subscribe({
         next: () => {
-          this.tickets = this.tickets.filter(ticket => ticket._id !== ticketId);
-          
+          this.tickets = this.tickets.filter(
+            (ticket) => ticket._id !== ticketId
+          );
           this.isLoading = false;
+
+          Swal.fire('Deleted!', 'The ticket has been deleted.', 'success');
         },
         error: (err) => {
-          console.error("Error deleting ticket:", err);
-          
+          console.error('Error deleting ticket:', err);
           this.isLoading = false;
-        }
+
+          Swal.fire('Error', 'Failed to delete the ticket.', 'error');
+        },
       });
     }
-  }
+  });
+}
+
 
   getStudentName(ticket: Ticket): string {
     if (ticket.studentId && typeof ticket.studentId === 'object') {

@@ -5,12 +5,25 @@ import CourseModel from "../models/Course.js";
 const router = express.Router();
 
 // ---------- Multer Storage ----------
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, "uploads/"),
+//   filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+// });
+
+// const upload = multer({ storage });
+
+
+import path from "path";
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+  destination: (req, file, cb) => cb(null, path.join(process.cwd(), "uploads")),
+  filename: (req, file, cb) => {
+    // sanitize filename (no spaces/brackets)
+    const safeName = file.originalname.replace(/[^\w.-]/g, "_");
+    cb(null, Date.now() + "-" + safeName);
+  },
 });
 
-const upload = multer({ storage });
 
 // ---------- CREATE Course ----------
 router.post(

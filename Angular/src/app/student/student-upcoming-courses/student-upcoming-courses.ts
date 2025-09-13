@@ -6,6 +6,8 @@ import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { UpcomingCourse } from '../../shared/models/upcoming-course.model';
 import { ToasterService } from '../../shared/sharedservices/admin/toaster';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-student-upcoming-courses',
   standalone: true,
@@ -31,8 +33,21 @@ export class StudentUpcomingCourses implements OnInit {
       }
     });
   }
-  enroll(){
-    this.toaster.show('Stay Tuned! We will update you soon.😊', 'info');
-  }
+
+
+enroll() {
+  Swal.fire({
+    title: 'Stay Tuned! 🎉',
+    text: 'We will update you soon. 😊',
+    icon: 'info',
+    confirmButtonText: 'Okay',
+    customClass: {
+      confirmButton:
+        'bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg',
+    },
+    buttonsStyling: false,
+  });
+}
+
 
 }

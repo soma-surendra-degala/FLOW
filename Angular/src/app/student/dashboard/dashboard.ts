@@ -125,7 +125,8 @@ export class Dashboard implements OnInit {
   private updateSummaryCards() {
     this.summaryCards = [
       { title: 'Courses', value: this.courses.length, icon: 'bi-book', color: 'cyan-400' },
-      { title: 'Students', value: this.students.length, icon: 'bi-people', color: 'green-400' },
+      // { title: 'Students', value: this.students.length, icon: 'bi-people', color: 'green-400' },
+       { title: 'Upcoming Courses', value: this.upcomingCourses.length, icon: 'bi-calendar-event', color: 'blue-400' },
       { title: 'Practices', value: this.practices.length, icon: 'bi-pencil-square', color: 'yellow-400' },
     ];
   }
@@ -141,7 +142,7 @@ export class Dashboard implements OnInit {
   }
 private loadUpcomingCourses() {
   this.dashboardService.getUpcomingCourses().subscribe(courses => {
-    console.log("Upcoming courses from API:", courses); // ✅ Debug
+    
     this.upcomingCourses = courses;
   });
 }
