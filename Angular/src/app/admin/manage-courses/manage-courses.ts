@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
+import Swal from 'sweetalert2';
+
 export interface Video {
   title: string;
   url?: string;
@@ -99,22 +101,7 @@ export class ManageCourses implements OnInit {
     this.showModal = true;
   }
 
-  deleteCourse(id?: string) {
-    if (!id) return;
-    if (confirm('Are you sure you want to delete this course?')) {
-      this.isLoading = true;
-      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
-        next: () => {
-          this.loadCourses();
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('❌ Error deleting course:', err);
-          this.isLoading = false;
-        },
-      });
-    }
-  }
+
 
   addVideo() {
     if (!this.selectedCourse?.videos) this.selectedCourse!.videos = [];
@@ -141,12 +128,57 @@ export class ManageCourses implements OnInit {
     }
   }
 
-  removeFile(course: Course, index: number) {
-    if (confirm('Are you sure you want to delete this file?')) {
+  
+
+removeFile(course: Course, index: number) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this file?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+  }).then((result) => {
+    if (result.isConfirmed) {
       course.files.splice(index, 1);
-      // Optionally, send delete request to server here
+      // 🔹 Optionally send delete request to server here
+      Swal.fire('Deleted!', 'The file has been deleted.', 'success');
     }
-  }
+  });
+}
+
+deleteCourse(id?: string) {
+  if (!id) return;
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'This course will be permanently deleted!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.isLoading = true;
+      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+        next: () => {
+          this.loadCourses();
+          this.isLoading = false;
+          Swal.fire('Deleted!', 'The course has been deleted.', 'success');
+        },
+        error: (err) => {
+          console.error('❌ Error deleting course:', err);
+          this.isLoading = false;
+          Swal.fire('Error!', 'Failed to delete the course.', 'error');
+        },
+      });
+    }
+  });
+}
+
+
 
   saveCourse() {
     if (!this.selectedCourse) return;
