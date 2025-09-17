@@ -129,14 +129,17 @@
               ></iframe>
 
               <!-- MP4 -->
-<video
-  *ngIf="currentVideo?.url?.toLowerCase().includes('.mp4')"
-  [src]="currentVideo?.url"
-  controls
-  autoplay
-  (loadeddata)="onVideoLoad()"
-  class="absolute top-0 left-0 w-full h-full rounded-xl"
-></video>
+<ng-container *ngIf="currentVideo?.url as url">
+  <video
+    *ngIf="url.toLowerCase().includes('.mp4')"
+    [src]="url"
+    controls
+    autoplay
+    (loadeddata)="onVideoLoad()"
+    class="absolute top-0 left-0 w-full h-full rounded-xl"
+  ></video>
+</ng-container>
+
 
             </div>
           </div>
