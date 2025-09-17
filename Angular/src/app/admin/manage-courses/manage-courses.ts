@@ -1,19 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { Sidebar } from '../Admin-components/sidebar/sidebar';
+
 import Swal from 'sweetalert2';
 
-import { Sidebar } from '../Admin-components/sidebar/sidebar';
-import { Course, CourseService } from '../../shared/sharedservices/admin/course';
-import { SafeUrlPipe } from '../../shared/pipes/safe-url.pipe.ts-pipe';
+export interface Video {
+  title: string;
+  url?: string;
+  localFile?: File;
+}
+
+export interface FileItem {
+  name: string;
+  url: string;
+}
+
+export interface Course {
+  _id?: string;
+  title: string;
+  description: string;
+  icon: string;
+  skills: string[];
+  videos: Video[];
+  files: FileItem[];
+}
 
 @Component({
   selector: 'app-manage-courses',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, Sidebar,SafeUrlPipe],
+  imports: [FormsModule, CommonModule, Sidebar, HttpClientModule],
   templateUrl: './manage-courses.html',
-  styleUrls: ['./manage-courses.css'],
+  styleUrls: ['./manage-courses.css']
 })
 export class ManageCourses implements OnInit {
   sidebarOpen = false;
@@ -23,7 +42,9 @@ export class ManageCourses implements OnInit {
   selectedFiles: File[] = [];
   isLoading = false;
 
-  constructor(private courseService: CourseService) {}
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/courses';
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadCourses();
@@ -35,24 +56,24 @@ export class ManageCourses implements OnInit {
 
   loadCourses() {
     this.isLoading = true;
-    this.courseService.getCourses().subscribe({
-      next: (data) => {
-        this.courses = data.map((c: any) => ({
-          ...c,
-          skills: Array.isArray(c.skills)
-            ? c.skills
-            : typeof c.skills === 'string'
-            ? (c.skills as string).split(',').map((s: string) => s.trim())
-            : [],
-          videos: Array.isArray(c.videos) ? c.videos : [],
-          files: Array.isArray(c.files) ? c.files : [],
+    this.http.get<Course[]>(this.apiUrl).subscribe({
+      next: (data: any[]) => {
+        this.courses = data.map(course => ({
+          ...course,
+          skills: Array.isArray(course.skills)
+            ? course.skills
+            : typeof course.skills === 'string'
+              ? course.skills.split(',').map((s: string) => s.trim())
+              : [],
+          videos: Array.isArray(course.videos) ? course.videos : [],
+          files: Array.isArray(course.files) ? course.files : []
         }));
         this.isLoading = false;
       },
       error: (err) => {
         console.error('❌ Error fetching courses:', err);
         this.isLoading = false;
-      },
+      }
     });
   }
 
@@ -63,15 +84,24 @@ export class ManageCourses implements OnInit {
       skills: [],
       icon: '',
       videos: [],
-      files: [],
+      files: []
     };
+    this.selectedFiles = [];
     this.showModal = true;
   }
 
   editCourse(course: Course) {
-    this.selectedCourse = { ...course };
+    this.selectedCourse = {
+      ...course,
+      skills: course.skills || [],
+      videos: course.videos || [],
+      files: course.files || []
+    };
+    this.selectedFiles = [];
     this.showModal = true;
   }
+
+
 
   addVideo() {
     if (!this.selectedCourse?.videos) this.selectedCourse!.videos = [];
@@ -79,97 +109,117 @@ export class ManageCourses implements OnInit {
   }
 
   removeVideo(index: number) {
-    this.selectedCourse?.videos.splice(index, 1);
+    this.selectedCourse?.videos?.splice(index, 1);
   }
 
   onVideoSelected(event: Event, index: number) {
     const input = event.target as HTMLInputElement;
-    if (input.files?.length && this.selectedCourse?.videos[index]) {
-      this.selectedCourse.videos[index].localFile = input.files[0];
+    if (input.files && input.files.length > 0 && this.selectedCourse?.videos?.[index]) {
+      const file = input.files[0];
+      this.selectedCourse.videos[index].localFile = file;
       delete this.selectedCourse.videos[index].url;
     }
   }
 
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files?.length) {
-      const newFiles = Array.from(input.files).map((f) => ({
-        name: f.name,
-        url: '',
-        localFile: f,
-      }));
-      this.selectedCourse?.files.push(...newFiles);
+    if (input.files && input.files.length > 0) {
+      this.selectedFiles = Array.from(input.files);
     }
   }
 
-  removeFile(course: Course, index: number) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to delete this file?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        course.files.splice(index, 1);
-        Swal.fire('Deleted!', 'The file has been removed locally.', 'success');
-      }
-    });
-  }
+  
 
-  deleteCourse(id?: string) {
-    if (!id) return;
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'This course will be permanently deleted!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.isLoading = true;
-        this.courseService.deleteCourse(id).subscribe({
-          next: () => {
-            this.loadCourses();
-            Swal.fire('Deleted!', 'Course deleted successfully.', 'success');
-          },
-          error: (err) => {
-            console.error('❌ Error deleting course:', err);
-            Swal.fire('Error!', 'Failed to delete the course.', 'error');
-          },
-          complete: () => (this.isLoading = false),
-        });
-      }
-    });
-  }
+removeFile(course: Course, index: number) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this file?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      course.files.splice(index, 1);
+      // 🔹 Optionally send delete request to server here
+      Swal.fire('Deleted!', 'The file has been deleted.', 'success');
+    }
+  });
+}
+
+deleteCourse(id?: string) {
+  if (!id) return;
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'This course will be permanently deleted!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.isLoading = true;
+      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+        next: () => {
+          this.loadCourses();
+          this.isLoading = false;
+          Swal.fire('Deleted!', 'The course has been deleted.', 'success');
+        },
+        error: (err) => {
+          console.error('❌ Error deleting course:', err);
+          this.isLoading = false;
+          Swal.fire('Error!', 'Failed to delete the course.', 'error');
+        },
+      });
+    }
+  });
+}
+
+
 
   saveCourse() {
     if (!this.selectedCourse) return;
     this.isLoading = true;
 
+    const formData = new FormData();
+    formData.append('title', this.selectedCourse.title);
+    formData.append('description', this.selectedCourse.description);
+    formData.append('skills', this.selectedCourse.skills.join(','));
+    formData.append('icon', this.selectedCourse.icon);
+
+    // Videos
+    this.selectedCourse.videos.forEach(v => {
+      if (v.localFile) formData.append('videoFiles', v.localFile);
+      else if (v.url) formData.append('videos', JSON.stringify([{ title: v.title, url: v.url }]));
+    });
+
+    // Files
+    this.selectedFiles.forEach(f => formData.append('files', f));
+
     const request = this.selectedCourse._id
-      ? this.courseService.updateCourse(this.selectedCourse)
-      : this.courseService.addCourse(this.selectedCourse);
+      ? this.http.put(`${this.apiUrl}/${this.selectedCourse._id}`, formData)
+      : this.http.post(this.apiUrl, formData);
 
     request.subscribe({
       next: () => {
         this.loadCourses();
         this.closeModal();
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('❌ Error saving course:', err);
-      },
-      complete: () => (this.isLoading = false),
+        this.isLoading = false;
+      }
     });
   }
 
   closeModal() {
     this.showModal = false;
     this.selectedCourse = null;
+    this.selectedFiles = [];
   }
 
   skillsToString(skills: string[] = []): string {
@@ -177,11 +227,8 @@ export class ManageCourses implements OnInit {
   }
 
   updateSkills(value: string) {
-    if (this.selectedCourse) {
-      this.selectedCourse.skills = value
-        .split(',')
-        .map((s: string) => s.trim())
-        .filter((s: string) => s.length > 0);
-    }
+    this.selectedCourse!.skills = value.split(',')
+      .map((s: string) => s.trim())
+      .filter(s => s.length > 0);
   }
 }
