@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
   title: { type: String, required: false },
-  url: { type: String, required: false },  // YouTube link OR uploaded video URL
-  isYouTube: { type: Boolean, default: false } // true = YouTube, false = uploaded
+  url: { type: String, required: false },
+  isYouTube: { type: Boolean, default: false }
 });
 
 const fileSchema = new mongoose.Schema({
-  name: { type: String, required: false },  // original filename
-  url: { type: String, required: false }    // file download URL
+  name: { type: String, required: false }, 
+  url: { type: String, required: false } 
+
 });
 
 const courseSchema = new mongoose.Schema(

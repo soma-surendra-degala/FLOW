@@ -12,6 +12,7 @@ export interface Video {
 export interface FileItem {
   name: string;
   url: string;
+  localFile?: File; // ✅ for new uploads
 }
 
 export interface Course {
@@ -25,7 +26,7 @@ export interface Course {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CourseService {
   private apiUrl = 'https://flow-hp2a.onrender.com/api/courses';
@@ -37,13 +38,13 @@ export class CourseService {
     return this.http.get<Course[]>(this.apiUrl);
   }
 
-  // Add a course (with files/videos)
+  // Add a course
   addCourse(course: Course): Observable<Course> {
     const formData = this.buildFormData(course);
     return this.http.post<Course>(this.apiUrl, formData);
   }
 
-  // Update a course (with files/videos)
+  // Update a course
   updateCourse(course: Course): Observable<Course> {
     if (!course._id) throw new Error('Course ID is required for update');
     const formData = this.buildFormData(course);
@@ -55,31 +56,42 @@ export class CourseService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  // Helper to build FormData for files/videos
-  private buildFormData(course: Course): FormData {
-    const formData = new FormData();
-    formData.append('title', course.title);
-    formData.append('description', course.description);
-    formData.append('icon', course.icon);
+private buildFormData(course: Course): FormData {
+  const formData = new FormData();
+
+  if (course.title) formData.append('title', course.title);
+  if (course.description) formData.append('description', course.description);
+  if (course.icon) {
+  formData.append('icon', course.icon);
+}
+
+
+  if (Array.isArray(course.skills)) {
     formData.append('skills', course.skills.join(','));
-
-    // Append videos
-    course.videos.forEach(v => {
-      if (v.localFile) {
-        formData.append('videoFiles', v.localFile);
-      } else if (v.url) {
-        formData.append('videos', JSON.stringify([{ title: v.title, url: v.url }]));
-      }
-    });
-
-    // Append files
-    course.files.forEach(f => {
-      // Backend expects files in "files" field; here only uploaded files
-      if ((f as any).localFile) formData.append('files', (f as any).localFile);
-      // Already uploaded files can be sent as JSON string
-      else formData.append('files', JSON.stringify([{ name: f.name, url: f.url }]));
-    });
-
-    return formData;
+  } else if (typeof course.skills === 'string') {
+    formData.append('skills', course.skills);
   }
+
+  (course.videos || []).forEach((v) => {
+    if (v.localFile) {
+      formData.append('videoFiles', v.localFile);
+    } else if (v.url) {
+      formData.append(
+        'videos',
+        JSON.stringify({ title: v.title, url: v.url })
+      );
+    }
+  });
+
+  (course.files || []).forEach((f) => {
+    if (f.localFile) {
+      formData.append('files', f.localFile);
+    } else if (f.url) {
+      formData.append('files', JSON.stringify({ name: f.name, url: f.url }));
+    }
+  });
+
+  return formData;
+}
+
 }
