@@ -9,15 +9,15 @@
       <span class="font-extrabold text-lg tracking-wide">FLOW</span>
     </a>
 
-    <!-- Desktop Menu -->
-    <ul class="hidden min-[871px]:flex items-center space-x-8 font-medium">
-      <li><a routerLink="/" fragment="home" (click)="scrollToSection('home')" class="hover:text-pink-400">Home</a></li>
-      <li><a routerLink="/" fragment="about" (click)="scrollToSection('about')" class="hover:text-pink-400">About</a></li>
-      <li><a routerLink="/" fragment="interships" (click)="scrollToSection('interships')" class="hover:text-pink-400">Internships</a></li>
-      <li><a routerLink="/" fragment="services" (click)="scrollToSection('services')" class="hover:text-pink-400">Services</a></li>
-      <li><a routerLink="/" fragment="testimonials" (click)="scrollToSection('testimonials')" class="hover:text-pink-400">Testimonials</a></li>
-      <li><a routerLink="/" fragment="contact" (click)="scrollToSection('contact')" class="hover:text-pink-400">Contact</a></li>
-    </ul>
+<ul class="hidden min-[871px]:flex items-center space-x-8 font-medium">
+  <li><a href="/#home" routerLink="/" fragment="home" (click)="scrollToSection('home')" class="hover:text-pink-400">Home</a></li>
+  <li><a href="/#about" routerLink="/" fragment="about" (click)="scrollToSection('about')" class="hover:text-pink-400">About</a></li>
+  <li><a href="/#interships" routerLink="/" fragment="interships" (click)="scrollToSection('interships')" class="hover:text-pink-400">Internships</a></li>
+  <li><a href="/#services" routerLink="/" fragment="services" (click)="scrollToSection('services')" class="hover:text-pink-400">Services</a></li>
+  <li><a href="/#testimonials" routerLink="/" fragment="testimonials" (click)="scrollToSection('testimonials')" class="hover:text-pink-400">Testimonials</a></li>
+  <li><a href="/#contact" routerLink="/" fragment="contact" (click)="scrollToSection('contact')" class="hover:text-pink-400">Contact</a></li>
+</ul>
+
 
     <!-- Desktop Buttons -->
     <div class="hidden min-[871px]:flex items-center gap-5">
@@ -37,13 +37,30 @@
   <div *ngIf="isMobileMenuOpen" 
        class="min-[871px]:hidden mt-2 px-6 py-4 text-end hero-bg backdrop-blur-md bg-opacity-90 text-white rounded-lg shadow-lg space-y-4">
     
-    <!-- Links -->
-    <a routerLink="/" fragment="home" (click)="scrollToSection('home'); isMobileMenuOpen=false" class="block hover:text-pink-400">Home</a>
-    <a routerLink="/" fragment="about" (click)="scrollToSection('about'); isMobileMenuOpen=false" class="block hover:text-pink-400">About</a>
-    <a routerLink="/" fragment="interships" (click)="scrollToSection('interships'); isMobileMenuOpen=false" class="block hover:text-pink-400">Internships</a>
-    <a routerLink="/" fragment="services" (click)="scrollToSection('services'); isMobileMenuOpen=false" class="block hover:text-pink-400">Services</a>
-    <a routerLink="/" fragment="testimonials" (click)="scrollToSection('testimonials'); isMobileMenuOpen=false" class="block hover:text-pink-400">Testimonials</a>
-    <a routerLink="/" fragment="contact" (click)="scrollToSection('contact'); isMobileMenuOpen=false" class="block hover:text-pink-400">Contact</a>
+<!-- Links -->
+<a href="/#home" routerLink="/" fragment="home" 
+   (click)="scrollToSection('home'); isMobileMenuOpen=false" 
+   class="block hover:text-pink-400">Home</a>
+
+<a href="/#about" routerLink="/" fragment="about" 
+   (click)="scrollToSection('about'); isMobileMenuOpen=false" 
+   class="block hover:text-pink-400">About</a>
+
+<a href="/#interships" routerLink="/" fragment="interships" 
+   (click)="scrollToSection('interships'); isMobileMenuOpen=false" 
+   class="block hover:text-pink-400">Internships</a>
+
+<a href="/#services" routerLink="/" fragment="services" 
+   (click)="scrollToSection('services'); isMobileMenuOpen=false" 
+   class="block hover:text-pink-400">Services</a>
+
+<a href="/#testimonials" routerLink="/" fragment="testimonials" 
+   (click)="scrollToSection('testimonials'); isMobileMenuOpen=false" 
+   class="block hover:text-pink-400">Testimonials</a>
+
+<a href="/#contact" routerLink="/" fragment="contact" 
+   (click)="scrollToSection('contact'); isMobileMenuOpen=false" 
+   class="block hover:text-pink-400">Contact</a>
 
     <hr class="border-gray-500 opacity-40" />
 
