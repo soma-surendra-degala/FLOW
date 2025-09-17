@@ -1,14 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+/* Import Tailwind */
 @import "tailwindcss";
 
-
-body{
+/* Global body styles */
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: white
+    background-color: #ffffff; /* Clean white background */
+    font-family: 'Inter Tight', sans-serif; /* Default body and UI elements */
+    font-weight: 400;
+    line-height: 1.6;
+    
 }
 
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; /* Stronger for emphasis */
+    line-height: 1.25;
+    
+    margin-top: 0;
+    
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Paragraphs */
+p {
+    font-family: 'Manrope', sans-serif; /* Modern, clean */
+    font-weight: 400;
+    line-height: 1.75; /* Slightly more spacing for comfortable reading */
+    
+    margin-bottom: 1em;
+}
+
+/* Optional: small text, captions, buttons */
+small, .text-small {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 500;
+    
+}
