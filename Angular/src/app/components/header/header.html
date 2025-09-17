@@ -11,12 +11,12 @@
 
     <!-- Desktop Menu -->
     <ul class="hidden min-[871px]:flex items-center space-x-8 font-medium">
-      <li><a fragment="home" (click)="scrollToSection('home')" class="hover:text-pink-400">Home</a></li>
-      <li><a fragment="about" (click)="scrollToSection('about')" class="hover:text-pink-400">About</a></li>
-      <li><a fragment="interships" (click)="scrollToSection('interships')" class="hover:text-pink-400">Internships</a></li>
-      <li><a fragment="services" (click)="scrollToSection('services')" class="hover:text-pink-400">Services</a></li>
-      <li><a fragment="testimonials" (click)="scrollToSection('testimonials')" class="hover:text-pink-400">Testimonials</a></li>
-      <li><a fragment="contact" (click)="scrollToSection('contact')" class="hover:text-pink-400">Contact</a></li>
+      <li><a (click)="scrollToSection('home')" class="hover:text-pink-400">Home</a></li>
+      <li><a (click)="scrollToSection('about')" class="hover:text-pink-400">About</a></li>
+      <li><a (click)="scrollToSection('interships')" class="hover:text-pink-400">Internships</a></li>
+      <li><a (click)="scrollToSection('services')" class="hover:text-pink-400">Services</a></li>
+      <li><a (click)="scrollToSection('testimonials')" class="hover:text-pink-400">Testimonials</a></li>
+      <li><a (click)="scrollToSection('contact')" class="hover:text-pink-400">Contact</a></li>
     </ul>
 
     <!-- Desktop Buttons -->
@@ -38,12 +38,12 @@
        class="min-[871px]:hidden mt-2 px-6 py-4 text-end hero-bg backdrop-blur-md bg-opacity-90 text-white rounded-lg shadow-lg space-y-4">
     
     <!-- Links -->
-    <a fragment="home" (click)="scrollToSection('home'); isMobileMenuOpen=false" class="block hover:text-pink-400">Home</a>
-    <a fragment="about" (click)="scrollToSection('about'); isMobileMenuOpen=false" class="block hover:text-pink-400">About</a>
-    <a fragment="interships" (click)="scrollToSection('interships'); isMobileMenuOpen=false" class="block hover:text-pink-400">Internships</a>
-    <a fragment="services" (click)="scrollToSection('services'); isMobileMenuOpen=false" class="block hover:text-pink-400">Services</a>
-    <a fragment="testimonials" (click)="scrollToSection('testimonials'); isMobileMenuOpen=false" class="block hover:text-pink-400">Testimonials</a>
-    <a fragment="contact" (click)="scrollToSection('contact'); isMobileMenuOpen=false" class="block hover:text-pink-400">Contact</a>
+    <a (click)="scrollToSection('home'); isMobileMenuOpen=false" class="block hover:text-pink-400">Home</a>
+    <a (click)="scrollToSection('about'); isMobileMenuOpen=false" class="block hover:text-pink-400">About</a>
+    <a (click)="scrollToSection('interships'); isMobileMenuOpen=false" class="block hover:text-pink-400">Internships</a>
+    <a (click)="scrollToSection('services'); isMobileMenuOpen=false" class="block hover:text-pink-400">Services</a>
+    <a (click)="scrollToSection('testimonials'); isMobileMenuOpen=false" class="block hover:text-pink-400">Testimonials</a>
+    <a (click)="scrollToSection('contact'); isMobileMenuOpen=false" class="block hover:text-pink-400">Contact</a>
 
     <hr class="border-gray-500 opacity-40" />
 
