@@ -1,0 +1,119 @@
+<div class="flex min-h-screen bg-neutral-950 text-white overflow-hidden">
+  <!-- Sidebar -->
+  <div
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
+  >
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="flex justify-between items-center p-4 border-b border-neutral-800 md:px-6">
+      <h2 class="text-xl md:text-2xl font-bold text-cyan-400">Manage Notifications</h2>
+
+      <div *ngIf="isLoading" class="loader-overlay">
+        <div class="spinner"></div>
+      </div>
+
+      <button
+        (click)="addNotification()"
+        class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow"
+      >
+        + Add Notification
+      </button>
+    </header>
+
+    <!-- Notifications Section -->
+    <main class="flex-1 overflow-auto p-4 md:p-6">
+      <div class="bg-neutral-900 p-4 md:p-6 rounded-xl shadow border border-neutral-800">
+
+        <!-- Table (Desktop) -->
+        <div class="overflow-x-auto hidden sm:block">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="text-gray-400 border-b border-neutral-800">
+                <th class="py-2 px-4">Title</th>
+                <th class="py-2 px-4">Message</th>
+                <th class="py-2 px-4">Date</th>
+                <th class="py-2 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let n of notifications">
+                <tr class="border-b border-neutral-800 hover:bg-neutral-800/40 transition">
+                  <td class="px-4 py-2 font-semibold">{{ n.title }}</td>
+                  <td class="px-4 py-2 text-gray-400 text-sm">{{ n.message }}</td>
+                  <td class="px-4 py-2 text-gray-500 text-sm">{{ n.createdAt | date: 'short' }}</td>
+                  <td class="py-2 px-4 flex justify-end gap-2">
+                    <button (click)="editNotification(n)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">Edit</button>
+                    <button (click)="deleteNotification(n._id)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded">Delete</button>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="sm:hidden flex flex-col gap-4">
+          <ng-container *ngFor="let n of notifications">
+            <div class="bg-neutral-800 p-4 rounded-lg shadow flex flex-col gap-2">
+              <div class="flex justify-between items-center">
+                <span class="font-semibold">{{ n.title }}</span>
+                <div class="flex gap-2">
+                  <button (click)="editNotification(n)" class="px-2 py-1 bg-blue-500 rounded text-sm">Edit</button>
+                  <button (click)="deleteNotification(n._id)" class="px-2 py-1 bg-red-500 rounded text-sm">Delete</button>
+                </div>
+              </div>
+              <p class="text-gray-400 text-sm">{{ n.message }}</p>
+              <p class="text-gray-500 text-xs">{{ n.createdAt | date: 'short' }}</p>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div
+    *ngIf="showModal"
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
+  >
+    <div
+      class="bg-neutral-900 p-6 rounded-2xl w-full max-w-lg border border-neutral-800 shadow-xl"
+    >
+      <!-- Header -->
+      <h3 class="text-xl font-semibold mb-6 text-cyan-400">
+        {{ selectedNotification?._id ? "Edit Notification" : "Add Notification" }}
+      </h3>
+
+      <!-- Form -->
+      <div class="space-y-4">
+        <input
+          [(ngModel)]="selectedNotification!.title"
+          placeholder="Notification Title"
+          class="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <textarea
+          [(ngModel)]="selectedNotification!.message"
+          placeholder="Notification Message"
+          class="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          rows="4"
+        ></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 mt-6">
+        <button
+          (click)="closeModal()"
+          class="px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition"
+        >Cancel</button>
+        <button
+          (click)="saveNotification()"
+          class="px-5 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded transition"
+        >Save</button>
+      </div>
+    </div>
+  </div>
+</div>

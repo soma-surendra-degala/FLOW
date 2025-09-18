@@ -14,6 +14,8 @@ import { ToasterService } from '../../shared/sharedservices/toaster';
 export class Login {
   loginData: LoginData = { email: '', password: '' };
   loading = false; // Loader flag
+  showPassword: boolean = false;
+
 
   constructor(
     private authService: AuthService,

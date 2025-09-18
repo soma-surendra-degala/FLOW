@@ -55,5 +55,9 @@ export class Sidebar {
   openCareers() {
   this.router.navigate(['admin/careers'])
 }
+notifications() {
+  this.router.navigate(['admin/notifications'])
+  this.isSidebarOpen = false;
+}
 
 }

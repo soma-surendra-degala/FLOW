@@ -57,6 +57,14 @@
       <span *ngIf="isOpen">Support</span>
     </a>
 
+    <a
+      routerLink="/admin/notifications" (click)="notifications()"
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800"
+    >
+      <i class="bi bi-bell text-cyan-400"></i>
+      <span *ngIf="isOpen">Notifications</span>
+    </a>
+
         <button
       (click)="openCareers()"
       class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800 w-full text-left"

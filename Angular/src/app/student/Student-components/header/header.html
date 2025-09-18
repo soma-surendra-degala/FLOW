@@ -11,6 +11,29 @@
     </div>
   </div>
 
+  
+<div class="relative" (click)="toggleNotifications()">
+  <!-- Bootstrap Bell Icon -->
+  <i class="bi bi-bell text-xl cursor-pointer"></i>
+
+  <!-- Badge Count -->
+  <span *ngIf="notifications.length" 
+        class="absolute -top-2 -right-2 bg-danger text-white text-xs rounded-full px-1">
+    {{ notifications.length }}
+  </span>
+
+  <!-- Dropdown -->
+  <div *ngIf="showDropdown" 
+       class="absolute right-0 mt-2 w-64 bg-white text-black rounded shadow-lg p-2 z-50">
+    <div *ngFor="let n of notifications" class="border-bottom p-2">
+      <strong>{{ n.title }}</strong>
+      <p class="text-sm">{{ n.message }}</p>
+    </div>
+  </div>
+</div>
+
+
+
   <div class="flex items-center gap-4">
    <span class="text-xs text-neutral-400 dark:text-gray-600  sm:text-sm">
   Welcome, <b>{{ studentName }}</b>👋

@@ -29,6 +29,9 @@ export class Register {
     gender: ''
   };
   confirmPassword = '';
+  showPassword: boolean = false;
+showConfirmPassword: boolean = false;
+
 
   constructor(
     private router: Router,

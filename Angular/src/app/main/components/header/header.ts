@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class Header {
 
+  loading = false;
+
   constructor(private router: Router) {}
 
   scrollToSection(sectionId: string) {
@@ -44,11 +46,20 @@ mobileNavigate(sectionId: string) {
 }
 
 login() {
-  window.open('/student/login', '_blank');
+  this.loading = true;
+    setTimeout(() => {
+    this.loading = false;
+    window.open('/student/login', '_blank');
+  }, 1000);
+  
 }
 
 admin() {
+  this.loading = true;
+    setTimeout(() => {
+    this.loading = false;
   window.open('/admin/login', '_blank');
+  }, 1000);
 }
 
 

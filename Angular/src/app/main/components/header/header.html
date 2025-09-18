@@ -3,6 +3,20 @@
   <nav
     class="px-6 py-3 flex items-center justify-between w-full max-w-7xl mx-auto rounded-lg shadow-lg hero-bg backdrop-blur-md bg-opacity-80 text-white transition-all duration-300"
   >
+
+
+<!-- Small Premium Loader -->
+<div *ngIf="loading" class="fixed inset-0 flex items-center justify-center z-50 bg-white/60 backdrop-blur-sm">
+  <!-- Spinner -->
+  <div class="relative h-7 w-7">
+    <!-- Outer gradient ring -->
+    <div class="absolute inset-0 rounded-full border-2 border-transparent border-t-cyan-500 border-r-blue-500 animate-spin"></div>
+    <!-- Inner circle for cut-out effect -->
+    <div class="absolute inset-1 rounded-full bg-white"></div>
+  </div>
+</div>
+
+
     <!-- Logo -->
     <a routerLink="/" class="flex items-center gap-2">
       <img src="assets/bg.png" alt="Logo" class="w-9 h-9" (click)='admin()' />

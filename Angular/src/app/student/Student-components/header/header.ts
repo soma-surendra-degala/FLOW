@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { StudentService } from '../../../shared/sharedservices/students';
 import { Student } from '../../../shared/components/models/student.model';
 import { ToasterService } from '../../../shared/sharedservices/toaster';
+import { NotificationService, AppNotification } from '../../../shared/sharedservices/notification';
 
 @Component({
   selector: 'app-header',
@@ -13,14 +14,20 @@ import { ToasterService } from '../../../shared/sharedservices/toaster';
   standalone: true
 })
 export class Header implements OnInit {
-  studentName: string = '';   // 👈 will come from backend
+  studentName: string = '';
   isSidebarOpen: boolean = false;
   isDarkMode = true;
 
-  constructor(private router: Router, private studentService: StudentService 
-    , private toaster: ToasterService
+  notifications: AppNotification[] = [];
+  showDropdown = false;
+
+  constructor(
+    private router: Router,
+    private studentService: StudentService,
+    private toaster: ToasterService,
+    private notificationService: NotificationService
   ) {
-    // ✅ Load saved theme on page reload
+    // Theme setup
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
       this.isDarkMode = false;
@@ -35,12 +42,13 @@ export class Header implements OnInit {
 
   ngOnInit(): void {
     this.loadStudentName();
+    this.loadNotifications();
   }
 
   loadStudentName() {
     this.studentService.getProfile().subscribe({
       next: (student: Student) => {
-        this.studentName = student.name;   // 👈 set from backend
+        this.studentName = student.name;
       },
       error: (err) => {
         console.error('Error loading student profile', err);
@@ -48,12 +56,20 @@ export class Header implements OnInit {
     });
   }
 
+  loadNotifications() {
+    this.notificationService.getAll().subscribe(data => this.notifications = data);
+  }
+
+  toggleNotifications() {
+    this.showDropdown = !this.showDropdown;
+  }
+
   closeSidebar() {
     this.isSidebarOpen = false;
   }
 
   onLogout() {
-    localStorage.removeItem('token'); // 👈 make sure same key used when login
+    localStorage.removeItem('token');
     this.router.navigate(['/student/login']);
     this.toaster.show('👋 Logged out successfully', 'success');
   }

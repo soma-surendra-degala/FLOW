@@ -14,6 +14,7 @@ import { ToasterService } from '../../shared/sharedservices/toaster';
 export class AdminLogin implements OnInit {
   loginForm!: FormGroup;
   loading = false; // 🔹 loader state
+  showPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,

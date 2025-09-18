@@ -43,6 +43,23 @@
              class="text-red-600 text-xs mt-1">
           Password must be at least 6 characters
         </div>
+
+          <!-- Toggle Button -->
+  <button
+    type="button"
+    (click)="showPassword = !showPassword"
+    class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-gray-900 focus:outline-none"
+    [disabled]="loading"
+  >
+    <ng-container *ngIf="!showPassword">
+      <!-- Eye icon (show) -->
+      <i class="bi bi-eye"></i>
+    </ng-container>
+    <ng-container *ngIf="showPassword">
+      <!-- Eye-slash icon (hide) -->
+      <i class="bi bi-eye-slash"></i>
+    </ng-container>
+  </button>
       </div>
 
       <!-- Submit Button -->

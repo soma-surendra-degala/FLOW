@@ -165,6 +165,14 @@ export const routes: Routes = [
           ),
         canActivate: [AdminGuard],
       },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('./admin/admin-notification/admin-notification').then(
+            (m) => m.AdminNotifications
+          ),
+          canActivate: [AdminGuard],
+      },  
     ],
   },
 

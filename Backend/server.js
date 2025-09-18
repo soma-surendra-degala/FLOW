@@ -14,6 +14,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import upcomingCourses from "./routes/upcomingCourses.js";
 import supportRoutes from "./routes/supportRoutes.js";
 import careersRoutes from "./routes/careersRoutes.js";
+import notificationRoutes from "./routes/notificationsRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -54,6 +55,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/admin/upcoming-courses", upcomingCourses);
 app.use("/api/support", supportRoutes);
 app.use("/api/careers", careersRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // ✅ MongoDB Connection
 mongoose

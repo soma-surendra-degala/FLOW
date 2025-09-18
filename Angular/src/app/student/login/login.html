@@ -29,20 +29,38 @@
         />
       </div>
 
-      <!-- Password -->
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          [(ngModel)]="loginData.password"
-          [disabled]="loading"
-          required
-          class="mt-1 w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
-          placeholder="••••••••"
-        />
-      </div>
+<!-- Password -->
+<div class="relative">
+  <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+  <input
+    [type]="showPassword ? 'text' : 'password'"
+    id="password"
+    name="password"
+    [(ngModel)]="loginData.password"
+    [disabled]="loading"
+    required
+    class="mt-1 w-full px-4 py-2 pr-10 rounded-lg bg-neutral-800 border border-neutral-700 text-white placeholder-gray-500 focus:ring-2 focus:ring-cyan-500 focus:outline-none disabled:opacity-50"
+    placeholder="••••••••"
+  />
+
+  <!-- Toggle Button -->
+  <button
+    type="button"
+    (click)="showPassword = !showPassword"
+    class="absolute inset-y-0 right-0 pr-5 pt-6 flex items-center text-gray-400 hover:text-gray-200 focus:outline-none"
+    [disabled]="loading"
+  >
+    <ng-container *ngIf="!showPassword">
+      <!-- Eye icon (show) -->
+      <i class="bi bi-eye"></i>
+    </ng-container>
+    <ng-container *ngIf="showPassword">
+      <!-- Eye-slash icon (hide) -->
+      <i class="bi bi-eye-slash"></i>
+    </ng-container>
+  </button>
+</div>
+
 
       <!-- Remember Me + Forgot -->
       <div class="flex items-center justify-between text-sm">
@@ -74,14 +92,14 @@
     </div>
 
     <!-- Social Logins -->
-    <div class="grid grid-cols-2 gap-4">
+    <!-- <div class="grid grid-cols-2 gap-4">
       <button class="flex items-center justify-center gap-2 border border-neutral-700 py-2 rounded-lg hover:bg-neutral-800 transition">
         <i class="bi bi-google"></i> Google
       </button>
       <button class="flex items-center justify-center gap-2 border border-neutral-700 py-2 rounded-lg hover:bg-neutral-800 transition">
         <i class="bi bi-facebook"></i> Facebook
       </button>
-    </div>
+    </div> -->
 
     <!-- Signup Link -->
     <p class="text-center text-gray-400 mt-6 text-sm">
