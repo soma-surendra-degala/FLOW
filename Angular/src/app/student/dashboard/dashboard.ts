@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { DashboardService } from '../../shared/sharedservices/admin/dashboard';
-import type { Student } from '../../shared/models/student.model';
-import type { Course } from '../../shared/models/course.model';
-import type { Practice } from '../../shared/models/practice.model';
-import type { UpcomingCourse } from '../../shared/models/upcoming-course.model';
+import { DashboardService } from '../../shared/sharedservices/dashboard';
+import type { Student } from '../../shared/components/models/student.model';
+import type { Course } from '../../shared/components/models/course.model';
+import type { Practice } from '../../shared/components/models/practice.model';
+import type { UpcomingCourse } from '../../shared/components/models/upcoming-course.model';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 

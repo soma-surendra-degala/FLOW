@@ -1,0 +1,65 @@
+// src/app/services/student.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Student } from '../components/models/student.model';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class StudentService {
+  private apiUrl = 'https://flow-hp2a.onrender.com/api/students'; // adjust API URL
+
+  constructor(private http: HttpClient) {}
+
+  // Helper to get headers with token
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('No token found in localStorage');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token || ''}`
+    });
+  }
+getProfile(): Observable<Student> {
+  return this.http.get<Student>(`${this.apiUrl}/profile`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
+updateProfile(data: FormData): Observable<Student> {
+  return this.http.put<Student>(`${this.apiUrl}/profile`, data, {
+    headers: this.getAuthHeaders() // don't set Content-Type manually
+  });
+}
+
+
+  // Admin: get all students
+  getStudents(): Observable<Student[]> {
+    return this.http
+      .get<Student[]>(this.apiUrl, { headers: this.getAuthHeaders() })
+      .pipe(catchError((err) => throwError(() => err)));
+  }
+
+  // Admin: update a student by ID
+  updateStudent(id: string, data: Partial<Student>): Observable<Student> {
+    return this.http
+      .put<Student>(`${this.apiUrl}/${id}`, data, { headers: this.getAuthHeaders() })
+      .pipe(catchError((err) => throwError(() => err)));
+  }
+
+  getStudent(id: string): Observable<Student> {
+  return this.http.get<Student>(`${this.apiUrl}/${id}`);
+}
+
+
+ deleteStudent(id: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${id}`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
+}

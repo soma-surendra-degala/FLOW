@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { PracticeService } from '../../shared/sharedservices/admin/practice';
-import { Practice } from '../../shared/models/practice.model';
-import { ToasterService } from '../../shared/sharedservices/admin/toaster';
+import { PracticeService } from '../../shared/sharedservices/practice';
+import { Practice } from '../../shared/components/models/practice.model';
+import { ToasterService } from '../../shared/sharedservices/toaster';
 
 @Component({
   selector: 'app-practice',

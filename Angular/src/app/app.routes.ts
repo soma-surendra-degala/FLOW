@@ -5,8 +5,10 @@ import { MainLayout } from './layouts/main-layout/main-layout';
 import { BlankLayout } from './layouts/blank-layout/blank-layout';
 
 // Guards
-import { authGuard } from './auth/guards/auth-guard';
-import { AdminGuard } from './auth/admin/admin-guard';
+
+import { AdminGuard } from './admin/guards/admin-guard';
+import { authGuard } from './student/guards/auth-guard';
+
 
 export const routes: Routes = [
   // -------------------- Student Routes --------------------
@@ -17,12 +19,12 @@ export const routes: Routes = [
       {
         path: 'login',
         loadComponent: () =>
-          import('./auth/login/login').then((m) => m.Login),
+          import('./student/login/login').then((m) => m.Login),
       },
       {
         path: 'register',
         loadComponent: () =>
-          import('./auth/register/register').then((m) => m.Register),
+          import('./student/register/register').then((m) => m.Register),
       },
       {
         path: 'dashboard',
@@ -86,7 +88,7 @@ export const routes: Routes = [
       {
         path: 'careers',
         loadComponent: () =>
-          import('./Careers/student-careers/student-careers').then(
+          import('./student/student-careers/student-careers').then(
             (m) => m.StudentCareers
           ),
         canActivate: [authGuard],
@@ -106,7 +108,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        loadComponent: () => import('./admin/admin').then((m) => m.Admin),
+        loadComponent: () => import('./admin/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
         canActivate: [AdminGuard],
       },
       {
@@ -158,7 +160,7 @@ export const routes: Routes = [
       {
         path: 'careers',
         loadComponent: () =>
-          import('./Careers/admin-careers/admin-careers').then(
+          import('./admin/admin-careers/admin-careers').then(
             (m) => m.AdminCareers
           ),
         canActivate: [AdminGuard],
@@ -173,32 +175,32 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+        loadComponent: () => import('./main/home/home').then((m) => m.Home),
       },
       {
         path: 'home',
-        loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+        loadComponent: () => import('./main/home/home').then((m) => m.Home),
       },
       {
         path: 'about',
-        loadComponent: () => import('./pages/about/about').then((m) => m.About),
+        loadComponent: () => import('./main/about/about').then((m) => m.About),
       },
       {
         path: 'contact',
         loadComponent: () =>
-          import('./pages/contact/contact').then((m) => m.Contact),
+          import('./main/contact/contact').then((m) => m.Contact),
       },
       {
         path: 'services',
         loadComponent: () =>
-          import('./pages/ourservices/ourservices').then(
+          import('./main/ourservices/ourservices').then(
             (m) => m.Ourservices
           ),
       },
       {
         path: 'internships',
         loadComponent: () =>
-          import('./pages/interships/interships').then((m) => m.Interships),
+          import('./main/interships/interships').then((m) => m.Interships),
       },
     ],
   },

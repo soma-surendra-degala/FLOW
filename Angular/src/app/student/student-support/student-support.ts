@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Header } from '../Student-components/header/header';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
-import { SupportService } from '../../shared/sharedservices/admin/support';
-import { Ticket } from '../../shared/models/ticket.model';
-import { ToasterService } from '../../shared/sharedservices/admin/toaster'; // ✅ import toaster
+import { SupportService } from '../../shared/sharedservices/support';
+import { Ticket } from '../../shared/components/models/ticket.model';
+import { ToasterService } from '../../shared/sharedservices/toaster'; // ✅ import toaster
 
 @Component({
   selector: 'app-student-support',

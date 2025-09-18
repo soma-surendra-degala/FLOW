@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
-import { Toaster } from './toaster/toaster';
+import { Toaster } from './shared/components/toaster/toaster';
 
 @Component({
   selector: 'app-root',

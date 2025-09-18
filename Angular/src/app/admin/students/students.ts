@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Sidebar } from '../Admin-components/sidebar/sidebar';
-
-import { Student } from '../../shared/models/student.model';
-import { StudentService } from '../../shared/sharedservices/admin/students';
+import { Student } from '../../shared/components/models/student.model';
+import { StudentService } from '../../shared/sharedservices/students';
 import { Router } from '@angular/router';
+import { Sidebar } from '../components/sidebar/sidebar';
 
 @Component({
   selector: 'app-students',

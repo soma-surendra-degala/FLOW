@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
 import { Header } from '../Student-components/header/header';
-import { Student } from '../../shared/models/student.model';
-import { StudentService } from '../../shared/sharedservices/admin/students';
-import { ToasterService } from '../../shared/sharedservices/admin/toaster';
+import { Student } from '../../shared/components/models/student.model';
+import { StudentService } from '../../shared/sharedservices/students';
+import { ToasterService } from '../../shared/sharedservices/toaster';
 
 @Component({
   selector: 'app-profile',

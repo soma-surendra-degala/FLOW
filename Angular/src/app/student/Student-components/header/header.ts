@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { StudentService } from '../../../shared/sharedservices/admin/students';
-import { Student } from '../../../shared/models/student.model';
-import { ToasterService } from '../../../shared/sharedservices/admin/toaster';
+import { StudentService } from '../../../shared/sharedservices/students';
+import { Student } from '../../../shared/components/models/student.model';
+import { ToasterService } from '../../../shared/sharedservices/toaster';
 
 @Component({
   selector: 'app-header',

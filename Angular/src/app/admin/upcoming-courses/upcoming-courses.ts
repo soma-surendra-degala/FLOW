@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UpcomingCoursesService } from '../../shared/sharedservices/admin/upcoming-courses';
-import { Sidebar } from '../Admin-components/sidebar/sidebar';
+import { UpcomingCoursesService } from '../../shared/sharedservices/upcoming-courses';
 import { HttpClientModule } from '@angular/common/http';
+import { Sidebar } from '../components/sidebar/sidebar';
 
 @Component({
   selector: 'app-upcoming-courses',

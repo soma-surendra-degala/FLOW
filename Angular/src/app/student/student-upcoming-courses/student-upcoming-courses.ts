@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UpcomingCoursesService } from '../../shared/sharedservices/admin/upcoming-courses';
+import { UpcomingCoursesService } from '../../shared/sharedservices/upcoming-courses';
 import { Header } from '../Student-components/header/header';
 import { Sidebar } from '../Student-components/sidebar/sidebar';
-import { UpcomingCourse } from '../../shared/models/upcoming-course.model';
-import { ToasterService } from '../../shared/sharedservices/admin/toaster';
+import { UpcomingCourse } from '../../shared/components/models/upcoming-course.model';
+import { ToasterService } from '../../shared/sharedservices/toaster';
 
 import Swal from 'sweetalert2';
 

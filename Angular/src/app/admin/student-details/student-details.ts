@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Sidebar } from '../Admin-components/sidebar/sidebar';
-import { StudentService } from '../../shared/sharedservices/admin/students';
-import { Student } from '../../shared/models/student.model';
-import { ToasterService } from '../../shared/sharedservices/admin/toaster';
+import { StudentService } from '../../shared/sharedservices/students';
+import { Student } from '../../shared/components/models/student.model';
+import { ToasterService } from '../../shared/sharedservices/toaster';
 import Swal from 'sweetalert2';
+import { Sidebar } from '../components/sidebar/sidebar';
 
 @Component({
   selector: 'app-admin-student-detail',

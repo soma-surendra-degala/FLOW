@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { Sidebar } from '../Admin-components/sidebar/sidebar';
-
-import { SupportService } from '../../shared/sharedservices/admin/support';
-import { Ticket } from '../../shared/models/ticket.model';
+import { SupportService } from '../../shared/sharedservices/support';
+import { Ticket } from '../../shared/components/models/ticket.model';
 import Swal from 'sweetalert2';
+import { Sidebar } from '../components/sidebar/sidebar';
 
 @Component({
   selector: 'app-admin-support',

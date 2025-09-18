@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Sidebar } from '../Admin-components/sidebar/sidebar';
 
 import Swal from 'sweetalert2';
+import { Sidebar } from '../components/sidebar/sidebar';
 
 export interface Video {
   title: string;

@@ -1,0 +1,100 @@
+<!-- Contact Section -->
+<div id="contact" class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
+  <!-- Background Image -->
+  <img src="assets/contact-bg.png" alt="Contact Background"
+       class="absolute inset-0 -z-10 w-full h-full object-cover object-center opacity-20 blur-xs" />
+
+  <!-- Gradient Shape -->
+  <div aria-hidden="true"
+       class="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl">
+    <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 
+                85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 
+                52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 
+                27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 
+                27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+         class="w-[60rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20">
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <!-- Title -->
+    <div class="text-center mb-12">
+      <h2 class="text-5xl font-semibold tracking-tight text-white">Contact Us</h2>
+      <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+        Have a question or want to work together? We’d love to hear from you!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <!-- Contact Info -->
+      <div class="space-y-6 text-gray-300">
+        <div class="flex items-center gap-4">
+          <i class="bi bi-geo-alt-fill text-2xl text-blue-400"></i>
+          <span>Nandyal, Andhra Pradesh, India</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <i class="bi bi-envelope-fill text-2xl text-green-400"></i>
+          <span>flow@example.com</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <i class="bi bi-telephone-fill text-2xl text-purple-400"></i>
+          <span>+91 6XXXX XXXXX</span>
+        </div>
+
+        <!-- Social Icons -->
+ <div class="flex gap-4 mt-6">
+  <a href="https://www.facebook.com/Suri_Degala" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="bi bi-facebook"></i></a>
+  <a href="https://www.instagram.com/surendra.degala25" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="bi bi-instagram"></i></a>
+  <a href="https://www.twitter.com/Suri_Degala" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="bi bi-twitter"></i></a>
+  <a href="https://www.linkedin.com/in/soma-surendra-degala" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="bi bi-linkedin"></i></a>
+  <a href="https://www.github.com/soma-surendra-degala" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="bi bi-github"></i></a>
+</div>
+      </div>
+
+      <!-- Contact Form -->
+      <form action="#" method="POST" class="bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-lg border border-white/10">
+        <div class="mb-4">
+          <label class="block text-gray-900 mb-2" for="name">Name</label>
+          <div class="flex items-center border border-gray-600 rounded-lg px-3">
+            <i class="bi bi-person text-gray-800 mr-2"></i>
+            <input type="text" id="name" name="name"
+                   class="w-full bg-transparent text-gray-800 outline-none py-2"
+                   placeholder="Your Name" required>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-900 mb-2" for="email">Email</label>
+          <div class="flex items-center border border-gray-600 rounded-lg px-3">
+            <i class="bi bi-envelope text-gray-800 mr-2"></i>
+            <input type="email" id="email" name="email"
+                   class="w-full bg-transparent text-gray-800 outline-none py-2"
+                   placeholder="Your Email" required>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-900 mb-2" for="subject">Subject</label>
+          <div class="flex items-center border border-gray-600 rounded-lg px-3">
+            <i class="bi bi-chat-left-text text-gray-800 mr-2"></i>
+            <input type="text" id="subject" name="subject"
+                   class="w-full bg-transparent text-gray-800 outline-none py-2"
+                   placeholder="Subject" required>
+          </div>
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-900 mb-2" for="message">Message</label>
+          <div class="flex items-start border border-gray-600 rounded-lg px-3">
+            <i class="bi bi-pencil-square text-gray-800 mt-3 mr-2"></i>
+            <textarea id="message" name="message" rows="4"
+                      class="w-full bg-transparent text-gray-800 outline-none py-2"
+                      placeholder="Write your message..." required></textarea>
+          </div>
+        </div>
+        <button type="submit"
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition">
+          Send Message
+        </button>
+      </form>
+    </div>
+    
+  </div>
+</div>
