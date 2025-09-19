@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import Swal from 'sweetalert2';
 import { NotificationService, AppNotification } from '../../shared/sharedservices/notification';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,7 +6,7 @@ import { Sidebar } from '../components/sidebar/sidebar';
 
 @Component({
   selector: 'app-admin-notification',
-  imports: [FormsModule,CommonModule,Sidebar],
+  imports: [FormsModule, CommonModule, Sidebar],
   templateUrl: './admin-notification.html',
   styleUrls: ['./admin-notification.css']
 })
@@ -17,10 +16,17 @@ export class AdminNotifications implements OnInit {
   showModal = false;
   isLoading = false;
 
+  // Sidebar state
+  sidebarOpen = false;
+
   constructor(private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.loadNotifications();
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
   loadNotifications() {
@@ -48,39 +54,24 @@ export class AdminNotifications implements OnInit {
     if (!this.selectedNotification) return;
 
     if (this.selectedNotification._id) {
-      // Update
-      this.notificationService.update(this.selectedNotification._id, this.selectedNotification).subscribe(() => {
-        Swal.fire('Updated', 'Notification updated!', 'success');
-        this.closeModal();
-        this.loadNotifications();
-      });
+      this.notificationService.update(this.selectedNotification._id, this.selectedNotification)
+        .subscribe(() => {
+          this.closeModal();
+          this.loadNotifications();
+        });
     } else {
-      // Create
-      this.notificationService.create(this.selectedNotification).subscribe(() => {
-        Swal.fire('Success', 'Notification created!', 'success');
-        this.closeModal();
-        this.loadNotifications();
-      });
+      this.notificationService.create(this.selectedNotification)
+        .subscribe(() => {
+          this.closeModal();
+          this.loadNotifications();
+        });
     }
   }
 
   deleteNotification(id?: string) {
     if (!id) return;
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'This notification will be removed.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#6b7280',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((res) => {
-      if (res.isConfirmed) {
-        this.notificationService.delete(id).subscribe(() => {
-          Swal.fire('Deleted', 'Notification removed.', 'success');
-          this.loadNotifications();
-        });
-      }
+    this.notificationService.delete(id).subscribe(() => {
+      this.loadNotifications();
     });
   }
 

@@ -10,9 +10,9 @@
 
   // ---------------- Multer Setup ----------------
   const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads/"); // make sure uploads/ folder exists
-    },
+destination: function (req, file, cb) {
+  cb(null, path.join(process.cwd(), "uploads"));
+},
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
       const ext = path.extname(file.originalname);
@@ -68,10 +68,12 @@
       );
 
       // Convert avatar path to full URL
-      const studentObj = student.toObject();
- if (student && student.avatar && !student.avatar.startsWith("http")) {
-  student.avatar = `https://flow-hp2a.onrender.com${student.avatar}`;
+const studentObj = student.toObject();
+if (studentObj.avatar && !studentObj.avatar.startsWith("http")) {
+  studentObj.avatar = `https://flow-hp2a.onrender.com${studentObj.avatar}`;
 }
+res.json({ token, student: studentObj });
+
      res.json({ token, student: studentObj });
     } catch (err) {
       res.status(500).json({ message: err.message });

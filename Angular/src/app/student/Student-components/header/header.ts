@@ -17,6 +17,7 @@ export class Header implements OnInit {
   studentName: string = '';
   isSidebarOpen: boolean = false;
   isDarkMode = true;
+  
 
   notifications: AppNotification[] = [];
   showDropdown = false;
@@ -27,15 +28,7 @@ export class Header implements OnInit {
     private toaster: ToasterService,
     private notificationService: NotificationService
   ) {
-    // Theme setup
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      this.isDarkMode = false;
-      document.documentElement.classList.remove('dark');
-    } else {
-      this.isDarkMode = true;
-      document.documentElement.classList.add('dark');
-    }
+
   }
 
   @Output() toggleSidebar = new EventEmitter<void>();

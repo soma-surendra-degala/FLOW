@@ -2,25 +2,33 @@
   <!-- Sidebar -->
   <div
     class="fixed inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-neutral-800 transform transition-transform duration-300 md:relative md:translate-x-0"
-  >
+    [ngClass]="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
     <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+    *ngIf="sidebarOpen"
+    (click)="toggleSidebar()">
   </div>
 
   <!-- Main Content -->
   <div class="flex-1 flex flex-col">
     <!-- Header -->
     <header class="flex justify-between items-center p-4 border-b border-neutral-800 md:px-6">
-      <h2 class="text-xl md:text-2xl font-bold text-cyan-400">Manage Notifications</h2>
-
-      <div *ngIf="isLoading" class="loader-overlay">
-        <div class="spinner"></div>
+      <div class="flex items-center gap-3">
+        <!-- Hamburger -->
+        <button class="md:hidden p-2 rounded-lg bg-neutral-800 text-cyan-400" (click)="toggleSidebar()">
+          <i class="bi bi-list text-2xl"></i>
+        </button>
+        <h2 class="text-xl md:text-2xl font-bold text-cyan-400">Manage Notifications</h2>
       </div>
 
       <button
         (click)="addNotification()"
-        class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow"
-      >
-        + Add Notification
+        class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg shadow">
+        + Add
       </button>
     </header>
 
@@ -44,7 +52,7 @@
                 <tr class="border-b border-neutral-800 hover:bg-neutral-800/40 transition">
                   <td class="px-4 py-2 font-semibold">{{ n.title }}</td>
                   <td class="px-4 py-2 text-gray-400 text-sm">{{ n.message }}</td>
-                  <td class="px-4 py-2 text-gray-500 text-sm">{{ n.createdAt | date: 'short' }}</td>
+                  <td class="px-4 py-2 text-gray-500 text-sm">{{ n.createdAt | date:'short' }}</td>
                   <td class="py-2 px-4 flex justify-end gap-2">
                     <button (click)="editNotification(n)" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded">Edit</button>
                     <button (click)="deleteNotification(n._id)" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded">Delete</button>
@@ -67,7 +75,7 @@
                 </div>
               </div>
               <p class="text-gray-400 text-sm">{{ n.message }}</p>
-              <p class="text-gray-500 text-xs">{{ n.createdAt | date: 'short' }}</p>
+              <p class="text-gray-500 text-xs">{{ n.createdAt | date:'short' }}</p>
             </div>
           </ng-container>
         </div>
@@ -78,11 +86,10 @@
   <!-- Modal -->
   <div
     *ngIf="showModal"
-    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
-  >
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
     <div
-      class="bg-neutral-900 p-6 rounded-2xl w-full max-w-lg border border-neutral-800 shadow-xl"
-    >
+      class="bg-neutral-900 p-6 rounded-2xl w-full max-w-lg border border-neutral-800 shadow-xl">
+      
       <!-- Header -->
       <h3 class="text-xl font-semibold mb-6 text-cyan-400">
         {{ selectedNotification?._id ? "Edit Notification" : "Add Notification" }}
@@ -93,26 +100,18 @@
         <input
           [(ngModel)]="selectedNotification!.title"
           placeholder="Notification Title"
-          class="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
-        />
+          class="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
         <textarea
           [(ngModel)]="selectedNotification!.message"
           placeholder="Notification Message"
           class="w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          rows="4"
-        ></textarea>
+          rows="4"></textarea>
       </div>
 
       <!-- Actions -->
       <div class="flex justify-end gap-3 mt-6">
-        <button
-          (click)="closeModal()"
-          class="px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition"
-        >Cancel</button>
-        <button
-          (click)="saveNotification()"
-          class="px-5 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded transition"
-        >Save</button>
+        <button (click)="closeModal()" class="px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded transition">Cancel</button>
+        <button (click)="saveNotification()" class="px-5 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded transition">Save</button>
       </div>
     </div>
   </div>
