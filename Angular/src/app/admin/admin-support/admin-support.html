@@ -41,6 +41,7 @@
           <table class="w-full text-left text-sm">
             <thead>
               <tr class="text-gray-400 border-b border-neutral-800">
+                  <th class="py-2 px-2">#</th>
                 <th class="py-2 px-2">Student</th>
                 <th class="py-2 px-2">Subject</th>
                 <th class="py-2 px-2">Message</th>
@@ -50,7 +51,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let ticket of tickets" class="border-b border-neutral-800 hover:bg-neutral-800/40 transition align-top">
+              <tr *ngFor="let ticket of tickets; let i = index" class="border-b border-neutral-800 hover:bg-neutral-800/40 transition align-top">
+                    <td class="px-2 py-2">{{ i + 1 }}</td>
                 <td class="px-2 py-2">{{ getStudentName(ticket) }}</td>
                 <td class="px-2 py-2">{{ ticket.subject }}</td>
                 <td class="px-2 py-2">{{ ticket.message }}</td>
@@ -69,11 +71,11 @@
                   <div *ngIf="ticket.replies && ticket.replies.length > 0" class="mt-2">
                     <h4 class="font-semibold text-cyan-400">Replies:</h4>
                     <div *ngFor="let reply of ticket.replies" class="mt-1 text-sm flex justify-between items-center">
-                      <span *ngIf="!editingReplies[reply._id]">
-                        <strong>{{ reply.sender }}:</strong> {{ reply.message }}
-                        <i class="text-gray-500">({{ reply.createdAt | date:'short' }})</i>
-                      </span>
-
+                        <span *ngIf="!editingReplies[reply._id]" class="leading-relaxed">
+                          <strong>{{ reply.sender }}:</strong> {{ reply.message }}
+                          <br>
+                          <i class="text-gray-500">({{ reply.createdAt | date:'medium' }})</i>
+                        </span>
                       <span *ngIf="editingReplies[reply._id]">
                         <input type="text" [(ngModel)]="editedMessages[reply._id]" class="p-1 rounded bg-neutral-800 text-white border border-neutral-700"/>
                       </span>
@@ -136,13 +138,14 @@
 
         <!-- Mobile Cards -->
         <div class="sm:hidden flex flex-col gap-4" *ngIf="tickets.length > 0">
-          <div *ngFor="let ticket of tickets" class="bg-neutral-800 p-4 rounded-lg shadow flex flex-col gap-2">
+          <div *ngFor="let ticket of tickets; let i = index" class="bg-neutral-800 p-4 rounded-lg shadow flex flex-col gap-2">
             <div class="flex justify-between items-center">
               <div>
+                <div class="text-sm text-gray-400 mb-2"># {{ i + 1 }}</div>
                 <h3 class="font-semibold">{{ ticket.subject }}</h3>
                 <p class="text-sm mt-1 text-gray-400">{{ ticket.message }}</p>
                 <p class="text-sm mt-1 text-gray-400">
-                  <strong>Student:</strong> {{ getStudentName(ticket) }}
+                  <strong class="text-gray-50">Student:</strong> {{ getStudentName(ticket) }}
                 </p>
                 <p class="mt-1 text-sm">
                   <strong>Status:</strong>
@@ -162,10 +165,11 @@
             <div *ngIf="ticket.replies && ticket.replies.length > 0" class="mt-2">
               <h4 class="font-semibold text-cyan-400">Replies:</h4>
               <div *ngFor="let reply of ticket.replies" class="mt-1 text-xs text-gray-300 flex justify-between items-center">
-                <span *ngIf="!editingReplies[reply._id]">
-                  <strong>{{ reply.sender }}:</strong> {{ reply.message }}
-                  <i class="text-gray-500">({{ reply.createdAt | date:'short' }})</i>
-                </span>
+ <span *ngIf="!editingReplies[reply._id]" class="leading-relaxed">
+  <strong>{{ reply.sender }}:</strong> {{ reply.message }}<br>
+  <i class="text-gray-500">({{ reply.createdAt | date:'medium' }})</i>
+</span>
+
 
                 <span *ngIf="editingReplies[reply._id.toString()]">
                   <input type="text" [(ngModel)]="editedMessages[reply._id.toString()]" class="p-1 rounded bg-neutral-800 text-white border border-neutral-700"/>

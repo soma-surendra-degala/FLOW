@@ -43,19 +43,23 @@ export class AdminSupport implements OnInit {
     this.loadTickets();
   }
 
-  loadTickets() {
-    this.isLoading = true;
-    this.supportService.getTickets().subscribe({
-      next: (tickets: Ticket[]) => {
-        this.tickets = tickets;
-        this.isLoading = false;
-      },
-      error: (err: any) => {
-        console.error('Error loading tickets', err);
-        this.isLoading = false;
-      }
-    });
-  }
+loadTickets() {
+  this.isLoading = true;
+  this.supportService.getTickets().subscribe({
+    next: (tickets: Ticket[]) => {
+      // ✅ Sort by createdAt in descending order (latest first)
+      this.tickets = tickets.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      this.isLoading = false;
+    },
+    error: (err: any) => {
+      console.error('Error loading tickets', err);
+      this.isLoading = false;
+    }
+  });
+}
+
 
   updateStatus(ticketId: string, status: string) {
     this.isLoading = true;

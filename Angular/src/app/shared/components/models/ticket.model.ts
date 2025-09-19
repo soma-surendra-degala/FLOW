@@ -11,7 +11,7 @@ export interface Ticket {
   message: string;
   status?: 'open' | 'in-progress' | 'closed';
   reply?: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt?: string;
   studentId?: {
     _id: string;
