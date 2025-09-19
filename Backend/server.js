@@ -31,27 +31,18 @@ if (!fs.existsSync(uploadPath)) {
   console.log("📂 Created uploads folder");
 }
 
-const allowedOrigins = [
-  "http://localhost:4200",
-  "https://flowlms.netlify.app",
-];
-app.use(cors({
-  origin: function(origin, callback){
-    // Allow requests with no origin (like Postman)
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
-
-// Handle preflight OPTIONS requests
-app.options("*", cors());
+// ✅ CORS config
+app.use(
+  cors({
+    origin: [
+      "http://localhost:4200", // Angular local dev
+      "https://flowlms.netlify.app", // Deployed Angular app
+    ],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
 
 // ✅ Middleware
 app.use(express.json()); // Parse JSON
